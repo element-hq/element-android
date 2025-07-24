@@ -24,15 +24,20 @@ import org.matrix.android.sdk.api.session.pushrules.ContainsDisplayNameCondition
 import org.matrix.android.sdk.api.session.pushrules.EventMatchCondition
 import org.matrix.android.sdk.api.session.pushrules.RoomMemberCountCondition
 import org.matrix.android.sdk.api.session.pushrules.SenderNotificationPermissionCondition
+import org.matrix.android.sdk.api.session.room.getRoomPowerLevels
 import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.api.session.room.model.create.getRoomCreateContentWithSender
+import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.RoomGetter
+import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import javax.inject.Inject
 
 internal class DefaultConditionResolver @Inject constructor(
         private val roomGetter: RoomGetter,
-        @UserId private val userId: String
+        @UserId private val userId: String,
+        private val stateEventDataSource: StateEventDataSource,
 ) : ConditionResolver {
 
     override fun resolveEventMatchCondition(
@@ -55,13 +60,8 @@ internal class DefaultConditionResolver @Inject constructor(
     ): Boolean {
         val roomId = event.roomId ?: return false
         val room = roomGetter.getRoom(roomId) ?: return false
-
-        val powerLevelsContent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
-                ?.content
-                ?.toModel<PowerLevelsContent>()
-                ?: PowerLevelsContent()
-
-        return condition.isSatisfied(event, powerLevelsContent)
+        val roomPowerLevels = room.getRoomPowerLevels()
+        return condition.isSatisfied(event, roomPowerLevels)
     }
 
     override fun resolveContainsDisplayNameCondition(

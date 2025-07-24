@@ -17,7 +17,13 @@
 package org.matrix.android.sdk.api.session.room
 
 import org.matrix.android.sdk.api.query.QueryStateEventValue
+import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.api.session.room.model.create.getRoomCreateContentWithSender
+import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 /**
@@ -34,3 +40,15 @@ fun Room.getTimelineEvent(eventId: String): TimelineEvent? =
  */
 fun Room.getStateEvent(eventType: String, stateKey: QueryStateEventValue): Event? =
         stateService().getStateEvent(eventType, stateKey)
+
+/**
+ * Get the current RoomPowerLevels of the room.
+ */
+fun Room.getRoomPowerLevels(): RoomPowerLevels {
+    val powerLevelsContent = getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)?.content?.toModel<PowerLevelsContent>()
+    val roomCreateContent = getStateEvent(EventType.STATE_ROOM_CREATE, QueryStringValue.IsEmpty)?.getRoomCreateContentWithSender()
+    return RoomPowerLevels(
+            powerLevelsContent,
+            roomCreateContent
+    )
+}

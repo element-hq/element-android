@@ -23,7 +23,7 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 
 class ShareSpaceViewModel @AssistedInject constructor(
         @Assisted private val initialState: ShareSpaceViewState,
@@ -52,11 +52,10 @@ class ShareSpaceViewModel @AssistedInject constructor(
         val room = session.getRoom(initialState.spaceId) ?: return
         PowerLevelsFlowFactory(room)
                 .createFlow()
-                .onEach { powerLevelContent ->
-                    val powerLevelsHelper = PowerLevelsHelper(powerLevelContent)
+                .onEach { roomPowerLevels ->
                     setState {
                         copy(
-                                canInviteByMxId = powerLevelsHelper.isUserAbleToInvite(session.myUserId)
+                                canInviteByMxId = roomPowerLevels.isUserAbleToInvite(session.myUserId)
                         )
                     }
                 }

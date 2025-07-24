@@ -19,6 +19,7 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.databinding.DialogEditPowerLevelBinding
 import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
+import org.matrix.android.sdk.api.session.room.powerlevels.UserPowerLevel
 
 object EditPowerLevelDialogs {
 
@@ -26,21 +27,21 @@ object EditPowerLevelDialogs {
     fun showChoice(
             activity: Activity,
             @StringRes titleRes: Int,
-            currentRole: Role,
-            listener: (Int) -> Unit
+            currentPowerLevel: UserPowerLevel,
+            listener: (UserPowerLevel.Value) -> Unit
     ) {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_edit_power_level, null)
         val views = DialogEditPowerLevelBinding.bind(dialogLayout)
         views.powerLevelRadioGroup.setOnCheckedChangeListener { _, checkedId ->
             views.powerLevelCustomEditLayout.isVisible = checkedId == R.id.powerLevelCustomRadio
         }
-        views.powerLevelCustomEdit.setText("${currentRole.value}")
-
+        val currentRole = Role.getSuggestedRole(currentPowerLevel)
         when (currentRole) {
+            Role.Creator -> views.powerLevelAdminRadio.isChecked = true
+            Role.SuperAdmin -> views.powerLevelAdminRadio.isChecked = true
             Role.Admin -> views.powerLevelAdminRadio.isChecked = true
             Role.Moderator -> views.powerLevelModeratorRadio.isChecked = true
-            Role.Default -> views.powerLevelDefaultRadio.isChecked = true
-            else -> views.powerLevelCustomRadio.isChecked = true
+            Role.User -> views.powerLevelDefaultRadio.isChecked = true
         }
 
         MaterialAlertDialogBuilder(activity)
@@ -48,14 +49,14 @@ object EditPowerLevelDialogs {
                 .setView(dialogLayout)
                 .setPositiveButton(CommonStrings.edit) { _, _ ->
                     val newValue = when (views.powerLevelRadioGroup.checkedRadioButtonId) {
-                        R.id.powerLevelAdminRadio -> Role.Admin.value
-                        R.id.powerLevelModeratorRadio -> Role.Moderator.value
-                        R.id.powerLevelDefaultRadio -> Role.Default.value
-                        else -> {
-                            views.powerLevelCustomEdit.text?.toString()?.toInt() ?: currentRole.value
-                        }
+                        R.id.powerLevelAdminRadio -> UserPowerLevel.Admin
+                        R.id.powerLevelModeratorRadio -> UserPowerLevel.Moderator
+                        R.id.powerLevelDefaultRadio -> UserPowerLevel.User
+                        else -> null
                     }
-                    listener(newValue)
+                    if(newValue != null) {
+                        listener(newValue)
+                    }
                 }
                 .setNegativeButton(CommonStrings.action_cancel, null)
                 .setOnKeyListener(DialogInterface.OnKeyListener

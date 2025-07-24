@@ -39,7 +39,7 @@ import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.flow.FlowRoom
 import org.matrix.android.sdk.flow.flow
@@ -115,9 +115,8 @@ class RoomProfileViewModel @AssistedInject constructor(
     private fun observePowerLevels() {
         val powerLevelsContentLive = PowerLevelsFlowFactory(room).createFlow()
         powerLevelsContentLive
-                .onEach {
-                    val powerLevelsHelper = PowerLevelsHelper(it)
-                    val canUpdateRoomState = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
+                .onEach { roomPowerLevels ->
+                    val canUpdateRoomState = roomPowerLevels.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
                     setState {
                         copy(canUpdateRoomState = canUpdateRoomState)
                     }
@@ -158,10 +157,9 @@ class RoomProfileViewModel @AssistedInject constructor(
     private fun observePermissions() {
         PowerLevelsFlowFactory(room)
                 .createFlow()
-                .setOnEach {
-                    val powerLevelsHelper = PowerLevelsHelper(it)
+                .setOnEach { roomPowerLevels ->
                     val permissions = RoomProfileViewState.ActionPermissions(
-                            canEnableEncryption = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
+                            canEnableEncryption = roomPowerLevels.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
                     )
                     copy(actionPermissions = permissions)
                 }

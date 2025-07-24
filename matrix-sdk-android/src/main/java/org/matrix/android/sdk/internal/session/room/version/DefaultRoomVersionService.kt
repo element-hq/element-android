@@ -25,7 +25,8 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.homeserver.RoomVersionStatus
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.api.session.room.model.create.getRoomCreateContentWithSender
+import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 import org.matrix.android.sdk.api.session.room.version.RoomVersionService
 import org.matrix.android.sdk.internal.session.homeserver.HomeServerCapabilitiesDataSource
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
@@ -71,11 +72,17 @@ internal class DefaultRoomVersionService @AssistedInject constructor(
     }
 
     override fun userMayUpgradeRoom(userId: String): Boolean {
-        val powerLevelsHelper = stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
+        val powerLevelsContent = stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
                 ?.content?.toModel<PowerLevelsContent>()
-                ?.let { PowerLevelsHelper(it) }
 
-        return powerLevelsHelper?.isUserAllowedToSend(userId, true, EventType.STATE_ROOM_TOMBSTONE) ?: false
+        val roomCreateContent = stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_CREATE, QueryStringValue.IsEmpty)
+                ?.getRoomCreateContentWithSender()
+
+        val roomPowerLevels = RoomPowerLevels(
+                powerLevelsContent = powerLevelsContent,
+                roomCreateContent = roomCreateContent
+        )
+        return roomPowerLevels.isUserAllowedToSend(userId, true, EventType.STATE_ROOM_TOMBSTONE)
     }
 
     companion object {

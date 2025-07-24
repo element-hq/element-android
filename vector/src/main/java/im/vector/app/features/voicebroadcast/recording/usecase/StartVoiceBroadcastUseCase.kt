@@ -33,10 +33,11 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
+import org.matrix.android.sdk.api.session.room.getRoomPowerLevels
 import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
@@ -139,12 +140,8 @@ class StartVoiceBroadcastUseCase @Inject constructor(
 
     @VisibleForTesting
     fun assertHasEnoughPowerLevels(room: Room) {
-        val powerLevelsHelper = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
-                ?.content
-                ?.toModel<PowerLevelsContent>()
-                ?.let { PowerLevelsHelper(it) }
-
-        if (powerLevelsHelper?.isUserAllowedToSend(session.myUserId, true, VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO) != true) {
+        val roomPowerLevels = room.getRoomPowerLevels()
+        if (!roomPowerLevels.isUserAllowedToSend(session.myUserId, true, VoiceBroadcastConstants.STATE_ROOM_VOICE_BROADCAST_INFO)) {
             Timber.d("## StartVoiceBroadcastUseCase: Cannot start voice broadcast: no permission")
             throw VoiceBroadcastFailure.RecordingError.NoPermission
         }

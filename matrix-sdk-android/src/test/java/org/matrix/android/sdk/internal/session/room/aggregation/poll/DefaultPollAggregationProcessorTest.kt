@@ -33,7 +33,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.getTimelineEvent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.PollResponseAggregatedSummaryEntity
@@ -255,9 +255,9 @@ class DefaultPollAggregationProcessorTest {
         every { room.getTimelineEvent(eventId) } returns if (hasExistingTimelineEvent) A_TIMELINE_EVENT else null
     }
 
-    private fun mockRedactionPowerLevels(userId: String, isAbleToRedact: Boolean): PowerLevelsHelper {
-        val powerLevelsHelper = mockk<PowerLevelsHelper>()
-        every { powerLevelsHelper.isUserAbleToRedact(userId) } returns isAbleToRedact
-        return powerLevelsHelper
+    private fun mockRedactionPowerLevels(userId: String, isAbleToRedact: Boolean): RoomPowerLevels {
+        val roomPowerLevels = mockk<RoomPowerLevels>()
+        every { roomPowerLevels.isUserAbleToRedact(userId) } returns isAbleToRedact
+        return roomPowerLevels
     }
 }

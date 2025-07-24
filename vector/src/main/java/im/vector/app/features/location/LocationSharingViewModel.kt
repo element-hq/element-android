@@ -34,7 +34,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getUserOrDefault
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 import org.matrix.android.sdk.api.util.toMatrixItem
 import timber.log.Timber
 
@@ -75,11 +75,10 @@ class LocationSharingViewModel @AssistedInject constructor(
     private fun observePowerLevelsForLiveLocationSharing() {
         PowerLevelsFlowFactory(room).createFlow()
                 .distinctUntilChanged()
-                .setOnEach {
-                    val powerLevelsHelper = PowerLevelsHelper(it)
+                .setOnEach { roomPowerLevels ->
                     val canShareLiveLocation = EventType.STATE_ROOM_BEACON_INFO.values
                             .all { beaconInfoType ->
-                                powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, beaconInfoType)
+                                roomPowerLevels.isUserAllowedToSend(session.myUserId, true, beaconInfoType)
                             }
 
                     copy(canShareLiveLocation = canShareLiveLocation)

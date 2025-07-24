@@ -32,7 +32,6 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.flow.flow
@@ -74,20 +73,19 @@ class SpaceMenuViewModel @AssistedInject constructor(
 
             PowerLevelsFlowFactory(room)
                     .createFlow()
-                    .onEach {
-                        val powerLevelsHelper = PowerLevelsHelper(it)
+                    .onEach { roomPowerLevels ->
 
-                        val canInvite = powerLevelsHelper.isUserAbleToInvite(session.myUserId)
-                        val canAddChild = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_SPACE_CHILD)
+                        val canInvite = roomPowerLevels.isUserAbleToInvite(session.myUserId)
+                        val canAddChild = roomPowerLevels.isUserAllowedToSend(session.myUserId, true, EventType.STATE_SPACE_CHILD)
 
-                        val canChangeAvatar = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_AVATAR)
-                        val canChangeName = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_NAME)
-                        val canChangeTopic = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_TOPIC)
+                        val canChangeAvatar = roomPowerLevels.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_AVATAR)
+                        val canChangeName = roomPowerLevels.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_NAME)
+                        val canChangeTopic = roomPowerLevels.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_TOPIC)
 
-                        val isAdmin = powerLevelsHelper.getUserRole(session.myUserId) is Role.Admin
+                        val isAdmin = roomPowerLevels.getUserRole(session.myUserId) == Role.Admin
                         val otherAdminCount = roomSummary?.otherMemberIds
-                                ?.map { powerLevelsHelper.getUserRole(it) }
-                                ?.count { it is Role.Admin }
+                                ?.map { roomPowerLevels.getUserRole(it) }
+                                ?.count { it == Role.Admin }
                                 ?: 0
                         val isLastAdmin = isAdmin && otherAdminCount == 0
 

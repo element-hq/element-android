@@ -31,10 +31,11 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getRoomPowerLevels
 import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.flow.flow
@@ -50,14 +51,12 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
     init {
         val space = session.getRoom(initialState.spaceId)
         val spaceSummary = space?.roomSummary()
-
-        val powerLevelsEvent = space?.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
-        powerLevelsEvent?.content?.toModel<PowerLevelsContent>()?.let { powerLevelsContent ->
-            val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
-            val isAdmin = powerLevelsHelper.getUserRole(session.myUserId) is Role.Admin
+        val roomPowerLevels = space?.getRoomPowerLevels()
+        roomPowerLevels?.let {
+            val isAdmin = roomPowerLevels.getUserRole(session.myUserId) == Role.Admin
             val otherAdminCount = spaceSummary?.otherMemberIds
-                    ?.map { powerLevelsHelper.getUserRole(it) }
-                    ?.count { it is Role.Admin }
+                    ?.map { roomPowerLevels.getUserRole(it) }
+                    ?.count { it == Role.Admin }
                     ?: 0
             val isLastAdmin = isAdmin && otherAdminCount == 0
             setState {

@@ -49,7 +49,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
@@ -117,11 +117,10 @@ class MessageActionsViewModel @AssistedInject constructor(
             return
         }
         PowerLevelsFlowFactory(room).createFlow()
-                .onEach {
-                    val powerLevelsHelper = PowerLevelsHelper(it)
-                    val canReact = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.REACTION)
-                    val canRedact = powerLevelsHelper.isUserAbleToRedact(session.myUserId)
-                    val canSendMessage = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
+                .onEach { roomPowerLevels ->
+                    val canReact = roomPowerLevels.isUserAllowedToSend(session.myUserId, false, EventType.REACTION)
+                    val canRedact = roomPowerLevels.isUserAbleToRedact(session.myUserId)
+                    val canSendMessage = roomPowerLevels.isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
                     val permissions = ActionPermissions(canSendMessage = canSendMessage, canRedact = canRedact, canReact = canReact)
                     setState {
                         copy(actionPermissions = permissions)

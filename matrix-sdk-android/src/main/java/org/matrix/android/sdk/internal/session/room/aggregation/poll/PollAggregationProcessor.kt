@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.session.room.aggregation.poll
 import io.realm.Realm
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 
 internal interface PollAggregationProcessor {
     /**
@@ -48,7 +48,7 @@ internal interface PollAggregationProcessor {
      */
     fun handlePollEndEvent(
             session: Session,
-            powerLevelsHelper: PowerLevelsHelper,
+            roomPowerLevels: RoomPowerLevels,
             realm: Realm,
             event: Event
     ): Boolean

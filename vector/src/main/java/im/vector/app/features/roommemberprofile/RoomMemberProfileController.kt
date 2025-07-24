@@ -17,8 +17,8 @@ import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
+import org.matrix.android.sdk.api.session.room.powerlevels.UserPowerLevel
 import javax.inject.Inject
 
 class RoomMemberProfileController @Inject constructor(
@@ -38,7 +38,7 @@ class RoomMemberProfileController @Inject constructor(
         fun onOverrideColorClicked()
         fun onJumpToReadReceiptClicked()
         fun onMentionClicked()
-        fun onEditPowerLevel(currentRole: Role)
+        fun onEditPowerLevel(userPowerLevel: UserPowerLevel)
         fun onKickClicked(isSpace: Boolean)
         fun onBanClicked(isSpace: Boolean, isUserBanned: Boolean)
         fun onCancelInviteClicked()
@@ -243,11 +243,10 @@ class RoomMemberProfileController @Inject constructor(
     }
 
     private fun buildAdminSection(state: RoomMemberProfileViewState) {
-        val powerLevelsContent = state.powerLevelsContent ?: return
         val powerLevelsStr = state.userPowerLevelString() ?: return
-        val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
-        val userPowerLevel = powerLevelsHelper.getUserRole(state.userId)
-        val myPowerLevel = powerLevelsHelper.getUserRole(session.myUserId)
+        val roomPowerLevels = state.roomPowerLevels ?: return
+        val userPowerLevel = roomPowerLevels.getUserPowerLevel(state.userId)
+        val myPowerLevel = roomPowerLevels.getUserPowerLevel(session.myUserId)
         if ((!state.isMine && myPowerLevel <= userPowerLevel)) {
             return
         }

@@ -13,7 +13,7 @@ import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.members.RoomMemberListViewModel
 import im.vector.app.features.roomprofile.members.RoomMemberListViewState
-import im.vector.app.features.roomprofile.members.RoomMemberSummaryComparator
+import im.vector.app.features.roomprofile.members.RoomMemberListComparator
 import im.vector.app.test.test
 import im.vector.app.test.testCoroutineDispatchers
 import io.mockk.coEvery
@@ -266,7 +266,7 @@ class MemberListViewModelTest {
     private fun createViewModel(): RoomMemberListViewModel {
         return RoomMemberListViewModel(
                 RoomMemberListViewState(args),
-                RoomMemberSummaryComparator(),
+                RoomMemberListComparator(),
                 fakeSession,
         )
     }

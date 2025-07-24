@@ -376,8 +376,8 @@ internal class DefaultCreateLocalRoomStateEventsTaskTest {
         powerLevelsContent.kick shouldBeEqualTo Role.Moderator.value
         powerLevelsContent.invite shouldBeEqualTo Role.Moderator.value
         powerLevelsContent.redact shouldBeEqualTo Role.Moderator.value
-        powerLevelsContent.eventsDefault shouldBeEqualTo Role.Default.value
-        powerLevelsContent.usersDefault shouldBeEqualTo Role.Default.value
+        powerLevelsContent.eventsDefault shouldBeEqualTo Role.User.value
+        powerLevelsContent.usersDefault shouldBeEqualTo Role.User.value
         powerLevelsContent.stateDefault shouldBeEqualTo Role.Moderator.value
         // Guest access
         result.find { it.type == EventType.STATE_ROOM_GUEST_ACCESS }
