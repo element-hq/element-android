@@ -17,6 +17,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.databinding.DialogEditPowerLevelBinding
+import im.vector.app.features.powerlevel.isOwner
 import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.session.room.powerlevels.UserPowerLevel
@@ -27,46 +28,45 @@ object EditPowerLevelDialogs {
     fun showChoice(
             activity: Activity,
             @StringRes titleRes: Int,
-            currentPowerLevel: UserPowerLevel,
+            currentPowerLevel: UserPowerLevel.Value,
             listener: (UserPowerLevel.Value) -> Unit
     ) {
         val dialogLayout = activity.layoutInflater.inflate(R.layout.dialog_edit_power_level, null)
         val views = DialogEditPowerLevelBinding.bind(dialogLayout)
-        views.powerLevelRadioGroup.setOnCheckedChangeListener { _, checkedId ->
-            views.powerLevelCustomEditLayout.isVisible = checkedId == R.id.powerLevelCustomRadio
-        }
         val currentRole = Role.getSuggestedRole(currentPowerLevel)
         when (currentRole) {
-            Role.Creator -> views.powerLevelAdminRadio.isChecked = true
-            Role.SuperAdmin -> views.powerLevelAdminRadio.isChecked = true
+            Role.Creator,
+            Role.SuperAdmin -> views.powerLevelOwnerRadio.isChecked = true
             Role.Admin -> views.powerLevelAdminRadio.isChecked = true
             Role.Moderator -> views.powerLevelModeratorRadio.isChecked = true
             Role.User -> views.powerLevelDefaultRadio.isChecked = true
         }
-
+        views.powerLevelOwnerRadio.isVisible = currentRole.isOwner()
         MaterialAlertDialogBuilder(activity)
                 .setTitle(titleRes)
                 .setView(dialogLayout)
                 .setPositiveButton(CommonStrings.edit) { _, _ ->
                     val newValue = when (views.powerLevelRadioGroup.checkedRadioButtonId) {
+                        R.id.powerLevelOwnerRadio -> UserPowerLevel.SuperAdmin
                         R.id.powerLevelAdminRadio -> UserPowerLevel.Admin
                         R.id.powerLevelModeratorRadio -> UserPowerLevel.Moderator
                         R.id.powerLevelDefaultRadio -> UserPowerLevel.User
                         else -> null
                     }
-                    if(newValue != null) {
+                    if (newValue != null) {
                         listener(newValue)
                     }
                 }
                 .setNegativeButton(CommonStrings.action_cancel, null)
-                .setOnKeyListener(DialogInterface.OnKeyListener
-                { dialog, keyCode, event ->
-                    if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                        dialog.cancel()
-                        return@OnKeyListener true
-                    }
-                    false
-                })
+                .setOnKeyListener(
+                        DialogInterface.OnKeyListener
+                        { dialog, keyCode, event ->
+                            if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                                dialog.cancel()
+                                return@OnKeyListener true
+                            }
+                            false
+                        })
                 .setOnDismissListener {
                     dialogLayout.hideKeyboard()
                 }

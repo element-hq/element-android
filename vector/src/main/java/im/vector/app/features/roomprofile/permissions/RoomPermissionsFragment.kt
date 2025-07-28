@@ -93,7 +93,7 @@ class RoomPermissionsFragment :
         }
     }
 
-    override fun onEditPermission(editablePermission: EditablePermission, currentPowerLevel: UserPowerLevel) {
+    override fun onEditPermission(editablePermission: EditablePermission, currentPowerLevel: UserPowerLevel.Value) {
         EditPowerLevelDialogs.showChoice(requireActivity(), editablePermission.labelResId, currentPowerLevel) { newPowerLevel ->
             viewModel.handle(RoomPermissionsAction.UpdatePermission(editablePermission, newPowerLevel))
         }

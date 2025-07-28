@@ -59,7 +59,7 @@ class RoomPowerLevels(
      * @param userId the user id
      * @return the power level
      */
-    fun getUserRole(userId: String): Role {
+    fun getSuggestedRole(userId: String): Role {
         val value = getUserPowerLevel(userId)
         return Role.getSuggestedRole(value)
     }

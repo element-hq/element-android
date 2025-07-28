@@ -82,9 +82,9 @@ class SpaceMenuViewModel @AssistedInject constructor(
                         val canChangeName = roomPowerLevels.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_NAME)
                         val canChangeTopic = roomPowerLevels.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_TOPIC)
 
-                        val isAdmin = roomPowerLevels.getUserRole(session.myUserId) == Role.Admin
+                        val isAdmin = roomPowerLevels.getSuggestedRole(session.myUserId) == Role.Admin
                         val otherAdminCount = roomSummary?.otherMemberIds
-                                ?.map { roomPowerLevels.getUserRole(it) }
+                                ?.map { roomPowerLevels.getSuggestedRole(it) }
                                 ?.count { it == Role.Admin }
                                 ?: 0
                         val isLastAdmin = isAdmin && otherAdminCount == 0

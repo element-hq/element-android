@@ -17,7 +17,6 @@ import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.session.room.powerlevels.UserPowerLevel
 import javax.inject.Inject
 
@@ -38,7 +37,7 @@ class RoomMemberProfileController @Inject constructor(
         fun onOverrideColorClicked()
         fun onJumpToReadReceiptClicked()
         fun onMentionClicked()
-        fun onEditPowerLevel(userPowerLevel: UserPowerLevel)
+        fun onEditPowerLevel(userPowerLevel: UserPowerLevel.Value)
         fun onKickClicked(isSpace: Boolean)
         fun onBanClicked(isSpace: Boolean, isUserBanned: Boolean)
         fun onCancelInviteClicked()
@@ -250,6 +249,7 @@ class RoomMemberProfileController @Inject constructor(
         if ((!state.isMine && myPowerLevel <= userPowerLevel)) {
             return
         }
+        if(userPowerLevel !is UserPowerLevel.Value) return
         val membership = state.asyncMembership() ?: return
         val canKick = !state.isMine && state.actionPermissions.canKick
         val canBan = !state.isMine && state.actionPermissions.canBan

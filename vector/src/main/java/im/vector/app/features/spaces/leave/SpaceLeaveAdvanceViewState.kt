@@ -21,7 +21,7 @@ data class SpaceLeaveAdvanceViewState(
         val currentFilter: String = "",
         val leaveState: Async<Unit> = Uninitialized,
         val isFilteringEnabled: Boolean = false,
-        val isLastAdmin: Boolean = false
+        val isLastOwner: Boolean = false
 ) : MavericksState {
 
     constructor(args: SpaceBottomSheetSettingsArgs) : this(

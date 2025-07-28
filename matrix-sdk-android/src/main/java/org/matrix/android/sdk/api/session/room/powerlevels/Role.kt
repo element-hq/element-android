@@ -24,7 +24,6 @@ enum class Role {
     Moderator,
     User;
 
-
     companion object {
         fun getSuggestedRole(userPowerLevel: UserPowerLevel): Role {
             return when {

@@ -35,7 +35,7 @@ class RoomPermissionsController @Inject constructor(
 ) : TypedEpoxyController<RoomPermissionsViewState>() {
 
     interface Callback {
-        fun onEditPermission(editablePermission: EditablePermission, currentPowerLevel: UserPowerLevel)
+        fun onEditPermission(editablePermission: EditablePermission, currentPowerLevel: UserPowerLevel.Value)
         fun toggleShowAllPermissions()
     }
 

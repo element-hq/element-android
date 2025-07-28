@@ -61,7 +61,7 @@ class SpaceLeaveAdvancedFragment :
             state.spaceSummary?.let { summary ->
                 val warningMessage: CharSequence? = when {
                     summary.otherMemberIds.isEmpty() -> getString(CommonStrings.space_leave_prompt_msg_only_you)
-                    state.isLastAdmin -> getString(CommonStrings.space_leave_prompt_msg_as_admin)
+                    state.isLastOwner -> getString(CommonStrings.space_leave_prompt_msg_as_admin)
                     !summary.isPublic -> getString(CommonStrings.space_leave_prompt_msg_private)
                     else -> null
                 }

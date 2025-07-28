@@ -377,7 +377,7 @@ class RoomMemberProfileFragment :
                 .show()
     }
 
-    override fun onEditPowerLevel(userPowerLevel: UserPowerLevel) {
+    override fun onEditPowerLevel(userPowerLevel: UserPowerLevel.Value) {
         EditPowerLevelDialogs.showChoice(requireActivity(), CommonStrings.power_level_edit_title, userPowerLevel) { newPowerLevel ->
             viewModel.handle(RoomMemberProfileAction.SetPowerLevel(userPowerLevel, newPowerLevel, true))
         }

@@ -20,23 +20,17 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.powerlevel.isOwner
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import okhttp3.internal.toImmutableList
-import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.getRoomPowerLevels
-import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
-import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
-import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
@@ -53,14 +47,14 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
         val spaceSummary = space?.roomSummary()
         val roomPowerLevels = space?.getRoomPowerLevels()
         roomPowerLevels?.let {
-            val isAdmin = roomPowerLevels.getUserRole(session.myUserId) == Role.Admin
-            val otherAdminCount = spaceSummary?.otherMemberIds
-                    ?.map { roomPowerLevels.getUserRole(it) }
-                    ?.count { it == Role.Admin }
+            val isOwner = roomPowerLevels.getSuggestedRole(session.myUserId).isOwner()
+            val otherOwnersCount = spaceSummary?.otherMemberIds
+                    ?.map { roomPowerLevels.getSuggestedRole(it) }
+                    ?.count { it.isOwner() }
                     ?: 0
-            val isLastAdmin = isAdmin && otherAdminCount == 0
+            val isLastOwner = isOwner && otherOwnersCount == 0
             setState {
-                copy(isLastAdmin = isLastAdmin)
+                copy(isLastOwner = isLastOwner)
             }
         }
 

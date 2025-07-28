@@ -388,9 +388,9 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         }
         roomSummaryLive.combine(powerLevelsFlow) { roomSummary, roomPowerLevels ->
             val roomName = roomSummary.toMatrixItem().getBestName()
-            when (roomPowerLevels.getUserRole(initialState.userId)) {
+            when (roomPowerLevels.getSuggestedRole(initialState.userId)) {
                 Role.SuperAdmin,
-                Role.Creator,
+                Role.Creator -> stringProvider.getString(CommonStrings.room_member_power_level_owner_in, roomName)
                 Role.Admin -> stringProvider.getString(CommonStrings.room_member_power_level_admin_in, roomName)
                 Role.Moderator -> stringProvider.getString(CommonStrings.room_member_power_level_moderator_in, roomName)
                 Role.User -> stringProvider.getString(CommonStrings.room_member_power_level_default_in, roomName)

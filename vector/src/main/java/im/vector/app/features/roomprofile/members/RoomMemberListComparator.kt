@@ -23,8 +23,8 @@ class RoomMemberListComparator @Inject constructor() : Comparator<RoomMemberWith
                     null -> -1
                     else ->
                         when {
-                            leftRoomMember.powerLevel > rightRoomMember.powerLevel -> 1
-                            leftRoomMember.powerLevel < rightRoomMember.powerLevel -> -1
+                            leftRoomMember.powerLevel > rightRoomMember.powerLevel -> -1
+                            leftRoomMember.powerLevel < rightRoomMember.powerLevel -> 1
                             leftRoomMember.summary.displayName.isNullOrBlank() ->
                                 when {
                                     rightRoomMember.summary.displayName.isNullOrBlank() -> {
