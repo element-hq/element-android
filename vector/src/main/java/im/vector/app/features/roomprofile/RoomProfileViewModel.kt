@@ -20,6 +20,7 @@ import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.home.ShortcutCreator
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
+import im.vector.app.features.powerlevel.isLastAdminFlow
 import im.vector.app.features.session.coroutineScope
 import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
@@ -72,6 +73,14 @@ class RoomProfileViewModel @AssistedInject constructor(
         observePermissions()
         observePowerLevels()
         observeCryptoSettings(flowRoom)
+        observeIsLastAdmin()
+    }
+
+    private fun observeIsLastAdmin() {
+        room.isLastAdminFlow(session.myUserId)
+                .onEach { isLastAdmin ->
+                    setState { copy(isLastAdmin = isLastAdmin) }
+                }.launchIn(viewModelScope)
     }
 
     private fun observeCryptoSettings(flowRoom: FlowRoom) {

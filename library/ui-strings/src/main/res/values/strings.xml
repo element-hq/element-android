@@ -686,6 +686,7 @@
     <string name="room_participants_leave_prompt_title">Leave room</string>
     <string name="room_participants_leave_prompt_msg">Are you sure you want to leave the room?</string>
     <string name="room_participants_leave_private_warning">This room is not public. You will not be able to rejoin without an invite.</string>
+    <string name="room_participants_leave_last_admin">You\'re the only admin of this room. Leaving it will mean no one has control over it.</string>
 
     <string name="room_participants_header_direct_chats">Direct Messages</string>
 

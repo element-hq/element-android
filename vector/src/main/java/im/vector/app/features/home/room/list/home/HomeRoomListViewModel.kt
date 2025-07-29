@@ -26,6 +26,8 @@ import im.vector.app.features.analytics.extensions.toTrackingValue
 import im.vector.app.features.analytics.plan.UserProperties
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.list.home.header.HomeRoomFilter
+import im.vector.app.features.room.LeaveRoomPrompt
+import im.vector.app.features.room.getLeaveRoomWarning
 import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -331,8 +333,8 @@ class HomeRoomListViewModel @AssistedInject constructor(
         filteredPagedRoomSummariesLive.queryParams = getFilteredQueryParams(newFilter, filteredPagedRoomSummariesLive.queryParams)
     }
 
-    fun isPublicRoom(roomId: String): Boolean {
-        return session.getRoom(roomId)?.stateService()?.isPublic().orFalse()
+    suspend fun getLeaveRoomWarning(roomId: String): LeaveRoomPrompt.Warning {
+        return session.getLeaveRoomWarning(roomId)
     }
 
     private fun handleSelectRoom(action: HomeRoomListAction.SelectRoom) = withState {

@@ -20,7 +20,7 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.powerlevel.isOwner
+import im.vector.app.features.powerlevel.isLastAdminFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -29,7 +29,6 @@ import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.SpaceFilter
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
-import org.matrix.android.sdk.api.session.room.getRoomPowerLevels
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.flow.flow
@@ -44,20 +43,13 @@ class SpaceLeaveAdvancedViewModel @AssistedInject constructor(
 
     init {
         val space = session.getRoom(initialState.spaceId)
-        val spaceSummary = space?.roomSummary()
-        val roomPowerLevels = space?.getRoomPowerLevels()
-        roomPowerLevels?.let {
-            val isOwner = roomPowerLevels.getSuggestedRole(session.myUserId).isOwner()
-            val otherOwnersCount = spaceSummary?.otherMemberIds
-                    ?.map { roomPowerLevels.getSuggestedRole(it) }
-                    ?.count { it.isOwner() }
-                    ?: 0
-            val isLastOwner = isOwner && otherOwnersCount == 0
-            setState {
-                copy(isLastOwner = isLastOwner)
-            }
-        }
 
+        space?.isLastAdminFlow(session.myUserId)
+                ?.onEach { isLastAdmin ->
+                    setState { copy(isLastAdmin = isLastAdmin) }
+                }?.launchIn(viewModelScope)
+
+        val spaceSummary = space?.roomSummary()
         setState { copy(spaceSummary = spaceSummary) }
         session.getRoom(initialState.spaceId)
                 ?.flow()
