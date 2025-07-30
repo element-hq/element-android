@@ -35,7 +35,7 @@ data class PowerLevelsContent(
          */
         @Json(name = "kick") val kick: Int? = null,
         /**
-         * The level required to invite a user. Defaults to 50 if unspecified.
+         * The level required to invite a user. Defaults to 0 if unspecified.
          */
         @Json(name = "invite") val invite: Int? = null,
         /**

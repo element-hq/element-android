@@ -14,6 +14,7 @@ import im.vector.app.features.session.coroutineScope
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeContext
 import im.vector.app.test.fakes.FakeLocationManager
+import im.vector.app.test.fakes.FakePermissionChecker
 import im.vector.app.test.fixtures.aBuildMeta
 import im.vector.app.test.test
 import io.mockk.every
@@ -29,6 +30,7 @@ import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 
 private const val A_LATITUDE = 1.2
@@ -48,7 +50,7 @@ class LocationTrackerTest {
     @Before
     fun setUp() {
         mockkStatic("im.vector.app.features.session.SessionCoroutineScopesKt")
-        locationTracker = LocationTracker(fakeContext.instance, fakeActiveSessionHolder.instance, aBuildMeta())
+        locationTracker = LocationTracker(fakeContext.instance, fakeActiveSessionHolder.instance, aBuildMeta(), FakePermissionChecker())
         fakeLocationManager.givenRemoveUpdates(locationTracker)
     }
 
