@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.api.session.room
 
-import kotlinx.coroutines.flow.Flow
 import org.matrix.android.sdk.api.query.QueryStateEventValue
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -26,8 +25,6 @@ import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.create.getRoomCreateContentWithSender
 import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.user.model.User
-import org.matrix.android.sdk.internal.di.UserId
 
 /**
  * Get a TimelineEvent using the TimelineService of a Room.

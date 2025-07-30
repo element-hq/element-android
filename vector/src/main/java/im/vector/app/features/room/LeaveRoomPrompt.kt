@@ -24,7 +24,7 @@ object LeaveRoomPrompt {
         LAST_ADMIN,
         PRIVATE_ROOM,
         NONE
-    };
+    }
 
     fun show(
             context: Context,
@@ -64,4 +64,3 @@ suspend fun Session.getLeaveRoomWarning(roomId: String): Warning {
         else -> Warning.NONE
     }
 }
-

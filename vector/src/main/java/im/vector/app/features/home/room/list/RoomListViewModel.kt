@@ -155,7 +155,6 @@ class RoomListViewModel @AssistedInject constructor(
         return session.getLeaveRoomWarning(roomId)
     }
 
-
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleSelectRoom(action: RoomListAction.SelectRoom) = withState {

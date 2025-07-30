@@ -23,21 +23,14 @@ import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.widgets.permissions.WidgetPermissionsHelper
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Content
-import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
-import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
-import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 import org.matrix.android.sdk.api.session.widgets.WidgetManagementFailure
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.flow.mapOptional
-import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 

@@ -11,9 +11,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.airbnb.mvrx.test.MavericksTestRule
 import im.vector.app.features.roomprofile.RoomProfileArgs
+import im.vector.app.features.roomprofile.members.RoomMemberListComparator
 import im.vector.app.features.roomprofile.members.RoomMemberListViewModel
 import im.vector.app.features.roomprofile.members.RoomMemberListViewState
-import im.vector.app.features.roomprofile.members.RoomMemberListComparator
 import im.vector.app.test.test
 import im.vector.app.test.testCoroutineDispatchers
 import io.mockk.coEvery

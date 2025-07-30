@@ -249,7 +249,7 @@ class RoomMemberProfileController @Inject constructor(
         if ((!state.isMine && myPowerLevel <= userPowerLevel)) {
             return
         }
-        if(userPowerLevel !is UserPowerLevel.Value) return
+        if (userPowerLevel !is UserPowerLevel.Value) return
         val membership = state.asyncMembership() ?: return
         val canKick = !state.isMine && state.actionPermissions.canKick
         val canBan = !state.isMine && state.actionPermissions.canBan

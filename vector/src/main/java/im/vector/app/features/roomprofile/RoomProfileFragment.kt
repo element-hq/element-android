@@ -321,13 +321,13 @@ class RoomProfileFragment :
     }
 
     override fun onLeaveRoomClicked() {
-        withState(roomProfileViewModel){ state ->
+        withState(roomProfileViewModel) { state ->
             val warning = when {
                 state.isLastAdmin -> LeaveRoomPrompt.Warning.LAST_ADMIN
                 state.roomSummary()?.isPublic == false -> LeaveRoomPrompt.Warning.PRIVATE_ROOM
                 else -> LeaveRoomPrompt.Warning.NONE
             }
-            LeaveRoomPrompt.show(requireContext(), warning){
+            LeaveRoomPrompt.show(requireContext(), warning) {
                 roomProfileViewModel.handle(RoomProfileAction.LeaveRoom)
             }
         }

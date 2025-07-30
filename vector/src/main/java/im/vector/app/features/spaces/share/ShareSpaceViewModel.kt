@@ -23,7 +23,6 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
-import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 
 class ShareSpaceViewModel @AssistedInject constructor(
         @Assisted private val initialState: ShareSpaceViewState,

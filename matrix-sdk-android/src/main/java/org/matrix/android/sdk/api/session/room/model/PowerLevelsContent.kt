@@ -115,7 +115,6 @@ private fun defaultNotificationLevel(key: String): Int {
     }
 }
 
-
 // Fallback to default value, defined in the Matrix specification
 fun PowerLevelsContent?.banOrDefault() = this?.ban ?: UserPowerLevel.Moderator.value
 fun PowerLevelsContent?.kickOrDefault() = this?.kick ?: UserPowerLevel.Moderator.value
