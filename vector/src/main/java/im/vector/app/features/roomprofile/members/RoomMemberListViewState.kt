@@ -18,11 +18,12 @@ import org.matrix.android.sdk.api.session.crypto.model.UserVerificationLevel
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
+import org.matrix.android.sdk.api.session.room.powerlevels.UserPowerLevel
 
 data class RoomMemberListViewState(
         val roomId: String,
         val roomSummary: Async<RoomSummary> = Uninitialized,
-        val roomMemberSummaries: Async<RoomMemberSummaries> = Uninitialized,
+        val roomMemberSummaries: Async<RoomMembersByRole> = Uninitialized,
         val areAllMembersLoaded: Boolean = false,
         val ignoredUserIds: List<String> = emptyList(),
         val filter: String = "",
@@ -41,12 +42,16 @@ data class ActionPermissions(
         val canRevokeThreePidInvite: Boolean = false
 )
 
-typealias RoomMemberSummaries = List<Pair<RoomMemberListCategories, List<RoomMemberSummary>>>
+data class RoomMemberWithPowerLevel(
+        val powerLevel: UserPowerLevel,
+        val summary: RoomMemberSummary,
+)
+
+typealias RoomMembersByRole = List<Pair<RoomMemberListCategories, List<RoomMemberWithPowerLevel>>>
 
 enum class RoomMemberListCategories(@StringRes val titleRes: Int) {
     ADMIN(CommonStrings.room_member_power_level_admins),
     MODERATOR(CommonStrings.room_member_power_level_moderators),
-    CUSTOM(CommonStrings.room_member_power_level_custom),
     INVITE(CommonStrings.room_member_power_level_invites),
     USER(CommonStrings.room_member_power_level_users)
 }

@@ -30,14 +30,20 @@ object MatrixPatterns {
     // Note: TLD is not mandatory (localhost, IP address...)
     private const val DOMAIN_REGEX = ":[A-Z0-9.-]+(:[0-9]{2,5})?"
 
+    private const val BASE_64_ALPHABET = "[0-9A-Za-z/\\+=]+"
+    private const val BASE_64_URL_SAFE_ALPHABET = "[0-9A-Za-z/\\-_]+"
+
     // regex pattern to find matrix user ids in a string.
     // See https://matrix.org/docs/spec/appendices#historical-user-ids
     private const val MATRIX_USER_IDENTIFIER_REGEX = "@[A-Z0-9\\x21-\\x39\\x3B-\\x7F]+$DOMAIN_REGEX"
     val PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER = MATRIX_USER_IDENTIFIER_REGEX.toRegex(RegexOption.IGNORE_CASE)
 
     // regex pattern to find room ids in a string.
-    private const val MATRIX_ROOM_IDENTIFIER_REGEX = "![A-Z0-9]+$DOMAIN_REGEX"
+    private const val MATRIX_ROOM_IDENTIFIER_REGEX = "^!.+$DOMAIN_REGEX$"
     private val PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER = MATRIX_ROOM_IDENTIFIER_REGEX.toRegex(RegexOption.IGNORE_CASE)
+
+    private const val MATRIX_ROOM_IDENTIFIER_DOMAINLESS_REGEX = "!$BASE_64_URL_SAFE_ALPHABET"
+    private val PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER_DOMAINLESS = MATRIX_ROOM_IDENTIFIER_DOMAINLESS_REGEX.toRegex()
 
     // regex pattern to find room aliases in a string.
     private const val MATRIX_ROOM_ALIAS_REGEX = "#[A-Z0-9._%#@=+-]+$DOMAIN_REGEX"
@@ -48,11 +54,11 @@ object MatrixPatterns {
     private val PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER = MATRIX_EVENT_IDENTIFIER_REGEX.toRegex(RegexOption.IGNORE_CASE)
 
     // regex pattern to find message ids in a string.
-    private const val MATRIX_EVENT_IDENTIFIER_V3_REGEX = "\\$[A-Z0-9/+]+"
+    private const val MATRIX_EVENT_IDENTIFIER_V3_REGEX = "\\$$BASE_64_ALPHABET"
     private val PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V3 = MATRIX_EVENT_IDENTIFIER_V3_REGEX.toRegex(RegexOption.IGNORE_CASE)
 
     // Ref: https://matrix.org/docs/spec/rooms/v4#event-ids
-    private const val MATRIX_EVENT_IDENTIFIER_V4_REGEX = "\\$[A-Z0-9\\-_]+"
+    private const val MATRIX_EVENT_IDENTIFIER_V4_REGEX = "\\$$BASE_64_URL_SAFE_ALPHABET"
     private val PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V4 = MATRIX_EVENT_IDENTIFIER_V4_REGEX.toRegex(RegexOption.IGNORE_CASE)
 
     // regex pattern to find group ids in a string.
@@ -76,7 +82,10 @@ object MatrixPatterns {
             PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER,
             PATTERN_CONTAIN_MATRIX_ALIAS,
             PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER,
+            PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER_DOMAINLESS,
             PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER,
+            PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V3,
+            PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V4,
             PATTERN_CONTAIN_MATRIX_GROUP_IDENTIFIER
     )
 
@@ -97,7 +106,9 @@ object MatrixPatterns {
      * @return true if the string is a valid room Id
      */
     fun isRoomId(str: String?): Boolean {
-        return str != null && str matches PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER
+        return str != null &&
+                (str matches PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER ||
+                        str matches PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER_DOMAINLESS)
     }
 
     /**

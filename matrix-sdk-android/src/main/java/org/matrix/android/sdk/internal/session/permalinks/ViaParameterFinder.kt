@@ -17,15 +17,11 @@
 package org.matrix.android.sdk.internal.session.permalinks
 
 import org.matrix.android.sdk.api.MatrixPatterns.getServerName
-import org.matrix.android.sdk.api.query.QueryStringValue
-import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.RoomGetter
+import org.matrix.android.sdk.internal.session.room.powerlevels.getRoomPowerLevels
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import java.net.URLEncoder
 import javax.inject.Inject
@@ -101,10 +97,7 @@ internal class ViaParameterFinder @Inject constructor(
     }
 
     fun userCanInvite(userId: String, roomId: String): Boolean {
-        val powerLevelsHelper = stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
-                ?.content?.toModel<PowerLevelsContent>()
-                ?.let { PowerLevelsHelper(it) }
-
-        return powerLevelsHelper?.isUserAbleToInvite(userId) ?: false
+        val roomPowerLevels = stateEventDataSource.getRoomPowerLevels(roomId)
+        return roomPowerLevels.isUserAbleToInvite(userId)
     }
 }

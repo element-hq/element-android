@@ -19,8 +19,9 @@ class RoleFormatter @Inject constructor(
         return when (role) {
             Role.Admin -> stringProvider.getString(CommonStrings.power_level_admin)
             Role.Moderator -> stringProvider.getString(CommonStrings.power_level_moderator)
-            Role.Default -> stringProvider.getString(CommonStrings.power_level_default)
-            is Role.Custom -> stringProvider.getString(CommonStrings.power_level_custom, role.value)
+            Role.User -> stringProvider.getString(CommonStrings.power_level_default)
+            Role.Creator -> stringProvider.getString(CommonStrings.power_level_owner)
+            Role.SuperAdmin -> stringProvider.getString(CommonStrings.power_level_owner)
         }
     }
 }

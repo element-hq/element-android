@@ -8,6 +8,7 @@
 package im.vector.app.features.roommemberprofile
 
 import im.vector.app.core.platform.VectorViewEvents
+import org.matrix.android.sdk.api.session.room.powerlevels.UserPowerLevel
 
 /**
  * Transient events for RoomMemberProfile.
@@ -22,8 +23,8 @@ sealed class RoomMemberProfileViewEvents : VectorViewEvents {
     object OnInviteActionSuccess : RoomMemberProfileViewEvents()
     object OnKickActionSuccess : RoomMemberProfileViewEvents()
     object OnBanActionSuccess : RoomMemberProfileViewEvents()
-    data class ShowPowerLevelValidation(val currentValue: Int, val newValue: Int) : RoomMemberProfileViewEvents()
-    data class ShowPowerLevelDemoteWarning(val currentValue: Int, val newValue: Int) : RoomMemberProfileViewEvents()
+    data class ShowPowerLevelValidation(val currentValue: UserPowerLevel, val newValue: UserPowerLevel.Value) : RoomMemberProfileViewEvents()
+    data class ShowPowerLevelDemoteWarning(val currentValue: UserPowerLevel, val newValue: UserPowerLevel.Value) : RoomMemberProfileViewEvents()
 
     data class StartVerification(
             val userId: String,

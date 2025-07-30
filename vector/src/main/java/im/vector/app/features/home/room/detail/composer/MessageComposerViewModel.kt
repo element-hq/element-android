@@ -69,7 +69,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.relation.shouldRenderInThread
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
@@ -183,7 +182,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                 PowerLevelsFlowFactory(room).createFlow(),
                 room.flow().liveRoomSummary().unwrap()
         ) { pl, sum ->
-            val canSendMessage = PowerLevelsHelper(pl).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
+            val canSendMessage = pl.isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
             if (canSendMessage) {
                 val isE2E = sum.isEncrypted
                 if (isE2E) {

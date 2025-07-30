@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/powerLevelRadioGroup"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -7,54 +9,32 @@
     android:paddingTop="12dp"
     android:paddingEnd="?dialogPreferredPadding">
 
-    <RadioGroup
-        android:id="@+id/powerLevelRadioGroup"
-        android:layout_width="match_parent"
+    <RadioButton
+        android:id="@+id/powerLevelOwnerRadio"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:text="@string/power_level_owner"
+        android:textColor="?vctr_content_primary" />
 
-        <RadioButton
-            android:id="@+id/powerLevelAdminRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/power_level_admin"
-            android:textColor="?vctr_content_primary" />
-
-        <RadioButton
-            android:id="@+id/powerLevelModeratorRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/power_level_moderator"
-            android:textColor="?vctr_content_primary" />
-
-        <RadioButton
-            android:id="@+id/powerLevelDefaultRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/power_level_default"
-            android:textColor="?vctr_content_primary" />
-
-        <RadioButton
-            android:id="@+id/powerLevelCustomRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/power_level_custom_no_value"
-            android:textColor="?vctr_content_primary" />
-
-    </RadioGroup>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/powerLevelCustomEditLayout"
-        android:layout_width="match_parent"
+    <RadioButton
+        android:id="@+id/powerLevelAdminRadio"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/power_level_custom_no_value">
+        android:text="@string/power_level_admin"
+        android:textColor="?vctr_content_primary" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/powerLevelCustomEdit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number|numberSigned" />
+    <RadioButton
+        android:id="@+id/powerLevelModeratorRadio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/power_level_moderator"
+        android:textColor="?vctr_content_primary" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+    <RadioButton
+        android:id="@+id/powerLevelDefaultRadio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/power_level_default"
+        android:textColor="?vctr_content_primary" />
 
-</LinearLayout>
+</RadioGroup>

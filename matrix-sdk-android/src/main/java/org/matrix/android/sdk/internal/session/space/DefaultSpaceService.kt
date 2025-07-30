@@ -35,8 +35,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
-import org.matrix.android.sdk.api.session.room.powerlevels.Role
+import org.matrix.android.sdk.api.session.room.powerlevels.UserPowerLevel
 import org.matrix.android.sdk.api.session.space.CreateSpaceParams
 import org.matrix.android.sdk.api.session.space.JoinSpaceResult
 import org.matrix.android.sdk.api.session.space.Space
@@ -47,11 +46,13 @@ import org.matrix.android.sdk.api.session.space.model.SpaceChildContent
 import org.matrix.android.sdk.api.session.space.model.SpaceChildSummaryEvent
 import org.matrix.android.sdk.api.session.space.model.SpaceParentContent
 import org.matrix.android.sdk.api.session.space.peeking.SpacePeekResult
+import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.RoomGetter
 import org.matrix.android.sdk.internal.session.room.SpaceGetter
 import org.matrix.android.sdk.internal.session.room.create.CreateRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.leaving.LeaveRoomTask
+import org.matrix.android.sdk.internal.session.room.powerlevels.getRoomPowerLevels
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryDataSource
 import org.matrix.android.sdk.internal.session.space.peeking.PeekSpaceTask
@@ -83,7 +84,7 @@ internal class DefaultSpaceService @Inject constructor(
             if (isPublic) {
                 this.roomAliasName = roomAliasLocalPart
                 this.powerLevelContentOverride = (powerLevelContentOverride ?: PowerLevelsContent()).copy(
-                        invite = if (isPublic) Role.Default.value else Role.Moderator.value
+                        invite = UserPowerLevel.User.value
                 )
                 this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
                 this.historyVisibility = RoomHistoryVisibility.WORLD_READABLE
@@ -253,15 +254,8 @@ internal class DefaultSpaceService @Inject constructor(
             if (roomSummaryDataSource.getRoomSummary(parentSpaceId)?.membership != Membership.JOIN) {
                 throw UnsupportedOperationException("Cannot add canonical child if not member of parent")
             }
-            val powerLevelsEvent = stateEventDataSource.getStateEvent(
-                    roomId = parentSpaceId,
-                    eventType = EventType.STATE_ROOM_POWER_LEVELS,
-                    stateKey = QueryStringValue.IsEmpty
-            )
-            val powerLevelsContent = powerLevelsEvent?.content?.toModel<PowerLevelsContent>()
-                    ?: throw UnsupportedOperationException("Cannot add canonical child, missing power level")
-            val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
-            if (!powerLevelsHelper.isUserAllowedToSend(userId, true, EventType.STATE_SPACE_CHILD)) {
+            val roomPowerLevels = stateEventDataSource.getRoomPowerLevels(parentSpaceId)
+            if (!roomPowerLevels.isUserAllowedToSend(userId, true, EventType.STATE_SPACE_CHILD)) {
                 throw UnsupportedOperationException("Cannot add canonical child, not enough power level")
             }
         }

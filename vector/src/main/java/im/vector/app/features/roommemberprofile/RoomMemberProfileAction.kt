@@ -8,6 +8,7 @@
 package im.vector.app.features.roommemberprofile
 
 import im.vector.app.core.platform.VectorViewModelAction
+import org.matrix.android.sdk.api.session.room.powerlevels.UserPowerLevel
 
 sealed class RoomMemberProfileAction : VectorViewModelAction {
     object RetryFetchingInfo : RoomMemberProfileAction()
@@ -18,7 +19,7 @@ sealed class RoomMemberProfileAction : VectorViewModelAction {
     object InviteUser : RoomMemberProfileAction()
     object VerifyUser : RoomMemberProfileAction()
     object ShareRoomMemberProfile : RoomMemberProfileAction()
-    data class SetPowerLevel(val previousValue: Int, val newValue: Int, val askForValidation: Boolean) : RoomMemberProfileAction()
+    data class SetPowerLevel(val previousValue: UserPowerLevel, val newValue: UserPowerLevel.Value, val askForValidation: Boolean) : RoomMemberProfileAction()
     data class SetUserColorOverride(val newColorSpec: String) : RoomMemberProfileAction()
     data class OpenOrCreateDm(val userId: String) : RoomMemberProfileAction()
 }

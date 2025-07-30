@@ -19,17 +19,23 @@ package org.matrix.android.sdk.api.session.room.powerlevels
 
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.banOrDefault
+import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContentWithSender
+import org.matrix.android.sdk.api.session.room.model.create.explicitlyPrivilegeRoomCreators
 import org.matrix.android.sdk.api.session.room.model.eventsDefaultOrDefault
 import org.matrix.android.sdk.api.session.room.model.inviteOrDefault
 import org.matrix.android.sdk.api.session.room.model.kickOrDefault
+import org.matrix.android.sdk.api.session.room.model.notificationLevelOrDefault
 import org.matrix.android.sdk.api.session.room.model.redactOrDefault
 import org.matrix.android.sdk.api.session.room.model.stateDefaultOrDefault
 import org.matrix.android.sdk.api.session.room.model.usersDefaultOrDefault
 
 /**
- * This class is an helper around PowerLevelsContent.
+ * This class is an helper around PowerLevelsContent and RoomCreateContent.
  */
-class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
+class RoomPowerLevels(
+        val powerLevelsContent: PowerLevelsContent?,
+        private val roomCreateContent: RoomCreateContentWithSender?,
+) {
 
     /**
      * Returns the user power level of a dedicated user Id.
@@ -37,10 +43,14 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      * @param userId the user id
      * @return the power level
      */
-    fun getUserPowerLevelValue(userId: String): Int {
-        return powerLevelsContent.users
+    fun getUserPowerLevel(userId: String): UserPowerLevel {
+        if (shouldGiveInfinitePowerLevel(userId)) return UserPowerLevel.Infinite
+        if (powerLevelsContent == null) return UserPowerLevel.User
+        val value = powerLevelsContent.users
                 ?.get(userId)
                 ?: powerLevelsContent.usersDefaultOrDefault()
+
+        return UserPowerLevel.Value(value)
     }
 
     /**
@@ -49,10 +59,9 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      * @param userId the user id
      * @return the power level
      */
-    fun getUserRole(userId: String): Role {
-        val value = getUserPowerLevelValue(userId)
-        // I think we should use powerLevelsContent.usersDefault, but Ganfra told me that it was like that on riot-Web
-        return Role.fromValue(value, powerLevelsContent.eventsDefaultOrDefault())
+    fun getSuggestedRole(userId: String): Role {
+        val value = getUserPowerLevel(userId)
+        return Role.getSuggestedRole(value)
     }
 
     /**
@@ -65,14 +74,14 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      */
     fun isUserAllowedToSend(userId: String, isState: Boolean, eventType: String?): Boolean {
         return if (userId.isNotEmpty()) {
-            val powerLevel = getUserPowerLevelValue(userId)
-            val minimumPowerLevel = powerLevelsContent.events?.get(eventType)
+            val powerLevel = getUserPowerLevel(userId)
+            val minimumPowerLevel = powerLevelsContent?.events?.get(eventType)
                     ?: if (isState) {
                         powerLevelsContent.stateDefaultOrDefault()
                     } else {
                         powerLevelsContent.eventsDefaultOrDefault()
                     }
-            powerLevel >= minimumPowerLevel
+            powerLevel >= UserPowerLevel.Value(minimumPowerLevel)
         } else false
     }
 
@@ -82,8 +91,8 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      * @return true if able to invite
      */
     fun isUserAbleToInvite(userId: String): Boolean {
-        val powerLevel = getUserPowerLevelValue(userId)
-        return powerLevel >= powerLevelsContent.inviteOrDefault()
+        val powerLevel = getUserPowerLevel(userId)
+        return powerLevel >= UserPowerLevel.Value(powerLevelsContent.inviteOrDefault())
     }
 
     /**
@@ -92,8 +101,8 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      * @return true if able to ban
      */
     fun isUserAbleToBan(userId: String): Boolean {
-        val powerLevel = getUserPowerLevelValue(userId)
-        return powerLevel >= powerLevelsContent.banOrDefault()
+        val powerLevel = getUserPowerLevel(userId)
+        return powerLevel >= UserPowerLevel.Value(powerLevelsContent.banOrDefault())
     }
 
     /**
@@ -102,8 +111,8 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      * @return true if able to kick
      */
     fun isUserAbleToKick(userId: String): Boolean {
-        val powerLevel = getUserPowerLevelValue(userId)
-        return powerLevel >= powerLevelsContent.kickOrDefault()
+        val powerLevel = getUserPowerLevel(userId)
+        return powerLevel >= UserPowerLevel.Value(powerLevelsContent.kickOrDefault())
     }
 
     /**
@@ -112,7 +121,22 @@ class PowerLevelsHelper(private val powerLevelsContent: PowerLevelsContent) {
      * @return true if able to redact
      */
     fun isUserAbleToRedact(userId: String): Boolean {
-        val powerLevel = getUserPowerLevelValue(userId)
-        return powerLevel >= powerLevelsContent.redactOrDefault()
+        val powerLevel = getUserPowerLevel(userId)
+        return powerLevel >= UserPowerLevel.Value(powerLevelsContent.redactOrDefault())
+    }
+
+    fun isUserAbleToTriggerNotification(userId: String, notificationKey: String): Boolean {
+        val userPowerLevel = getUserPowerLevel(userId)
+        val notificationPowerLevel = UserPowerLevel.Value(powerLevelsContent.notificationLevelOrDefault(key = notificationKey))
+        return userPowerLevel >= notificationPowerLevel
+    }
+
+    private fun shouldGiveInfinitePowerLevel(userId: String): Boolean {
+        if (roomCreateContent == null) return false
+        return if (roomCreateContent.inner.explicitlyPrivilegeRoomCreators()) {
+            roomCreateContent.creators.contains(userId)
+        } else {
+            false
+        }
     }
 }

@@ -18,7 +18,8 @@ package org.matrix.android.sdk.api.session.room.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.session.room.powerlevels.Role
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent.Companion.NOTIFICATIONS_ROOM_KEY
+import org.matrix.android.sdk.api.session.room.powerlevels.UserPowerLevel
 
 /**
  * Class representing the EventType.EVENT_TYPE_STATE_ROOM_POWER_LEVELS state event content.
@@ -34,7 +35,7 @@ data class PowerLevelsContent(
          */
         @Json(name = "kick") val kick: Int? = null,
         /**
-         * The level required to invite a user. Defaults to 50 if unspecified.
+         * The level required to invite a user. Defaults to 0 if unspecified.
          */
         @Json(name = "invite") val invite: Int? = null,
         /**
@@ -88,7 +89,7 @@ data class PowerLevelsContent(
      * Get the notification level for a dedicated key.
      *
      * @param key the notification key
-     * @return the level, default to Moderator if the key is not found
+     * @return the level
      */
     fun notificationLevel(key: String): Int {
         return when (val value = notifications.orEmpty()[key]) {
@@ -96,10 +97,9 @@ data class PowerLevelsContent(
             is String -> value.toInt()
             is Double -> value.toInt()
             is Int -> value
-            else -> Role.Moderator.value
+            else -> defaultNotificationLevel(key)
         }
     }
-
     companion object {
         /**
          * Key to use for content.notifications and get the level required to trigger an @room notification. Defaults to 50 if unspecified.
@@ -108,11 +108,20 @@ data class PowerLevelsContent(
     }
 }
 
+private fun defaultNotificationLevel(key: String): Int {
+    return when (key) {
+        NOTIFICATIONS_ROOM_KEY -> UserPowerLevel.Moderator.value
+        else -> UserPowerLevel.User.value
+    }
+}
+
 // Fallback to default value, defined in the Matrix specification
-fun PowerLevelsContent.banOrDefault() = ban ?: Role.Moderator.value
-fun PowerLevelsContent.kickOrDefault() = kick ?: Role.Moderator.value
-fun PowerLevelsContent.inviteOrDefault() = invite ?: Role.Moderator.value
-fun PowerLevelsContent.redactOrDefault() = redact ?: Role.Moderator.value
-fun PowerLevelsContent.eventsDefaultOrDefault() = eventsDefault ?: Role.Default.value
-fun PowerLevelsContent.usersDefaultOrDefault() = usersDefault ?: Role.Default.value
-fun PowerLevelsContent.stateDefaultOrDefault() = stateDefault ?: Role.Moderator.value
+fun PowerLevelsContent?.banOrDefault() = this?.ban ?: UserPowerLevel.Moderator.value
+fun PowerLevelsContent?.kickOrDefault() = this?.kick ?: UserPowerLevel.Moderator.value
+fun PowerLevelsContent?.inviteOrDefault() = this?.invite ?: UserPowerLevel.User.value
+fun PowerLevelsContent?.redactOrDefault() = this?.redact ?: UserPowerLevel.Moderator.value
+fun PowerLevelsContent?.eventsDefaultOrDefault() = this?.eventsDefault ?: UserPowerLevel.User.value
+fun PowerLevelsContent?.usersDefaultOrDefault() = this?.usersDefault ?: UserPowerLevel.User.value
+fun PowerLevelsContent?.stateDefaultOrDefault() = this?.stateDefault ?: UserPowerLevel.Moderator.value
+
+fun PowerLevelsContent?.notificationLevelOrDefault(key: String) = this?.notificationLevel(key) ?: defaultNotificationLevel(key)

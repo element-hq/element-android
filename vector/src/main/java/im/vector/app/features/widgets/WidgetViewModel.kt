@@ -19,6 +19,7 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.widgets.permissions.WidgetPermissionsHelper
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
@@ -26,16 +27,10 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.Content
-import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
-import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.widgets.WidgetManagementFailure
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.flow.mapOptional
-import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 
@@ -102,11 +97,10 @@ class WidgetViewModel @AssistedInject constructor(
         if (room == null) {
             return
         }
-        room.flow().liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
-                .mapOptional { it.content.toModel<PowerLevelsContent>() }
-                .unwrap()
-                .map {
-                    PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, true, null)
+        PowerLevelsFlowFactory(room)
+                .createFlow()
+                .map { roomPowerLevels ->
+                    roomPowerLevels.isUserAllowedToSend(session.myUserId, true, null)
                 }
                 .setOnEach {
                     copy(canManageWidgets = it)

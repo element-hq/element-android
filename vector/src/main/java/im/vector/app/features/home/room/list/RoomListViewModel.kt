@@ -26,6 +26,8 @@ import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
 import im.vector.app.features.analytics.plan.JoinedRoom
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.invite.AutoAcceptInvites
+import im.vector.app.features.room.LeaveRoomPrompt
+import im.vector.app.features.room.getLeaveRoomWarning
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -41,7 +43,6 @@ import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.localecho.RoomLocalEcho
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
@@ -150,8 +151,8 @@ class RoomListViewModel @AssistedInject constructor(
         }
     }
 
-    fun isPublicRoom(roomId: String): Boolean {
-        return session.getRoom(roomId)?.stateService()?.isPublic().orFalse()
+    suspend fun getLeaveRoomWarning(roomId: String): LeaveRoomPrompt.Warning {
+        return session.getLeaveRoomWarning(roomId)
     }
 
     // PRIVATE METHODS *****************************************************************************

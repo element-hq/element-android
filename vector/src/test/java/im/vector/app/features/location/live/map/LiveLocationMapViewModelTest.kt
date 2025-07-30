@@ -12,6 +12,7 @@ import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.live.StopLiveLocationShareUseCase
 import im.vector.app.test.fakes.FakeLocationSharingServiceConnection
 import im.vector.app.test.fakes.FakeLocationTracker
+import im.vector.app.test.fakes.FakePermissionChecker
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.test
 import io.mockk.every
@@ -38,6 +39,7 @@ class LiveLocationMapViewModelTest {
     private val fakeLocationSharingServiceConnection = FakeLocationSharingServiceConnection()
     private val fakeStopLiveLocationShareUseCase = mockk<StopLiveLocationShareUseCase>()
     private val fakeLocationTracker = FakeLocationTracker()
+    private val fakePermissionChecker = FakePermissionChecker()
 
     private fun createViewModel(): LiveLocationMapViewModel {
         return LiveLocationMapViewModel(
@@ -47,6 +49,7 @@ class LiveLocationMapViewModelTest {
                 locationSharingServiceConnection = fakeLocationSharingServiceConnection.instance,
                 stopLiveLocationShareUseCase = fakeStopLiveLocationShareUseCase,
                 locationTracker = fakeLocationTracker.instance,
+                permissionChecker = fakePermissionChecker
         )
     }
 

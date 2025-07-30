@@ -16,7 +16,6 @@
 package org.matrix.android.sdk.internal.session.room
 
 import io.realm.Realm
-import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationState
 import org.matrix.android.sdk.api.session.events.model.AggregatedAnnotation
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -27,7 +26,6 @@ import org.matrix.android.sdk.api.session.events.model.content.EncryptedEventCon
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.ReferencesAggregatedContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageBeaconLocationDataContent
@@ -36,7 +34,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.verification.toState
 import org.matrix.android.sdk.internal.database.helper.findRootThreadEvent
@@ -62,6 +59,7 @@ import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
 import org.matrix.android.sdk.internal.session.room.aggregation.livelocation.LiveLocationAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.aggregation.poll.PollAggregationProcessor
 import org.matrix.android.sdk.internal.session.room.aggregation.utd.EncryptedReferenceAggregationProcessor
+import org.matrix.android.sdk.internal.session.room.powerlevels.getRoomPowerLevels
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.util.time.Clock
 import timber.log.Timber
@@ -216,9 +214,8 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 }
                 in EventType.POLL_END.values -> {
                     sessionManager.getSessionComponent(sessionId)?.session()?.let { session ->
-                        getPowerLevelsHelper(event.roomId)?.let {
-                            pollAggregationProcessor.handlePollEndEvent(session, it, realm, event)
-                        }
+                        val roomPowerLevels = stateEventDataSource.getRoomPowerLevels(event.roomId)
+                        pollAggregationProcessor.handlePollEndEvent(session, roomPowerLevels, realm, event)
                     }
                 }
                 in EventType.STATE_ROOM_BEACON_INFO.values -> {
@@ -379,12 +376,6 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 threadSummaryLatestMessage = replaceEvent
             }
         }
-    }
-
-    private fun getPowerLevelsHelper(roomId: String): PowerLevelsHelper? {
-        return stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
-                ?.content?.toModel<PowerLevelsContent>()
-                ?.let { PowerLevelsHelper(it) }
     }
 
     private fun handleInitialAggregatedRelations(

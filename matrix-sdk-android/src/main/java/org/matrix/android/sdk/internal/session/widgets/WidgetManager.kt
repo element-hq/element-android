@@ -30,15 +30,13 @@ import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerService
-import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.widgets.WidgetManagementFailure
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.session.integrationmanager.IntegrationManager
+import org.matrix.android.sdk.internal.session.room.powerlevels.getRoomPowerLevels
 import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataDataSource
 import org.matrix.android.sdk.internal.session.widgets.helper.WidgetFactory
@@ -200,12 +198,7 @@ internal class WidgetManager @Inject constructor(
     }
 
     fun hasPermissionsToHandleWidgets(roomId: String): Boolean {
-        val powerLevelsEvent = stateEventDataSource.getStateEvent(
-                roomId = roomId,
-                eventType = EventType.STATE_ROOM_POWER_LEVELS,
-                stateKey = QueryStringValue.IsEmpty
-        )
-        val powerLevelsContent = powerLevelsEvent?.content?.toModel<PowerLevelsContent>() ?: return false
-        return PowerLevelsHelper(powerLevelsContent).isUserAllowedToSend(userId, true, EventType.STATE_ROOM_WIDGET_LEGACY)
+        val roomPowerLevels = stateEventDataSource.getRoomPowerLevels(roomId)
+        return roomPowerLevels.isUserAllowedToSend(userId, true, EventType.STATE_ROOM_WIDGET_LEGACY)
     }
 }

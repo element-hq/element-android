@@ -18,15 +18,39 @@ package org.matrix.android.sdk.api.session.room.model.create
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.toModel
 
 /**
  * Content of a m.room.create type event.
  */
 @JsonClass(generateAdapter = true)
 data class RoomCreateContent(
+        // Creator should be replaced by the sender of the event
         @Json(name = "creator") val creator: String? = null,
         @Json(name = "room_version") val roomVersion: String? = null,
         @Json(name = "predecessor") val predecessor: Predecessor? = null,
         // Defines the room type, see #RoomType (user extensible)
-        @Json(name = "type") val type: String? = null
+        @Json(name = "type") val type: String? = null,
+        @Json(name = "additional_creators") val additionalCreators: List<String>? = null,
 )
+
+data class RoomCreateContentWithSender(
+        val senderId: String,
+        val inner: RoomCreateContent
+) {
+    val creators = setOf(senderId) + inner.additionalCreators.orEmpty().toSet()
+}
+
+fun Event.getRoomCreateContentWithSender(): RoomCreateContentWithSender? {
+    if (this.type != EventType.STATE_ROOM_CREATE) return null
+    val innerContent = getClearContent().toModel<RoomCreateContent>() ?: return null
+    val senderId = senderId ?: return null
+    return RoomCreateContentWithSender(senderId, innerContent)
+}
+
+fun RoomCreateContent.explicitlyPrivilegeRoomCreators(): Boolean {
+    val supportedRoomVersions = listOf("org.matrix.hydra.11", "12")
+    return supportedRoomVersions.contains(roomVersion)
+}

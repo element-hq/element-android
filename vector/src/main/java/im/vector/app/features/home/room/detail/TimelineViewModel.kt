@@ -110,7 +110,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachme
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.model.tombstone.RoomTombstoneContent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -304,11 +303,11 @@ class TimelineViewModel @AssistedInject constructor(
     private fun observePowerLevel() {
         if (room == null) return
         PowerLevelsFlowFactory(room).createFlow()
-                .onEach {
-                    val canInvite = PowerLevelsHelper(it).isUserAbleToInvite(session.myUserId)
+                .onEach { powerLevels ->
+                    val canInvite = powerLevels.isUserAbleToInvite(session.myUserId)
                     val isAllowedToManageWidgets = session.widgetService().hasPermissionsToHandleWidgets(room.roomId)
-                    val isAllowedToStartWebRTCCall = PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, false, EventType.CALL_INVITE)
-                    val isAllowedToSetupEncryption = PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
+                    val isAllowedToStartWebRTCCall = powerLevels.isUserAllowedToSend(session.myUserId, false, EventType.CALL_INVITE)
+                    val isAllowedToSetupEncryption = powerLevels.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
                     setState {
                         copy(
                                 canInvite = canInvite,
