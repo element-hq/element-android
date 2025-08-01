@@ -95,7 +95,7 @@ import org.matrix.rustcomponents.sdk.crypto.ProgressListener as RustProgressList
 
 class CryptoLogger : Logger {
     override fun log(logLine: String) {
-        Timber.d(logLine)
+        Timber.d(logLine.trimEnd())
     }
 }
 
