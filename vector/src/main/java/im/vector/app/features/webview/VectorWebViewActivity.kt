@@ -9,6 +9,7 @@ package im.vector.app.features.webview
 
 import android.content.Context
 import android.content.Intent
+import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,6 +28,9 @@ import org.matrix.android.sdk.api.session.Session
 class VectorWebViewActivity : VectorBaseActivity<ActivityVectorWebViewBinding>() {
 
     override fun getBinding() = ActivityVectorWebViewBinding.inflate(layoutInflater)
+
+    override val rootView: View
+        get() = views.mainRoot
 
     val session: Session by lazy {
         activeSessionHolder.getActiveSession()

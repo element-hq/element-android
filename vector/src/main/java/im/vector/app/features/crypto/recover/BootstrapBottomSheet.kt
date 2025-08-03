@@ -122,6 +122,7 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = super.onCreateView(inflater, container, savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            @Suppress("DEPRECATION")
             dialog?.window?.setDecorFitsSystemWindows(false)
         } else {
             @Suppress("DEPRECATION")

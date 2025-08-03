@@ -9,6 +9,7 @@ package im.vector.app.features.pin
 
 import android.content.Context
 import android.content.Intent
+import android.view.View
 import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
@@ -30,6 +31,9 @@ class PinActivity : VectorBaseActivity<ActivitySimpleBinding>(), UnlockedActivit
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     override fun initUiAndData() {
         if (isFirstCreation()) {

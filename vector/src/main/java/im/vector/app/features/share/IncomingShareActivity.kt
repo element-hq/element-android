@@ -9,6 +9,7 @@ package im.vector.app.features.share
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
@@ -45,6 +46,9 @@ class IncomingShareActivity : VectorBaseActivity<ActivitySimpleBinding>() {
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     private fun handleAppStarted() {
         // If we are not logged in, stop the sharing process and open login screen.

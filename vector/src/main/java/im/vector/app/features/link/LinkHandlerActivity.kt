@@ -10,6 +10,7 @@ package im.vector.app.features.link
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -40,6 +41,9 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
     private val startAppViewModel: StartAppViewModel by viewModel()
 
     override fun getBinding() = ActivityProgressBinding.inflate(layoutInflater)
+
+    override val rootView: View
+        get() = views.mainRoot
 
     override fun initUiAndData() {
         handleIntent()

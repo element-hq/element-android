@@ -7,6 +7,7 @@
 
 package im.vector.app.features.voice
 
+import android.Manifest
 import android.content.Context
 import android.media.AudioFormat
 import android.media.AudioRecord
@@ -15,6 +16,7 @@ import android.media.audiofx.AutomaticGainControl
 import android.media.audiofx.NoiseSuppressor
 import android.os.Build
 import android.widget.Toast
+import im.vector.app.core.utils.PermissionChecker
 import io.element.android.opusencoder.OggOpusEncoder
 import io.element.android.opusencoder.configuration.SampleRate
 import kotlinx.coroutines.CoroutineScope
@@ -22,6 +24,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -31,6 +34,7 @@ class VoiceRecorderL(
         private val context: Context,
         coroutineContext: CoroutineContext,
         private val codec: OggOpusEncoder,
+        private val permissionChecker: PermissionChecker,
 ) : AbstractVoiceRecorder(context) {
 
     companion object {
@@ -127,7 +131,11 @@ class VoiceRecorderL(
         bufferSizeInShorts = AudioRecord.getMinBufferSize(SAMPLE_RATE.value, channelConfig, format)
         // Buffer is created as a ShortArray, but AudioRecord needs the size in bytes
         val bufferSizeInBytes = bufferSizeInShorts * 2
-        audioRecorder = AudioRecord(MediaRecorder.AudioSource.MIC, SAMPLE_RATE.value, channelConfig, format, bufferSizeInBytes)
+        if (permissionChecker.checkPermission(Manifest.permission.RECORD_AUDIO)) {
+            audioRecorder = AudioRecord(MediaRecorder.AudioSource.MIC, SAMPLE_RATE.value, channelConfig, format, bufferSizeInBytes)
+        } else {
+            Timber.w("Not allowed to record audio.")
+        }
     }
 
     private fun calculateMaxAmplitude(buffer: ShortArray) {

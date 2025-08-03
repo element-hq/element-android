@@ -10,6 +10,7 @@ package im.vector.app.features.home.room.threads
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.FragmentTransaction
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragmentToBackstack
@@ -41,6 +42,9 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>() {
     override fun getBinding() = ActivityThreadsBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

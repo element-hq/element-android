@@ -76,6 +76,9 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
+    override val rootView: View
+        get() = views.coordinatorLayout
+
     override fun initUiAndData() {
         analyticsScreenName = MobileScreen.ScreenName.Login
 

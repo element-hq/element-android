@@ -17,6 +17,7 @@ import androidx.core.content.getSystemService
 import androidx.core.location.LocationListenerCompat
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.BuildMeta
+import im.vector.app.core.utils.PermissionChecker
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -37,6 +38,7 @@ class LocationTracker @Inject constructor(
         context: Context,
         private val activeSessionHolder: ActiveSessionHolder,
         private val buildMeta: BuildMeta,
+        private val permissionChecker: PermissionChecker,
 ) : LocationListenerCompat {
 
     private val locationManager = context.getSystemService<LocationManager>()
@@ -173,7 +175,15 @@ class LocationTracker @Inject constructor(
     fun removeCallback(callback: Callback) {
         callbacks.remove(callback)
         if (callbacks.size == 0) {
-            stop()
+            if (permissionChecker.checkPermission(
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                    )
+            ) {
+                stop()
+            } else {
+                Timber.w("Not allowed to use location api.")
+            }
         }
     }
 

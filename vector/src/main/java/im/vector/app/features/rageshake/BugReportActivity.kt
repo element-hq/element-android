@@ -11,6 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -36,6 +37,9 @@ class BugReportActivity :
     override fun getBinding() = ActivityBugReportBinding.inflate(layoutInflater)
 
     private val viewModel: BugReportViewModel by viewModel()
+
+    override val rootView: View
+        get() = views.mainRoot
 
     private var reportType: ReportType = ReportType.BUG_REPORT
 

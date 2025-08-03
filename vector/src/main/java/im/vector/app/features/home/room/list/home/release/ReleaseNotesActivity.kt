@@ -7,6 +7,7 @@
 
 package im.vector.app.features.home.room.list.home.release
 
+import android.view.View
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
@@ -25,6 +26,9 @@ class ReleaseNotesActivity : VectorBaseActivity<ActivitySimpleBinding>() {
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     override fun initUiAndData() {
         orientationLocker.lockPhonesToPortrait(this)

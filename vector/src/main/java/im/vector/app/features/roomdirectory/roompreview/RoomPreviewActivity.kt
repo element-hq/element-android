@@ -10,6 +10,7 @@ package im.vector.app.features.roomdirectory.roompreview
 import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
+import android.view.View
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
@@ -72,6 +73,9 @@ class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>() {
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.simpleFragmentContainer
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
