@@ -1754,7 +1754,7 @@
     <string name="identity_server_set_default_submit">Izmantot %1$s</string>
     <string name="identity_server_set_default_notice">Mājasserveris (%1$s) ierosina identitātes serverim izmantot %2$s</string>
     <string name="identity_server_error_bulk_sha256_not_supported">Privātuma nolūkos ${app_name} nodrošina ar jaucējkodu slēptu lietotāja e-pasta adrešu un tālruņa numuru sūtīšanu.</string>
-    <string name="identity_server_error_terms_not_signed">Vispirms iestatījumos pieņemiet identitātes servera noteikumus.</string>
+    <string name="identity_server_error_terms_not_signed">Vispirms iestatījumos jāpieņem identitāšu servera noteikumi.</string>
     <string name="identity_server_error_no_identity_server_configured">Vispirms lūgums konfigurēt identitātes serveri.</string>
     <string name="identity_server_error_outdated_home_server">Šī darbība nav iespējama. Mājasserveris ir novecojis.</string>
     <string name="choose_locale_loading_locales">Ielādē pieejamās valodu…</string>
@@ -1801,10 +1801,10 @@
     <string name="directory_add_a_new_server_prompt">Jāievada jaunā servera, kuru ir vēlme izpētīt, nosaukums.</string>
     <string name="other_spaces_or_rooms_you_might_not_know">Citas vietas vai istabas, kuras varētu būt zināmas</string>
     <string name="space_you_know_that_contains_this_room">Telpa, kuru zināt, kas satur šo istabu</string>
-    <string name="decide_who_can_find_and_join">Izlemiet, kurš var atrast šo istabu un pievienoties tai.</string>
+    <string name="decide_who_can_find_and_join">Izlem, kurš var atrast šo istabu un pievienoties tai!</string>
     <string name="tap_to_edit_spaces">Piesist, lai labotu vietas</string>
     <string name="select_spaces">Izvēlaties Telpas</string>
-    <string name="decide_which_spaces_can_access">Izlemiet, kuras Telpas var piekļūt šai istabai. Ja Telpa ir izvēlēta, tās dalībnieki varēs atrast istabas nosaukumu un pievienoties tai.</string>
+    <string name="decide_which_spaces_can_access">Izlem, kuras vietas var piekļūt šai istabai! Ja vieta ir izvēlēta, tās dalībnieki varēs atrast istabas nosaukumu un pievienoties tai.</string>
     <string name="spaces_which_can_access">Telpas, kurām var piekļūt</string>
     <string name="allow_space_member_to_find_and_access">Ļaut vietas dalībniekiem atrast un piekļūt.</string>
     <string name="room_create_member_of_space_name_can_join">Telpas %s dalībnieki var atrast, apskatīt un pievienoties.</string>
@@ -2491,7 +2491,7 @@
     <string name="settings_security_pin_code_use_biometrics_error">Nevarēja iespējot biometrisko autentifikāciju.</string>
     <string name="a11y_open_settings">Atvērt iestatījumus</string>
     <string name="a11y_trust_level_default">Noklusējuma uzticamības līmenis</string>
-    <string name="settings_security_pin_code_summary">Ja ir vēlēšanas atiestatīt savu PIN, jāpiesit Aizmirsu PIN, lai atteiktos un atiesatītu.</string>
+    <string name="settings_security_pin_code_summary">Ja ir vēlēšanas atiestatīt savu PIN, jāpiesit \"Aizmirsu PIN\", lai atteiktos un atiestatītu.</string>
     <string name="settings_security_pin_code_grace_period_title">Pieprasīt PIN pēc 2 minūtēm</string>
     <string name="call_transfer_consult_first">Iepriekškonsultēšana</string>
     <string name="dev_tools_error_no_content">Nav satura</string>
