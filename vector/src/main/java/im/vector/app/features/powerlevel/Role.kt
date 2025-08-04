@@ -22,7 +22,7 @@ fun Role.isOwner() = this == Role.Creator || this == Role.SuperAdmin
 
 fun Room.membersByRoleFlow(): Flow<Map<Role, List<RoomMemberSummary>>> {
     val roomMembersFlow = flow().liveRoomMembers(roomMemberQueryParams())
-    val roomPowerLevelsFlow = PowerLevelsFlowFactory(this).createFlow()
+    val roomPowerLevelsFlow = flow().liveRoomPowerLevels()
     return combine(roomMembersFlow, roomPowerLevelsFlow) { roomMembers, roomPowerLevels ->
         roomMembers.groupBy { roomPowerLevels.getSuggestedRole(it.userId) }
     }.distinctUntilChanged()

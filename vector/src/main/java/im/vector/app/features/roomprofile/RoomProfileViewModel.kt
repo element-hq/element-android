@@ -19,7 +19,6 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.home.ShortcutCreator
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.powerlevel.isLastAdminFlow
 import im.vector.app.features.session.coroutineScope
 import im.vector.lib.strings.CommonStrings
@@ -121,7 +120,7 @@ class RoomProfileViewModel @AssistedInject constructor(
     }
 
     private fun observePowerLevels() {
-        val powerLevelsContentLive = PowerLevelsFlowFactory(room).createFlow()
+        val powerLevelsContentLive = room.flow().liveRoomPowerLevels()
         powerLevelsContentLive
                 .onEach { roomPowerLevels ->
                     val canUpdateRoomState = roomPowerLevels.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
@@ -163,8 +162,7 @@ class RoomProfileViewModel @AssistedInject constructor(
     }
 
     private fun observePermissions() {
-        PowerLevelsFlowFactory(room)
-                .createFlow()
+        room.flow().liveRoomPowerLevels()
                 .setOnEach { roomPowerLevels ->
                     val permissions = RoomProfileViewState.ActionPermissions(
                             canEnableEncryption = roomPowerLevels.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)

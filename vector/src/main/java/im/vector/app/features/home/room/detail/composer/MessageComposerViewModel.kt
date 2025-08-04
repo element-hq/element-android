@@ -30,7 +30,6 @@ import im.vector.app.features.home.room.detail.ChatEffect
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.toMessageType
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voice.VoiceFailure
@@ -179,7 +178,7 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     private fun observePowerLevelAndEncryption(room: Room) {
         combine(
-                PowerLevelsFlowFactory(room).createFlow(),
+                room.flow().liveRoomPowerLevels(),
                 room.flow().liveRoomSummary().unwrap()
         ) { pl, sum ->
             val canSendMessage = pl.isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)

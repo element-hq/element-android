@@ -20,7 +20,6 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -71,8 +70,7 @@ class SpaceMenuViewModel @AssistedInject constructor(
                 }
             }.launchIn(viewModelScope)
 
-            PowerLevelsFlowFactory(room)
-                    .createFlow()
+            room.flow().liveRoomPowerLevels()
                     .onEach { roomPowerLevels ->
 
                         val canInvite = roomPowerLevels.isUserAbleToInvite(session.myUserId)

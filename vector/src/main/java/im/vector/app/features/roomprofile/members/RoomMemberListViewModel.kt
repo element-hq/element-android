@@ -16,7 +16,6 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -72,7 +71,7 @@ class RoomMemberListViewModel @AssistedInject constructor(
             memberships = Membership.activeMemberships()
         }
 
-        val powerLevelsFlow = PowerLevelsFlowFactory(room).createFlow()
+        val powerLevelsFlow = room.flow().liveRoomPowerLevels()
         combine(
                 roomFlow.liveRoomMembers(roomMemberQueryParams),
                 powerLevelsFlow,
@@ -137,7 +136,7 @@ class RoomMemberListViewModel @AssistedInject constructor(
     }
 
     private fun observePowerLevel() {
-        PowerLevelsFlowFactory(room).createFlow()
+        room.flow().liveRoomPowerLevels()
                 .onEach { roomPowerLevels ->
                     val permissions = ActionPermissions(
                             canInvite = roomPowerLevels.isUserAbleToInvite(session.myUserId),

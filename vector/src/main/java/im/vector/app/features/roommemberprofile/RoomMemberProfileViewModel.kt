@@ -23,7 +23,6 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
@@ -361,7 +360,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
 
     private fun observeRoomSummaryAndPowerLevels(room: Room) {
         val roomSummaryLive = room.flow().liveRoomSummary().unwrap()
-        val powerLevelsFlow = PowerLevelsFlowFactory(room).createFlow()
+        val powerLevelsFlow = room.flow().liveRoomPowerLevels()
         powerLevelsFlow
                 .onEach { roomPowerLevels ->
                     val permissions = ActionPermissions(

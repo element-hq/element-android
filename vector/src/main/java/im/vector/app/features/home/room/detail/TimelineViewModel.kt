@@ -54,7 +54,6 @@ import im.vector.app.features.home.room.typing.TypingHelper
 import im.vector.app.features.location.live.StopLiveLocationShareUseCase
 import im.vector.app.features.location.live.tracking.LocationSharingServiceConnection
 import im.vector.app.features.notifications.NotificationDrawerManager
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.raw.wellknown.CryptoConfig
 import im.vector.app.features.raw.wellknown.getOutboundSessionKeySharingStrategyOrDefault
 import im.vector.app.features.raw.wellknown.withElementWellKnown
@@ -302,7 +301,7 @@ class TimelineViewModel @AssistedInject constructor(
 
     private fun observePowerLevel() {
         if (room == null) return
-        PowerLevelsFlowFactory(room).createFlow()
+        room.flow().liveRoomPowerLevels()
                 .onEach { powerLevels ->
                     val canInvite = powerLevels.isUserAbleToInvite(session.myUserId)
                     val isAllowedToManageWidgets = session.widgetService().hasPermissionsToHandleWidgets(room.roomId)

@@ -24,13 +24,11 @@ import org.matrix.android.sdk.api.session.pushrules.SenderNotificationPermission
 import org.matrix.android.sdk.api.session.room.getRoomPowerLevels
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.RoomGetter
-import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 import javax.inject.Inject
 
 internal class DefaultConditionResolver @Inject constructor(
         private val roomGetter: RoomGetter,
         @UserId private val userId: String,
-        private val stateEventDataSource: StateEventDataSource,
 ) : ConditionResolver {
 
     override fun resolveEventMatchCondition(

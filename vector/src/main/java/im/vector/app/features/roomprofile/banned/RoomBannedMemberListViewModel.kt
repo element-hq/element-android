@@ -15,7 +15,6 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -61,7 +60,7 @@ class RoomBannedMemberListViewModel @AssistedInject constructor(
                     )
                 }
 
-        val powerLevelsFlow = PowerLevelsFlowFactory(room).createFlow()
+        val powerLevelsFlow = room.flow().liveRoomPowerLevels()
         powerLevelsFlow
                 .setOnEach { roomPowerLevels ->
                     copy(canUserBan = roomPowerLevels.isUserAbleToBan(session.myUserId))

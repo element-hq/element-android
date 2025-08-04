@@ -23,7 +23,6 @@ import im.vector.app.features.home.room.detail.timeline.format.NoticeEventFormat
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.VectorHtmlCompressor
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.strings.CommonStrings
@@ -115,7 +114,7 @@ class MessageActionsViewModel @AssistedInject constructor(
         if (room == null) {
             return
         }
-        PowerLevelsFlowFactory(room).createFlow()
+        room.flow().liveRoomPowerLevels()
                 .onEach { roomPowerLevels ->
                     val canReact = roomPowerLevels.isUserAllowedToSend(session.myUserId, false, EventType.REACTION)
                     val canRedact = roomPowerLevels.isUserAbleToRedact(session.myUserId)

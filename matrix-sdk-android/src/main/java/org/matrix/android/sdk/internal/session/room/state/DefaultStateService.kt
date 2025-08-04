@@ -31,11 +31,14 @@ import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
+import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 import org.matrix.android.sdk.api.session.room.state.StateService
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.content.FileUploader
+import org.matrix.android.sdk.internal.session.room.powerlevels.getRoomPowerLevels
+import org.matrix.android.sdk.internal.session.room.powerlevels.getRoomPowerLevelsLive
 
 internal class DefaultStateService @AssistedInject constructor(
         @Assisted private val roomId: String,
@@ -63,6 +66,14 @@ internal class DefaultStateService @AssistedInject constructor(
 
     override fun getStateEventsLive(eventTypes: Set<String>, stateKey: QueryStateEventValue): LiveData<List<Event>> {
         return stateEventDataSource.getStateEventsLive(roomId, eventTypes, stateKey)
+    }
+
+    override fun getRoomPowerLevels(): RoomPowerLevels {
+        return stateEventDataSource.getRoomPowerLevels(roomId)
+    }
+
+    override fun getRoomPowerLevelsLive(): LiveData<RoomPowerLevels> {
+        return stateEventDataSource.getRoomPowerLevelsLive(roomId)
     }
 
     override suspend fun sendStateEvent(

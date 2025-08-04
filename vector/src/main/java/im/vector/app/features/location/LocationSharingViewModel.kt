@@ -19,7 +19,6 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.utils.PermissionChecker
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.location.domain.usecase.CompareLocationsUseCase
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -35,6 +34,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getUserOrDefault
 import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 /**
@@ -72,7 +72,7 @@ class LocationSharingViewModel @AssistedInject constructor(
     }
 
     private fun observePowerLevelsForLiveLocationSharing() {
-        PowerLevelsFlowFactory(room).createFlow()
+        room.flow().liveRoomPowerLevels()
                 .distinctUntilChanged()
                 .setOnEach { roomPowerLevels ->
                     val canShareLiveLocation = EventType.STATE_ROOM_BEACON_INFO.values

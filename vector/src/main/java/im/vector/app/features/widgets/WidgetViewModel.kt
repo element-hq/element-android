@@ -19,7 +19,6 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.widgets.permissions.WidgetPermissionsHelper
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
@@ -97,8 +96,7 @@ class WidgetViewModel @AssistedInject constructor(
         if (room == null) {
             return
         }
-        PowerLevelsFlowFactory(room)
-                .createFlow()
+        room.flow().liveRoomPowerLevels()
                 .map { roomPowerLevels ->
                     roomPowerLevels.isUserAllowedToSend(session.myUserId, true, null)
                 }
