@@ -12,7 +12,7 @@ import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MXCrossSigningInfo
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
+import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 import org.matrix.android.sdk.api.util.MatrixItem
 
 data class RoomMemberProfileViewState(
@@ -24,7 +24,7 @@ data class RoomMemberProfileViewState(
         val isIgnored: Async<Boolean> = Uninitialized,
         val isRoomEncrypted: Boolean = false,
         val isAlgorithmSupported: Boolean = true,
-        val powerLevelsContent: PowerLevelsContent? = null,
+        val roomPowerLevels: RoomPowerLevels? = null,
         val userPowerLevelString: Async<String> = Uninitialized,
         val userMatrixItem: Async<MatrixItem> = Uninitialized,
         val userMXCrossSigningInfo: MXCrossSigningInfo? = null,

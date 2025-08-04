@@ -51,7 +51,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomThirdPartyInviteContent
 import org.matrix.android.sdk.api.session.room.model.RoomTopicContent
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
-import org.matrix.android.sdk.api.session.room.powerlevels.Role
+import org.matrix.android.sdk.api.session.room.powerlevels.UserPowerLevel
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.internal.session.profile.ThirdPartyIdentifier.Companion.MEDIUM_EMAIL
@@ -372,13 +372,13 @@ internal class DefaultCreateLocalRoomStateEventsTaskTest {
         // Power levels
         val powerLevelsContent = result.find { it.type == EventType.STATE_ROOM_POWER_LEVELS }?.content.toModel<PowerLevelsContent>()
         powerLevelsContent.shouldNotBeNull()
-        powerLevelsContent.ban shouldBeEqualTo Role.Moderator.value
-        powerLevelsContent.kick shouldBeEqualTo Role.Moderator.value
-        powerLevelsContent.invite shouldBeEqualTo Role.Moderator.value
-        powerLevelsContent.redact shouldBeEqualTo Role.Moderator.value
-        powerLevelsContent.eventsDefault shouldBeEqualTo Role.Default.value
-        powerLevelsContent.usersDefault shouldBeEqualTo Role.Default.value
-        powerLevelsContent.stateDefault shouldBeEqualTo Role.Moderator.value
+        powerLevelsContent.ban shouldBeEqualTo UserPowerLevel.Moderator.value
+        powerLevelsContent.kick shouldBeEqualTo UserPowerLevel.Moderator.value
+        powerLevelsContent.invite shouldBeEqualTo UserPowerLevel.User.value
+        powerLevelsContent.redact shouldBeEqualTo UserPowerLevel.Moderator.value
+        powerLevelsContent.eventsDefault shouldBeEqualTo UserPowerLevel.User.value
+        powerLevelsContent.usersDefault shouldBeEqualTo UserPowerLevel.User.value
+        powerLevelsContent.stateDefault shouldBeEqualTo UserPowerLevel.Moderator.value
         // Guest access
         result.find { it.type == EventType.STATE_ROOM_GUEST_ACCESS }
                 ?.content.toModel<RoomGuestAccessContent>()?.guestAccess shouldBeEqualTo GuestAccess.Forbidden

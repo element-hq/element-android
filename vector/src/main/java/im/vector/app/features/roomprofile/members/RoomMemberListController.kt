@@ -16,11 +16,13 @@ import im.vector.app.core.extensions.join
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.roomprofile.permissions.RoleFormatter
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomThirdPartyInviteContent
+import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -29,7 +31,8 @@ class RoomMemberListController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val stringProvider: StringProvider,
         private val colorProvider: ColorProvider,
-        private val roomMemberSummaryFilter: RoomMemberSummaryFilter
+        private val roomMemberSummaryFilter: RoomMemberSummaryFilter,
+        private val roleFormatter: RoleFormatter,
 ) : TypedEpoxyController<RoomMemberListViewState>() {
 
     interface Callback {
@@ -56,13 +59,13 @@ class RoomMemberListController @Inject constructor(
                 .orEmpty()
         var threePidInvitesDone = filteredThreePidInvites.isEmpty()
 
-        for ((powerLevelCategory, roomMemberList) in roomMembersByPowerLevel) {
-            val filteredRoomMemberList = roomMemberList.filter { roomMemberSummaryFilter.test(it) }
+        for ((category, roomMemberList) in roomMembersByPowerLevel) {
+            val filteredRoomMemberList = roomMemberList.filter { roomMemberSummaryFilter.test(it.summary) }
             if (filteredRoomMemberList.isEmpty()) {
                 continue
             }
 
-            if (powerLevelCategory == RoomMemberListCategories.USER && !threePidInvitesDone) {
+            if (category == RoomMemberListCategories.USER && !threePidInvitesDone) {
                 // If there is no regular invite, display threepid invite before the regular user
                 buildProfileSection(
                         stringProvider.getString(RoomMemberListCategories.INVITE.titleRes)
@@ -73,20 +76,20 @@ class RoomMemberListController @Inject constructor(
             }
 
             buildProfileSection(
-                    stringProvider.getString(powerLevelCategory.titleRes)
+                    stringProvider.getString(category.titleRes)
             )
 
             filteredRoomMemberList.join(
                     each = { _, roomMember ->
-                        buildRoomMember(roomMember, powerLevelCategory, host, data)
+                        buildRoomMember(roomMember, host, data)
                     },
                     between = { _, roomMemberBefore ->
                         dividerItem {
-                            id("divider_${roomMemberBefore.userId}")
+                            id("divider_${roomMemberBefore.summary.userId}")
                         }
                     }
             )
-            if (powerLevelCategory == RoomMemberListCategories.INVITE && !threePidInvitesDone) {
+            if (category == RoomMemberListCategories.INVITE && !threePidInvitesDone) {
                 // Display the threepid invite after the regular invite
                 dividerItem {
                     id("divider_threepidinvites")
@@ -108,24 +111,24 @@ class RoomMemberListController @Inject constructor(
     }
 
     private fun buildRoomMember(
-            roomMember: RoomMemberSummary,
-            powerLevelCategory: RoomMemberListCategories,
+            roomMember: RoomMemberWithPowerLevel,
             host: RoomMemberListController,
             data: RoomMemberListViewState
     ) {
-        val powerLabel = stringProvider.getString(powerLevelCategory.titleRes)
+        val role = Role.getSuggestedRole(roomMember.powerLevel)
+        val powerLabel = roleFormatter.format(role)
 
         profileMatrixItemWithPowerLevelWithPresence {
-            id(roomMember.userId)
-            matrixItem(roomMember.toMatrixItem())
+            id(roomMember.summary.userId)
+            matrixItem(roomMember.summary.toMatrixItem())
             avatarRenderer(host.avatarRenderer)
-            userVerificationLevel(data.trustLevelMap.invoke()?.get(roomMember.userId))
+            userVerificationLevel(data.trustLevelMap.invoke()?.get(roomMember.summary.userId))
             clickListener {
-                host.callback?.onRoomMemberClicked(roomMember)
+                host.callback?.onRoomMemberClicked(roomMember.summary)
             }
             showPresence(true)
-            userPresence(roomMember.userPresence)
-            ignoredUser(roomMember.userId in data.ignoredUserIds)
+            userPresence(roomMember.summary.userPresence)
+            ignoredUser(roomMember.summary.userId in data.ignoredUserIds)
             powerLevelLabel(
                     span {
                         span(powerLabel) {

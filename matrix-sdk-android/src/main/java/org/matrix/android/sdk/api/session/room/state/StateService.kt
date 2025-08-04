@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
+import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.Optional
 
@@ -106,4 +107,6 @@ interface StateService {
     suspend fun setJoinRulePublic()
     suspend fun setJoinRuleInviteOnly()
     suspend fun setJoinRuleRestricted(allowList: List<String>)
+    fun getRoomPowerLevels(): RoomPowerLevels
+    fun getRoomPowerLevelsLive(): LiveData<RoomPowerLevels>
 }

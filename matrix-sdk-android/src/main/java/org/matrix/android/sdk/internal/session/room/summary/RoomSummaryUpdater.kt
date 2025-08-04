@@ -34,7 +34,8 @@ import org.matrix.android.sdk.api.session.room.model.RoomTopicContent
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContentWithSender
+import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncUnreadNotifications
@@ -313,13 +314,25 @@ internal class RoomSummaryUpdater @Inject constructor(
                                         // check if sender can post child relation in parent?
                                         val senderId = parentInfo.stateEventSender
                                         val parentRoomId = parentInfo.roomId
-                                        val powerLevelsHelper = CurrentStateEventEntity
+                                        val powerLevelsContent = CurrentStateEventEntity
                                                 .getOrNull(realm, parentRoomId, "", EventType.STATE_ROOM_POWER_LEVELS)
                                                 ?.root
                                                 ?.let { ContentMapper.map(it.content).toModel<PowerLevelsContent>() }
-                                                ?.let { PowerLevelsHelper(it) }
 
-                                        isValidRelation = powerLevelsHelper?.isUserAllowedToSend(senderId, true, EventType.STATE_SPACE_CHILD) ?: false
+                                        val roomCreateContent = CurrentStateEventEntity
+                                                .getOrNull(realm, parentRoomId, "", EventType.STATE_ROOM_CREATE)
+                                                ?.root
+                                                ?.let {
+                                                    val content = ContentMapper.map(it.content).toModel<RoomCreateContent>()
+                                                    val sender = it.sender
+                                                    if (content != null && sender != null) {
+                                                        RoomCreateContentWithSender(sender, content)
+                                                    } else {
+                                                        null
+                                                    }
+                                                }
+                                        val roomPowerLevels = RoomPowerLevels(powerLevelsContent, roomCreateContent)
+                                        isValidRelation = roomPowerLevels.isUserAllowedToSend(senderId, true, EventType.STATE_SPACE_CHILD)
                                     }
 
                                     if (isValidRelation) {

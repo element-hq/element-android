@@ -30,6 +30,7 @@ import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.notification.RoomNotificationState
+import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Optional
@@ -93,6 +94,10 @@ class FlowRoom(private val room: Room) {
                 .startWith(room.coroutineDispatchers.io) {
                     room.stateService().getStateEvents(eventTypes, stateKey)
                 }
+    }
+
+    fun liveRoomPowerLevels(): Flow<RoomPowerLevels> {
+        return room.stateService().getRoomPowerLevelsLive().asFlow()
     }
 
     fun liveReadMarker(): Flow<Optional<String>> {

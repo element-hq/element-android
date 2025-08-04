@@ -23,7 +23,6 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
@@ -42,9 +41,9 @@ import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomEncryptionAlgorithm
 import org.matrix.android.sdk.api.session.room.model.RoomType
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -233,15 +232,15 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         if (room == null || action.previousValue == action.newValue) {
             return@withState
         }
-        val currentPowerLevelsContent = state.powerLevelsContent ?: return@withState
-        val myPowerLevel = PowerLevelsHelper(currentPowerLevelsContent).getUserPowerLevelValue(session.myUserId)
+        val roomPowerLevels = state.roomPowerLevels ?: return@withState
+        val myPowerLevel = roomPowerLevels.getUserPowerLevel(session.myUserId)
         if (action.askForValidation && action.newValue >= myPowerLevel) {
             _viewEvents.post(RoomMemberProfileViewEvents.ShowPowerLevelValidation(action.previousValue, action.newValue))
         } else if (action.askForValidation && state.isMine) {
             _viewEvents.post(RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning(action.previousValue, action.newValue))
         } else {
-            val newPowerLevelsContent = currentPowerLevelsContent
-                    .setUserPowerLevel(state.userId, action.newValue)
+            val newPowerLevelsContent = (roomPowerLevels.powerLevelsContent ?: PowerLevelsContent())
+                    .setUserPowerLevel(state.userId, action.newValue.value)
                     .toContent()
             viewModelScope.launch {
                 _viewEvents.post(RoomMemberProfileViewEvents.Loading())
@@ -361,19 +360,17 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
 
     private fun observeRoomSummaryAndPowerLevels(room: Room) {
         val roomSummaryLive = room.flow().liveRoomSummary().unwrap()
-        val powerLevelsContentLive = PowerLevelsFlowFactory(room).createFlow()
-
-        powerLevelsContentLive
-                .onEach {
-                    val powerLevelsHelper = PowerLevelsHelper(it)
+        val powerLevelsFlow = room.flow().liveRoomPowerLevels()
+        powerLevelsFlow
+                .onEach { roomPowerLevels ->
                     val permissions = ActionPermissions(
-                            canKick = powerLevelsHelper.isUserAbleToKick(session.myUserId),
-                            canBan = powerLevelsHelper.isUserAbleToBan(session.myUserId),
-                            canInvite = powerLevelsHelper.isUserAbleToInvite(session.myUserId),
-                            canEditPowerLevel = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_POWER_LEVELS)
+                            canKick = roomPowerLevels.isUserAbleToKick(session.myUserId),
+                            canBan = roomPowerLevels.isUserAbleToBan(session.myUserId),
+                            canInvite = roomPowerLevels.isUserAbleToInvite(session.myUserId),
+                            canEditPowerLevel = roomPowerLevels.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_POWER_LEVELS)
                     )
                     setState {
-                        copy(powerLevelsContent = it, actionPermissions = permissions)
+                        copy(roomPowerLevels = roomPowerLevels, actionPermissions = permissions)
                     }
                 }.launchIn(viewModelScope)
 
@@ -388,14 +385,14 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
                 copy(isRoomEncrypted = false)
             }
         }
-        roomSummaryLive.combine(powerLevelsContentLive) { roomSummary, powerLevelsContent ->
+        roomSummaryLive.combine(powerLevelsFlow) { roomSummary, roomPowerLevels ->
             val roomName = roomSummary.toMatrixItem().getBestName()
-            val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
-            when (val userPowerLevel = powerLevelsHelper.getUserRole(initialState.userId)) {
+            when (roomPowerLevels.getSuggestedRole(initialState.userId)) {
+                Role.SuperAdmin,
+                Role.Creator -> stringProvider.getString(CommonStrings.room_member_power_level_owner_in, roomName)
                 Role.Admin -> stringProvider.getString(CommonStrings.room_member_power_level_admin_in, roomName)
                 Role.Moderator -> stringProvider.getString(CommonStrings.room_member_power_level_moderator_in, roomName)
-                Role.Default -> stringProvider.getString(CommonStrings.room_member_power_level_default_in, roomName)
-                is Role.Custom -> stringProvider.getString(CommonStrings.room_member_power_level_custom_in, userPowerLevel.value, roomName)
+                Role.User -> stringProvider.getString(CommonStrings.room_member_power_level_default_in, roomName)
             }
         }.execute {
             copy(userPowerLevelString = it)

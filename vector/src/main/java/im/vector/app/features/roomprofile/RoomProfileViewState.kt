@@ -30,6 +30,7 @@ data class RoomProfileViewState(
         val encryptToVerifiedDeviceOnly: Async<Boolean> = Uninitialized,
         val globalCryptoConfig: Async<GlobalCryptoConfig> = Uninitialized,
         val unverifiedDevicesInTheRoom: Async<Boolean> = Uninitialized,
+        val isLastAdmin: Boolean = false
 ) : MavericksState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)

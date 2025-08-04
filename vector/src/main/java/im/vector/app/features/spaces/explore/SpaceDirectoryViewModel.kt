@@ -21,7 +21,6 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
 import im.vector.app.features.analytics.plan.JoinedRoom
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -36,7 +35,6 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
@@ -96,16 +94,14 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
     private fun observePermissions() {
         val room = session.getRoom(initialState.spaceId) ?: return
 
-        val powerLevelsContentLive = PowerLevelsFlowFactory(room).createFlow()
+        val powerLevelsFlow = room.flow().liveRoomPowerLevels()
 
-        powerLevelsContentLive
-                .onEach {
-                    val powerLevelsHelper = PowerLevelsHelper(it)
+        powerLevelsFlow
+                .onEach { roomPowerLevels ->
                     setState {
                         copy(
-                                canAddRooms = powerLevelsHelper.isUserAllowedToSend(
-                                        session.myUserId, true,
-                                        EventType.STATE_SPACE_CHILD
+                                canAddRooms = roomPowerLevels.isUserAllowedToSend(
+                                        userId = session.myUserId, isState = true, eventType = EventType.STATE_SPACE_CHILD
                                 )
                         )
                     }
