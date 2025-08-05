@@ -2829,7 +2829,7 @@
     <plurals name="x_selected">
         <item quantity="one">%1$d selecionado</item>
         <item quantity="many">%1$d selecionados</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <string name="error_voice_broadcast_blocked_by_someone_else_message">Alguma outra pessoa já está gravando um broadcast de voz. Espere que o broadcast de voz dela termine para começar um novo.</string>
     <string name="rich_text_editor_full_screen_toggle">Alternar modo de tela cheia</string>
