@@ -535,7 +535,7 @@
     <string name="resource_limit_contact_admin">联系你的服务管理员</string>
     <string name="resource_limit_soft_default">本服务器其中一项资源已超出限制，<b>部分用户将无法登录</b>。</string>
     <string name="resource_limit_hard_default">本服务器其中一项资源已超出限制。</string>
-    <string name="resource_limit_soft_mau">" 此家服务器已达到其每月活跃用户限制，因此&lt;b&gt;某些用户将无法登录&lt;/b&gt;。"</string>
+    <string name="resource_limit_soft_mau"> 此家服务器已达到其每月活跃用户限制，因此<b>某些用户将无法登录</b>。</string>
     <string name="resource_limit_hard_mau">此家服务器已达到其每月活跃用户限制。</string>
     <string name="resource_limit_hard_contact">请 %s 以继续使用本服务。</string>
     <string name="resource_limit_soft_contact">请 %s 以增加此限制的额度。</string>
