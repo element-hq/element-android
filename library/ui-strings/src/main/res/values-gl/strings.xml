@@ -123,7 +123,6 @@
 \nImportando conta…</string>
     <string name="room_displayname_empty_room_was">Sala baleira (estaba %s)</string>
     <string name="room_displayname_empty_room">Sala baleira</string>
-
     <plurals name="room_displayname_four_and_more_members">
         <item quantity="one">%1$s, %2$s, %3$s e %4$d máis</item>
         <item quantity="other">%1$s, %2$s, %3$s e %4$d outras</item>
@@ -246,7 +245,6 @@
     <string name="action_rename">Renomear</string>
     <string name="notification_listening_for_events">A escoita de eventos</string>
     <string name="report_content">Informar sobre contido</string>
-
     <string name="or">ou</string>
     <string name="action_invite">Convidar</string>
     <string name="action_sign_out">Saír</string>
@@ -306,7 +304,6 @@
     <string name="auth_invalid_email">Non semella ser un enderezo de correo electrónico válido</string>
     <string name="auth_email_already_defined">Ese correo xa se empregou.</string>
     <string name="auth_forgot_password">Esqueceu o contrasinal?</string>
-
     <string name="auth_recaptcha_message">Este servidor local quere asegurarse de que non é un robot</string>
     <string name="auth_reset_password_error_unauthorized">Fallo na verificación do enderezo de correo: asegúrese de ter picado na ligazón do correo</string>
     <string name="call">Chamar</string>
@@ -402,7 +399,6 @@
         <item quantity="one">%d notificación sen ler</item>
         <item quantity="other">%d notificacións sen ler</item>
     </plurals>
-
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d sala</item>
         <item quantity="other">%d salas</item>
@@ -472,15 +468,12 @@
     <string name="yes">SI</string>
     <string name="no">NON</string>
     <string name="action_join">Unirse</string>
-
-
     <plurals name="room_title_members">
         <item quantity="one">1 participante</item>
         <item quantity="other">%d participantes</item>
     </plurals>
     <string name="ssl_do_not_trust">Non confiar</string>
     <string name="ssl_fingerprint_hash">Pegada (%s):</string>
-
     <string name="settings_notification_ringtone">Son das notificacións</string>
     <string name="settings_enable_this_device">Activar notificacións para este dispositivo</string>
     <string name="settings_set_sync_timeout">Petición de sincronización esgotada</string>
