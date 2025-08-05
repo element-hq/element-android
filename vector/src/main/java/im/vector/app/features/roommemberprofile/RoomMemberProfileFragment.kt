@@ -51,7 +51,7 @@ import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
 import im.vector.lib.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.crypto.model.UserVerificationLevel
-import org.matrix.android.sdk.api.session.room.powerlevels.Role
+import org.matrix.android.sdk.api.session.room.powerlevels.UserPowerLevel
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
@@ -377,9 +377,9 @@ class RoomMemberProfileFragment :
                 .show()
     }
 
-    override fun onEditPowerLevel(currentRole: Role) {
-        EditPowerLevelDialogs.showChoice(requireActivity(), CommonStrings.power_level_edit_title, currentRole) { newPowerLevel ->
-            viewModel.handle(RoomMemberProfileAction.SetPowerLevel(currentRole.value, newPowerLevel, true))
+    override fun onEditPowerLevel(userPowerLevel: UserPowerLevel.Value) {
+        EditPowerLevelDialogs.showChoice(requireActivity(), CommonStrings.power_level_edit_title, userPowerLevel) { newPowerLevel ->
+            viewModel.handle(RoomMemberProfileAction.SetPowerLevel(userPowerLevel, newPowerLevel, true))
         }
     }
 

@@ -50,27 +50,12 @@ class SpaceLeaveAdvancedFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         controller.listener = this
 
         withState(viewModel) { state ->
             setupToolbar(views.toolbar)
                     .setSubtitle(state.spaceSummary?.name)
                     .allowBack()
-
-            state.spaceSummary?.let { summary ->
-                val warningMessage: CharSequence? = when {
-                    summary.otherMemberIds.isEmpty() -> getString(CommonStrings.space_leave_prompt_msg_only_you)
-                    state.isLastAdmin -> getString(CommonStrings.space_leave_prompt_msg_as_admin)
-                    !summary.isPublic -> getString(CommonStrings.space_leave_prompt_msg_private)
-                    else -> null
-                }
-
-                views.spaceLeavePromptDescription.isVisible = warningMessage != null
-                views.spaceLeavePromptDescription.text = warningMessage
-            }
-
-            views.spaceLeavePromptTitle.text = getString(CommonStrings.space_leave_prompt_msg_with_name, state.spaceSummary?.name ?: "")
         }
 
         views.roomList.configureWith(controller)
@@ -106,6 +91,19 @@ class SpaceLeaveAdvancedFragment :
 
     override fun invalidate() = withState(viewModel) { state ->
         super.invalidate()
+
+        state.spaceSummary?.let { summary ->
+            val warningMessage: CharSequence? = when {
+                summary.otherMemberIds.isEmpty() -> getString(CommonStrings.space_leave_prompt_msg_only_you)
+                state.isLastAdmin -> getString(CommonStrings.space_leave_prompt_msg_as_admin)
+                !summary.isPublic -> getString(CommonStrings.space_leave_prompt_msg_private)
+                else -> null
+            }
+            views.spaceLeavePromptDescription.isVisible = warningMessage != null
+            views.spaceLeavePromptDescription.text = warningMessage
+        }
+
+        views.spaceLeavePromptTitle.text = getString(CommonStrings.space_leave_prompt_msg_with_name, state.spaceSummary?.name ?: "")
 
         if (state.isFilteringEnabled) {
             views.appBarLayout.setExpanded(false)

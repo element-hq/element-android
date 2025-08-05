@@ -15,7 +15,6 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,7 +28,6 @@ import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 
@@ -62,12 +60,10 @@ class RoomBannedMemberListViewModel @AssistedInject constructor(
                     )
                 }
 
-        val powerLevelsContentLive = PowerLevelsFlowFactory(room).createFlow()
-
-        powerLevelsContentLive
-                .setOnEach {
-                    val powerLevelsHelper = PowerLevelsHelper(it)
-                    copy(canUserBan = powerLevelsHelper.isUserAbleToBan(session.myUserId))
+        val powerLevelsFlow = room.flow().liveRoomPowerLevels()
+        powerLevelsFlow
+                .setOnEach { roomPowerLevels ->
+                    copy(canUserBan = roomPowerLevels.isUserAbleToBan(session.myUserId))
                 }
     }
 

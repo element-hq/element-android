@@ -26,7 +26,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.lib.strings.CommonStrings
-import org.matrix.android.sdk.api.session.room.powerlevels.Role
+import org.matrix.android.sdk.api.session.room.powerlevels.UserPowerLevel
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -93,8 +93,8 @@ class RoomPermissionsFragment :
         }
     }
 
-    override fun onEditPermission(editablePermission: EditablePermission, currentRole: Role) {
-        EditPowerLevelDialogs.showChoice(requireActivity(), editablePermission.labelResId, currentRole) { newPowerLevel ->
+    override fun onEditPermission(editablePermission: EditablePermission, currentPowerLevel: UserPowerLevel.Value) {
+        EditPowerLevelDialogs.showChoice(requireActivity(), editablePermission.labelResId, currentPowerLevel) { newPowerLevel ->
             viewModel.handle(RoomPermissionsAction.UpdatePermission(editablePermission, newPowerLevel))
         }
     }

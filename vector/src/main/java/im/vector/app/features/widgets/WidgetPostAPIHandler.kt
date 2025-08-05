@@ -23,12 +23,10 @@ import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
-import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
+import org.matrix.android.sdk.api.session.room.getRoomPowerLevels
 import org.matrix.android.sdk.api.session.room.getStateEvent
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.widgets.WidgetPostAPIMediator
 import org.matrix.android.sdk.api.util.JsonDict
 import timber.log.Timber
@@ -146,13 +144,8 @@ class WidgetPostAPIHandler @AssistedInject constructor(
 
         Timber.d("## canSendEvent() : eventType $eventType isState $isState")
 
-        val powerLevelsEvent = room.getStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
-        val powerLevelsContent = powerLevelsEvent?.content?.toModel<PowerLevelsContent>()
-        val canSend = if (powerLevelsContent == null) {
-            false
-        } else {
-            PowerLevelsHelper(powerLevelsContent).isUserAllowedToSend(session.myUserId, isState, eventType)
-        }
+        val roomPowerLevels = room.getRoomPowerLevels()
+        val canSend = roomPowerLevels.isUserAllowedToSend(session.myUserId, isState, eventType)
         if (canSend) {
             Timber.d("## canSendEvent() returns true")
             widgetPostAPIMediator.sendBoolResponse(true, eventData)

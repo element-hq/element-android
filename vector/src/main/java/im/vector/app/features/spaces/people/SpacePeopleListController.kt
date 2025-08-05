@@ -54,7 +54,7 @@ class SpacePeopleListController @Inject constructor(
         memberSummaries.forEach { memberEntry ->
 
             val filtered = memberEntry.second
-                    .filter { roomMemberSummaryFilter.test(it) }
+                    .filter { roomMemberSummaryFilter.test(it.summary) }
             if (filtered.isNotEmpty()) {
                 dividerItem {
                     id("divider_type_${memberEntry.first.titleRes}")
@@ -65,10 +65,10 @@ class SpacePeopleListController @Inject constructor(
                     .join(
                             each = { _, roomMember ->
                                 profileMatrixItemWithPowerLevel {
-                                    id(roomMember.userId)
-                                    matrixItem(roomMember.toMatrixItem())
+                                    id(roomMember.summary.userId)
+                                    matrixItem(roomMember.summary.toMatrixItem())
                                     avatarRenderer(host.avatarRenderer)
-                                    userVerificationLevel(data.trustLevelMap.invoke()?.get(roomMember.userId))
+                                    userVerificationLevel(data.trustLevelMap.invoke()?.get(roomMember.summary.userId))
                                             .apply {
                                                 val pl = host.toPowerLevelLabel(memberEntry.first)
                                                 if (memberEntry.first == RoomMemberListCategories.INVITE) {
@@ -106,13 +106,13 @@ class SpacePeopleListController @Inject constructor(
                                             }
 
                                     clickListener {
-                                        host.listener?.onSpaceMemberClicked(roomMember)
+                                        host.listener?.onSpaceMemberClicked(roomMember.summary)
                                     }
                                 }
                             },
                             between = { _, roomMemberBefore ->
                                 dividerItem {
-                                    id("divider_${roomMemberBefore.userId}")
+                                    id("divider_${roomMemberBefore.summary.userId}")
                                 }
                             }
                     )

@@ -45,6 +45,7 @@ import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.navigation.SettingsActivityPayload
+import im.vector.app.features.room.LeaveRoomPrompt
 import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -320,25 +321,16 @@ class RoomProfileFragment :
     }
 
     override fun onLeaveRoomClicked() {
-        val isPublicRoom = roomProfileViewModel.isPublicRoom()
-        val message = buildString {
-            append(getString(CommonStrings.room_participants_leave_prompt_msg))
-            if (!isPublicRoom) {
-                append("\n\n")
-                append(getString(CommonStrings.room_participants_leave_private_warning))
+        withState(roomProfileViewModel) { state ->
+            val warning = when {
+                state.isLastAdmin -> LeaveRoomPrompt.Warning.LAST_ADMIN
+                state.roomSummary()?.isPublic == false -> LeaveRoomPrompt.Warning.PRIVATE_ROOM
+                else -> LeaveRoomPrompt.Warning.NONE
+            }
+            LeaveRoomPrompt.show(requireContext(), warning) {
+                roomProfileViewModel.handle(RoomProfileAction.LeaveRoom)
             }
         }
-        MaterialAlertDialogBuilder(
-                requireContext(),
-                if (isPublicRoom) 0 else im.vector.lib.ui.styles.R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive
-        )
-                .setTitle(CommonStrings.room_participants_leave_prompt_title)
-                .setMessage(message)
-                .setPositiveButton(CommonStrings.action_leave) { _, _ ->
-                    roomProfileViewModel.handle(RoomProfileAction.LeaveRoom)
-                }
-                .setNegativeButton(CommonStrings.action_cancel, null)
-                .show()
     }
 
     override fun onRoomAliasesClicked() {

@@ -16,14 +16,13 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getRoomSummary
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.flow.flow
 
 class ShareSpaceViewModel @AssistedInject constructor(
         @Assisted private val initialState: ShareSpaceViewState,
@@ -50,13 +49,11 @@ class ShareSpaceViewModel @AssistedInject constructor(
 
     private fun observePowerLevel() {
         val room = session.getRoom(initialState.spaceId) ?: return
-        PowerLevelsFlowFactory(room)
-                .createFlow()
-                .onEach { powerLevelContent ->
-                    val powerLevelsHelper = PowerLevelsHelper(powerLevelContent)
+        room.flow().liveRoomPowerLevels()
+                .onEach { roomPowerLevels ->
                     setState {
                         copy(
-                                canInviteByMxId = powerLevelsHelper.isUserAbleToInvite(session.myUserId)
+                                canInviteByMxId = roomPowerLevels.isUserAbleToInvite(session.myUserId)
                         )
                     }
                 }

@@ -10,12 +10,27 @@ package im.vector.app.core.utils
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
+import dagger.Binds
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 
-class PermissionChecker @Inject constructor(
+interface PermissionChecker {
+
+    @InstallIn(SingletonComponent::class)
+    @dagger.Module
+    interface Module {
+        @Binds
+        fun bindPermissionChecker(permissionChecker: AndroidPermissionChecker): PermissionChecker
+    }
+
+    fun checkPermission(vararg permissions: String): Boolean
+}
+
+class AndroidPermissionChecker @Inject constructor(
         private val applicationContext: Context,
-) {
-    fun checkPermission(vararg permissions: String): Boolean {
+) : PermissionChecker {
+    override fun checkPermission(vararg permissions: String): Boolean {
         return permissions.any { permission ->
             ActivityCompat.checkSelfPermission(applicationContext, permission) != PackageManager.PERMISSION_GRANTED
         }
