@@ -1250,9 +1250,9 @@
     <string name="resource_limit_hard_contact">ກະລຸນາ %s ເພື່ອສືບຕໍ່ໃຊ້ບໍລິການນີ້.</string>
     <string name="resource_limit_soft_contact">ກະລຸນາ %s ເພື່ອເພີ່ມຂີດຈຳກັດນີ້.</string>
     <string name="resource_limit_hard_mau">homeserver ນີ້ຮອດຂີດຈຳກັດຜູ້ໃຊ້ປະຈຳເດືອນແລ້ວ.</string>
-    <string name="resource_limit_soft_mau">" homeserver ນີ້ຮອດຂີດຈຳກັດຜູ້ໃຊ້ລາຍເດືອນຂອງມັນແລ້ວ ດັ່ງນັ້ນ &lt;b&gt;ຜູ້ໃຊ້ບາງຄົນຈະບໍ່ສາມາດເຂົ້າສູ່ລະບົບໄດ້&lt;/b&gt;."</string>
+    <string name="resource_limit_soft_mau"> homeserver ນີ້ຮອດຂີດຈຳກັດຜູ້ໃຊ້ລາຍເດືອນຂອງມັນແລ້ວ ດັ່ງນັ້ນ <b>ຜູ້ໃຊ້ບາງຄົນຈະບໍ່ສາມາດເຂົ້າສູ່ລະບົບໄດ້</b>.</string>
     <string name="resource_limit_hard_default">homeserver ນີ້ ມີຊັບພະຍາກເກີນຂີດຈຳກັດໃດໜຶ່ງ.</string>
-    <string name="resource_limit_soft_default">ເຊີບເວີ homeserver ນີ້ເກີນຂີດຈຳກັດໃນຊັບພະຍາກອນຂອງມັນ ດັ່ງນັ້ນ &lt;b&gt;ຜູ້ໃຊ້ບາງຄົນຈະບໍ່ສາມາດເຂົ້າສູ່ລະບົບໄດ້&lt;/b&gt;.</string>
+    <string name="resource_limit_soft_default">ເຊີບເວີ homeserver ນີ້ເກີນຂີດຈຳກັດໃນຊັບພະຍາກອນຂອງມັນ ດັ່ງນັ້ນ <b>ຜູ້ໃຊ້ບາງຄົນຈະບໍ່ສາມາດເຂົ້າສູ່ລະບົບໄດ້</b>.</string>
     <string name="resource_limit_contact_admin">ຕິດຕໍ່ຜູ້ເບິ່ງແຍງການບໍລິການຂອງທ່ານ</string>
     <string name="room_tombstone_predecessor_link">ກົດທີ່ນີ້ເພື່ອເບິ່ງຂໍ້ຄວາມເກົ່າ</string>
     <string name="room_tombstone_continuation_description">ສືບຕໍ່ການສົນທະນາອື່ນໃນຫ້ອງນີ້</string>
