@@ -806,7 +806,7 @@
     <string name="room_tombstone_continuation_description">ეს ოთახი არის სხვა საუბრის გაგრძელება</string>
     <string name="resource_limit_contact_admin">დაუკავშირდით თქვენს სერვისის ადმინისტრატორს</string>
     <string name="resource_limit_hard_default">ეს ჰომესერვერი გადააჭარბა მის რესურსების ლიმიტს.</string>
-    <string name="resource_limit_soft_mau">" ეს ჰომესერვერი გადააჭარბა მის თვიური აქტიური მომხმარებლის ლიმიტს, ამიტომ &lt;b&gt;ზოგიერთ მომხმარებელს ვერ ექნება შესვლა&lt;/b&gt;."</string>
+    <string name="resource_limit_soft_mau"> ეს ჰომესერვერი გადააჭარბა მის თვიური აქტიური მომხმარებლის ლიმიტს, ამიტომ <b>ზოგიერთ მომხმარებელს ვერ ექნება შესვლა</b>.</string>
     <string name="resource_limit_soft_contact">გთხოვთ %s, რომ ეს ლიმიტი გაიზარდოს.</string>
     <string name="unknown_error">ბოდიში, მოხდა შეცდომა</string>
     <string name="merged_events_expand">გაფართოება</string>
@@ -897,7 +897,7 @@
     <string name="deactivate_account_delete_checkbox">გთხოვთ, დაივიწყოთ ყველა შეტყობინება, რომელიც გავგზავნე, როდესაც ჩემი ანგარიში დეაქტივირდება (გაფრთხილება: ეს გამოიწვევს, რომ მომავალი მომხმარებლები დაინახავენ საუბრის არასრული ხედვას)</string>
     <string name="room_tombstone_continuation_link">საუბარი გრძელდება აქ</string>
     <string name="room_tombstone_predecessor_link">დააწკაპუნეთ აქ ძველი შეტყობინებების სანახავად</string>
-    <string name="resource_limit_soft_default">ეს ჰომესერვერი გადააჭარბა მის რესურსების ლიმიტს, ამიტომ &lt;b&gt;ზოგიერთ მომხმარებელს ვერ ექნება შესვლა&lt;/b&gt;.</string>
+    <string name="resource_limit_soft_default">ეს ჰომესერვერი გადააჭარბა მის რესურსების ლიმიტს, ამიტომ <b>ზოგიერთ მომხმარებელს ვერ ექნება შესვლა</b>.</string>
     <string name="resource_limit_hard_mau">ეს ჰომესერვერი გადააჭარბა მის თვიური აქტიური მომხმარებლის ლიმიტს.</string>
     <string name="resource_limit_hard_contact">გთხოვთ %s, რომ გააგრძელოთ ამ სერვისის გამოყენება.</string>
     <string name="keys_backup_passphrase_not_empty_error_message">გთხოვთ წაშალოთ პაროლფრაზა, თუ გსურთ, რომ ${app_name}-მა შექმნას აღდგენის გასაღები.</string>
