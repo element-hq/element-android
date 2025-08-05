@@ -77,7 +77,6 @@
     <string name="matrix_only_filter">Apenas contactos do Matrix</string>
     <string name="no_result_placeholder">Sem resultados</string>
     <string name="rooms_header">Salas</string>
-
     <string name="send_bug_report_include_logs">Enviar logs</string>
     <string name="send_bug_report_include_crash_logs">Enviar logs da falha</string>
     <string name="send_bug_report_include_screenshot">Enviar captura de ecrã</string>
@@ -105,10 +104,8 @@
     <string name="auth_invalid_email">Isto não parece ser um endereço de e-mail válido</string>
     <string name="auth_email_already_defined">Este endereço de email já está registado.</string>
     <string name="auth_forgot_password">Esqueceu-se da palavra-passe?</string>
-
     <string name="auth_recaptcha_message">Este servidor quer ter a certeza de que você não é um robô</string>
     <string name="auth_reset_password_error_unauthorized">Falha ao verificar o endereço de e-mail: verifique se clicou no link no e-mail</string>
-
     <string name="login_error_invalid_home_server">Introduza um URL válido</string>
     <string name="login_error_bad_json">JSON mal formatado</string>
     <string name="login_error_not_json">Não continha JSON válido</string>
@@ -124,15 +121,10 @@
     <string name="call_in_progress">Chamada em curso</string>
     <string name="call_error_user_not_responding">O destinatário não atendeu.</string>
     <string name="permissions_rationale_popup_title">Informação</string>
-
-
     <string name="permissions_rationale_msg_record_audio">${app_name} necessita de permissão para aceder ao seu microfone para realizar chamadas de áudio.</string>
-
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} necessita de permissão para aceder à sua câmara e ao seu microfone para realizar chamadas de vídeo.
 
 Por favor, permita o acesso na próxima janela para poder efetuar a chamada.</string>
-
-
     <string name="yes">SIM</string>
     <string name="no">NÃO</string>
     <string name="_continue">Continuar</string>
@@ -140,7 +132,6 @@ Por favor, permita o acesso na próxima janela para poder efetuar a chamada.</st
     <string name="action_join">Entrar</string>
     <string name="action_reject">Rejeitar</string>
     <string name="room_jump_to_first_unread">Ir para a primeira mensagem não lida.</string>
-
     <string name="room_participants_leave_prompt_title">Sair da sala</string>
     <string name="room_participants_leave_prompt_msg">Tem a certeza que quer sair da sala?</string>
     <string name="room_participants_header_direct_chats">CONVERSAS DIRETAS</string>
@@ -167,7 +158,6 @@ Tem a certeza?</string>
     <string name="ssl_unexpected_existing_expl">O certificado mudou de um que era confiado pelo seu telefone. Isto é ALTAMENTE INVULGAR. Recomendamos que NÃO ACEITE este novo certificado.</string>
     <string name="ssl_expected_existing_expl">O certificado mudou de um que era anteriormente confiável para um que não é confiável. O servidor pode ter renovado o seu certificado. Contacte o administrador do servidor para obter a impressão digital expectável.</string>
     <string name="ssl_only_accept">Apenas aceite o certificado se o administrador do servidor publicou uma impressão digital que corresponde à impressão digital acima.</string>
-
     <string name="search_hint">Pesquisar</string>
     <string name="search_members_hint">Filtrar membros da sala</string>
     <string name="search_no_results">Nenhum resultado</string>
@@ -212,7 +202,6 @@ Tem a certeza?</string>
     <string name="devices_details_device_name">Nome do dispositivo</string>
     <string name="devices_details_last_seen_title">Visto pela última vez</string>
     <string name="devices_details_last_seen_format">%1$s em %2$s</string>
-
     <string name="devices_delete_dialog_title">Autenticação</string>
     <string name="settings_logged_in">Conectado como</string>
     <string name="settings_home_server">Servidor (homeserver)</string>
@@ -243,7 +232,6 @@ Note que esta acção irá reiniciar a aplicação e poderá levar algum tempo.<
     <string name="room_settings_labs_warning_message">Estas são funcionalidades experimentais que podem comportar-se de forma inesperada. Use com cautela.</string>
     <string name="room_settings_set_main_address">Definir como endereço principal</string>
     <string name="room_settings_unset_main_address">Retirar este endereço como principal</string>
-
     <string name="encryption_information_decryption_error">Erro de decifragem</string>
     <string name="encryption_information_device_name">Nome do dispositivo</string>
     <string name="device_manager_session_details_session_id">ID do dispositivo</string>
@@ -254,7 +242,6 @@ Note que esta acção irá reiniciar a aplicação e poderá levar algum tempo.<
     <string name="encryption_export_export">Exportar</string>
     <string name="passphrase_enter_passphrase">Insira a frase secreta</string>
     <string name="passphrase_confirm_passphrase">Confirme a frase secreta</string>
-
     <string name="encryption_import_e2e_room_keys">Importar chaves E2E da sala</string>
     <string name="encryption_import_room_keys">Importar chaves da sala</string>
     <string name="encryption_import_room_keys_summary">Importar as chaves de um ficheiro local</string>
@@ -266,7 +253,6 @@ Note que esta acção irá reiniciar a aplicação e poderá levar algum tempo.<
     <string name="encryption_information_verify">Verificar</string>
     <string name="encryption_information_verify_device_warning">Para confirmar que este dispositivo pode ser considerado confiável, entre em contacto com o seu dono usando outros meios (p. ex. pessoalmente ou através de uma chamada telefónica) e pergunte-lhe se a chave que ele vê nas suas Definições de Utilizador para este dispositivo é igual à chave abaixo:</string>
     <string name="encryption_information_verify_device_warning2">Se é igual, clique no botão verificar, abaixo. Se não é igual, então alguém está a interceptar este dispositivo e você poderá querer colocá-lo na lista negra. No futuro, este processo de verificação irá ser mais sofisticado.</string>
-
     <string name="select_room_directory">Selecione um diretório de salas</string>
     <string name="directory_server_placeholder">URL do servidor (Homeserver)</string>
     <string name="directory_server_all_rooms_on_server">Todas as salas no servidor %s</string>
@@ -335,15 +321,10 @@ Adicionar alguns agora?</string>
     </plurals>
     <string name="call">Chamar</string>
     <string name="list_members">Listar participantes</string>
-
     <plurals name="room_title_members">
         <item quantity="one">%d participante</item>
         <item quantity="other">%d participantes</item>
     </plurals>
-
-
-
-
     <string name="room_participants_ban_prompt_msg">Tem a certeza que pretende banir este utilizador desta conversa?</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d nova mensagem</item>
@@ -353,8 +334,6 @@ Adicionar alguns agora?</string>
         <item quantity="one">%d seleccionado</item>
         <item quantity="other">%d seleccionados</item>
     </plurals>
-
-
     <string name="room_settings_all_messages">Todas as mensagens</string>
     <string name="room_settings_add_homescreen_shortcut">Adicionar atalho no ecrã inicial</string>
     <string name="settings_containing_my_display_name">Mensagens que contenham o meu nome público</string>
@@ -374,7 +353,6 @@ Adicionar alguns agora?</string>
         <item quantity="one">%d mensagem notificada não lida</item>
         <item quantity="other">%d mensagens notificadas não lidas</item>
     </plurals>
-
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d sala</item>
         <item quantity="other">%d salas</item>
@@ -411,8 +389,6 @@ Adicionar alguns agora?</string>
     <string name="group_details_home">Início</string>
     <string name="rooms">Salas</string>
     <string name="invited">Foi convidado</string>
-
-
     <string name="has_been_removed">Você foi expulso da sala %1$s por %2$s</string>
     <string name="has_been_banned">Você foi banido da sala %1$s por %2$s</string>
     <string name="reason_colon">Motivo: %1$s</string>
