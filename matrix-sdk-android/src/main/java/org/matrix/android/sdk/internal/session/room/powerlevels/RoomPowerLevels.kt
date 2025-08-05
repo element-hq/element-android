@@ -32,7 +32,10 @@ import org.matrix.android.sdk.internal.session.room.state.StateEventDataSource
 internal fun StateEventDataSource.getRoomPowerLevels(roomId: String): RoomPowerLevels {
     val powerLevelsEvent = getStateEvent(roomId, EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
     val roomCreateEvent = getStateEvent(roomId, EventType.STATE_ROOM_CREATE, QueryStringValue.IsEmpty)
-    return createRoomPowerLevels(powerLevelsEvent = powerLevelsEvent, roomCreateEvent = roomCreateEvent)
+    return createRoomPowerLevels(
+            powerLevelsEvent = powerLevelsEvent,
+            roomCreateEvent = roomCreateEvent
+    )
 }
 
 internal fun StateEventDataSource.getRoomPowerLevelsLive(roomId: String): LiveData<RoomPowerLevels> {
@@ -42,7 +45,10 @@ internal fun StateEventDataSource.getRoomPowerLevelsLive(roomId: String): LiveDa
 
     fun emitIfReady(powerLevelEvent: Optional<Event>?, roomCreateEvent: Optional<Event>?) {
         if (powerLevelEvent != null && roomCreateEvent != null) {
-            val roomPowerLevels = createRoomPowerLevels(powerLevelEvent.get(), roomCreateEvent.get())
+            val roomPowerLevels = createRoomPowerLevels(
+                    powerLevelsEvent = powerLevelEvent.getOrNull(),
+                    roomCreateEvent = roomCreateEvent.getOrNull()
+            )
             resultLiveData.postValue(roomPowerLevels)
         }
     }
