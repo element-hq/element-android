@@ -2921,4 +2921,5 @@
     <string name="view_download_replacement_app_subtitle">更快、更安全，並配備了強大的協作工具。</string>
     <string name="room_profile_section_more_report">回報聊天室</string>
     <string name="room_profile_section_more_report_success_content">已成功回報聊天室。</string>
+    <string name="power_level_owner">擁有者</string>
 </resources>
