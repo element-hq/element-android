@@ -1,3 +1,14 @@
+Changes in Element v1.6.44 (2025-08-06)
+=======================================
+
+Other changes
+-------------
+ - Hide the "Manually Verify by Text" option behind devtool flag. ([#9058](https://github.com/element-hq/element-android/issues/9058))
+ - Change targetSdk to 35. ([#9051](https://github.com/element-hq/element-android/issues/9051))
+ - Support room v12. ([#9065](https://github.com/element-hq/element-android/issues/9065))
+ - Fix window insets. ([#9067](https://github.com/element-hq/element-android/issues/9067))
+
+
 Changes in Element v1.6.42 (2025-06-10)
 =======================================
 
