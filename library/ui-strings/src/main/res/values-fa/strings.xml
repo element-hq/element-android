@@ -706,7 +706,7 @@
         <item quantity="one">%1$s: %2$d پیام</item>
         <item quantity="other">%1$s: %2$d پیام</item>
     </plurals>
-    <string name="notification_unread_notified_messages_in_room">%1$s در %2$s</string>
+    <string name="notification_unread_notified_messages_in_room">%1$s در %2$s\"</string>
     <string name="notification_unknown_new_event">رویداد جدید</string>
     <string name="notification_unknown_room_name">اتاق</string>
     <string name="notification_new_messages">پیام‌های جدید</string>
@@ -1593,9 +1593,9 @@
     <string name="resource_limit_hard_contact">لطفا %s تا استفاده از این سرویس را ادامه دهید.</string>
     <string name="resource_limit_soft_contact">لطفا %s تا این محدودیت را برطرف نمائید.</string>
     <string name="resource_limit_hard_mau">این کارساز خانگی به کران کاربر فعّال ماهانه‌اش رسیده.</string>
-    <string name="resource_limit_soft_mau"> این کارساز خانگی به کران کاربر فعّال ماهانه‌اش رسیده، پس <b>برخی کاربران قادر به ورود نخواهند بود</b>.</string>
+    <string name="resource_limit_soft_mau">این کارساز خانگی به کران کاربر فعّال ماهانه‌اش رسیده، پس <b>برخی کاربران قادر به ورود نخواهند بود</b>.\"</string>
     <string name="resource_limit_hard_default">این کارساز خانگی از کران یکی از منابعش تجاوز کرده.</string>
-    <string name="resource_limit_soft_default">این کارساز خانگی از کران یکی از منابعش تجاوز کرده، پس <b>برخی کاربران قادر به ورود نخواهند بود</b>.</string>
+    <string name="resource_limit_soft_default">این کارساز خانگی از کران یکی از منابعش تجاوز کرده، پس <b>برخی کاربران قادر به ورود نخواهند بود</b>.\"</string>
     <string name="room_tombstone_continuation_description">این اتاق ادامه‌ی گفتگوی دیگر است</string>
     <string name="room_tombstone_continuation_link">گفتگو در اینجا ادامه دارد</string>
     <string name="room_tombstone_versioned_description">این اتاق جایگزین شده و دیگر فعّال نیست.</string>
@@ -1635,8 +1635,8 @@
 \nاگر در دستگاه دیگری وارد حساب خود نشده‌اید، این درخواست را نادیده بگیرید.</string>
     <string name="you_added_a_new_device">شما یک نشست جدید \\\'%s\\\' اضافه کرده‌اید که درخواست کلید‌های رمزنگاری را دارد.</string>
     <string name="widget_integration_missing_parameter">پارامتر مورد نیاز وجود ندارد.</string>
-    <string name="notification_unread_notified_messages_and_invitation">%1$s و %2$s</string>
-    <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s در %2$s و %3$s</string>
+    <string name="notification_unread_notified_messages_and_invitation">%1$s و %2$s\"</string>
+    <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s در %2$s و %3$s\"</string>
     <plurals name="notification_invitations">
         <item quantity="one">%d دعوت</item>
         <item quantity="other">%d دعوت</item>
@@ -1873,8 +1873,8 @@
     <string name="a11y_screenshot">نماگرفت</string>
     <string name="call_transfer_consult_first">ابتدا مشاوره بگیرید</string>
     <plurals name="entries">
-        <item quantity="one">%d ورودی</item>
-        <item quantity="other">%d ورودی</item>
+        <item quantity="one">%d ورودی\"</item>
+        <item quantity="other">%d ورودی\"</item>
     </plurals>
     <string name="settings_server_upload_size_unknown">این محدودیت ناشناخته است.</string>
     <string name="settings_server_upload_size_content">کارساز خانگیتان پیوست(پرونده‌ها، رسانه و…) را تا %s می‌پذیرد.</string>
@@ -2179,7 +2179,7 @@
     <string name="room_settings_mention_and_keyword_only">فقط اشاره‌ها و کلیدواژگان</string>
     <string name="call_remove_jitsi_widget_progress">پایان دادن به تماس…</string>
     <string name="call_ended_invite_timeout_title">بدون پاسخ</string>
-    <string name="call_ended_user_busy_description">کاربری که با او تماس گرفته‌اید، مشغول است.</string>
+    <string name="call_ended_user_busy_description">کاربری که با او تماس گرفته‌اید، مشغول است.\"</string>
     <string name="call_ended_user_busy_title">کاربر مشغول</string>
     <string name="audio_call_with_participant">تماس صوتی با %s</string>
     <string name="video_call_with_participant">تماس تصویری با %s</string>
@@ -2981,4 +2981,7 @@
     <string name="view_download_replacement_app_subtitle">سریع‌تر، امن‌تر و دارای ابزارهای همکاری قدرتمند.</string>
     <string name="room_profile_section_more_report">گزارش اتاق</string>
     <string name="room_profile_section_more_report_success_content">اتاق با موفّقیت گزارش شد.</string>
+    <string name="power_level_owner">مالک</string>
+    <string name="room_participants_leave_last_admin">تنها مدیر این اتاق هستید. ترکش یعنی کسی واپایشی رویش ندارد.</string>
+    <string name="room_member_power_level_owner_in">مالک %1$s</string>
 </resources>
