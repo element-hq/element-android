@@ -27,6 +27,7 @@ import androidx.core.app.MultiWindowModeChangedInfo
 import androidx.core.util.Consumer
 import androidx.core.view.MenuProvider
 import androidx.core.view.ViewCompat
+import androidx.core.view.ViewGroupCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
@@ -210,6 +211,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         ThemeUtils.setActivityTheme(this, getOtherThemes())
         viewModelFactory = activityEntryPoint.viewModelFactory()
         enableEdgeToEdge()
+        ViewGroupCompat.installCompatInsetsDispatch(window.decorView)
         super.onCreate(savedInstanceState)
         addOnMultiWindowModeChangedListener(onMultiWindowModeChangedListener)
         setupMenu()
@@ -416,6 +418,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
             // Just log that a change occurred.
             Timber.w("MDM data has been updated")
         }
+
         ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, insets ->
             val systemBars = insets.getInsets(
                     WindowInsetsCompat.Type.systemBars() or
@@ -428,7 +431,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
                     systemBars.right,
                     systemBars.bottom,
             )
-            insets
+            WindowInsetsCompat.CONSUMED
         }
     }
 
