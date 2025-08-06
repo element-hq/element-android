@@ -1,0 +1,2 @@
+التغييرات الرئيسية في هذا الإصدار: إصدار تصحيحي.
+سجل التغييرات الكامل: https://github.com/element-hq/element-android/releases

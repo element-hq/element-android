@@ -1,0 +1,2 @@
+التغييرات الرئيسية في هذا الإصدار: مكتبة Bump SDK.
+سجل التغييرات الكامل: https://github.com/element-hq/element-android/releases

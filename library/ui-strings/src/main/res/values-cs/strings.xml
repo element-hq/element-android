@@ -1448,7 +1448,7 @@
     <string name="uploads_files_subtitle">%1$s %2$s</string>
     <string name="uploads_files_no_result">V této místnosti nejsou žádné soubory</string>
     <string name="login_connect_using_matrix_id_submit">Přihlásit se identifikátorem Matrixu</string>
-    <string name="login_signin_matrix_id_title">Přihlásit se</string>
+    <string name="login_signin_matrix_id_title">Přihlásit se pomocí Matrix ID</string>
     <string name="login_signin_matrix_id_notice">Pokud založíte účet na domovském serveru, použijte své Matrix ID (např. @user:domain.com) a heslo níže.</string>
     <string name="login_signin_matrix_id_hint">Identifikátor uživatele</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">To není platný identifikátor uživatele. Platný formát: \'@uživatel:homeserver.org\'</string>
@@ -3039,4 +3039,9 @@
     <string name="view_download_replacement_app_title">Stáhnout %1$s</string>
     <string name="error_mas_not_supported_title">Pomocí této aplikace již nelze vytvořit účet na %1$s</string>
     <string name="view_download_replacement_app_subtitle">Rychlejší, bezpečnější a s výkonnými nástroji pro spolupráci.</string>
+    <string name="room_profile_section_more_report">Nahlásit místnost</string>
+    <string name="room_profile_section_more_report_success_content">Místnost byla úspěšně nahlášena.</string>
+    <string name="power_level_owner">Vlastník</string>
+    <string name="room_participants_leave_last_admin">Jste jediným správcem této místnosti. Pokud ji opustíte, nikdo nad ní nebude mít kontrolu.</string>
+    <string name="room_member_power_level_owner_in">Vlastník v %1$s</string>
 </resources>

@@ -1,0 +1,2 @@
+Galvenās izmaiņas šajā versijā: Uzlabota drošība.
+Pilnais izmaiņu žurnāls: https://github.com/element-hq/element-android/releases

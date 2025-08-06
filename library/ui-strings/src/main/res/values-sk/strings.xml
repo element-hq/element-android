@@ -3039,4 +3039,6 @@
     <string name="view_download_replacement_app_title">Stiahnuť %1$s</string>
     <string name="error_mas_not_supported_title">Pomocou tejto aplikácie si už nemôžete vytvoriť účet %1$s</string>
     <string name="view_download_replacement_app_subtitle">Rýchlejší, bezpečnejší a vybavený výkonnými nástrojmi na spoluprácu.</string>
+    <string name="room_profile_section_more_report">Nahlásiť miestnosť</string>
+    <string name="room_profile_section_more_report_success_content">Miestnosť bola úspešne nahlásená.</string>
 </resources>

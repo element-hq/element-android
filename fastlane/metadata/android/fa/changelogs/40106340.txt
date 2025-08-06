@@ -1,0 +1,2 @@
+تغغیرات عمده در این نگارش: بهبود امنیت.
+گزارش دگرگونی کامل: https://github.com/element-hq/element-android/releases

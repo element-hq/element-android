@@ -1,0 +1,2 @@
+Principaux changements pour cette version : L’utilisateur est redirigé vers Element X s’il désire créer un compte sur un serveur prenant en charge MAS.
+Intégralité des changements : https://github.com/element-hq/element-android/releases

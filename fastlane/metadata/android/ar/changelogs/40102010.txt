@@ -1,0 +1,2 @@
+التغييرات الرئيسية في هذا الإصدار: تحسينات عديدة على VoIP وSpaces (لا يزال في مرحلة تجريبية).
+سجل التغييرات الكامل: https://github.com/element-hq/element-android/releases/tag/v1.2.1

@@ -1,0 +1,2 @@
+Bu sürümdeki başlıca değişiklikler: Element Android artık Crypto Rust SDK kullanıyor.
+Tam değişiklik günlüğü için: https://github.com/element-hq/element-android/releases

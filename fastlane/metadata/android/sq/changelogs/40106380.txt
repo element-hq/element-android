@@ -1,0 +1,2 @@
+Ndryshimet kryesore në këtë version: Filtrim lidhjesh celulare: hap vetëm lidhje të cilat kanë një shteg shprehimisht të zbrazët.
+Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases

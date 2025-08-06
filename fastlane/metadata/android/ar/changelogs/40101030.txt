@@ -1,0 +1,2 @@
+التغييرات الرئيسية في هذا الإصدار: تحسينات في الأداء وإصلاحات للأخطاء!
+سجل التغييرات الكامل: https://github.com/element-hq/element-android/releases/tag/v1.1.3

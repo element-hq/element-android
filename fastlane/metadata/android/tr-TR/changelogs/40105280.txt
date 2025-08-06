@@ -1,0 +1,2 @@
+Bu sürümdeki başlıca değişiklikler: Genellikle hata düzeltmeleri yapıldı.
+Tam değişiklik günlüğü için: https://github.com/element-hq/element-android/releases

@@ -1,0 +1,2 @@
+z此版本中的主要變動：更新 SDK 函式庫。
+完整的變更紀錄：https://github.com/element-hq/element-android/releases

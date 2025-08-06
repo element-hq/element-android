@@ -1,2 +1,2 @@
-Fő változás ebben a verzióban: béta állapotú Tér támogatás. Videó tömörítés küldés előtt.
+Fő változás ebben a verzióban: Terek béta állapotú támogatása. Videótömörítés küldés előtt.
 Teljes változásnapló: https://github.com/element-hq/element-android/releases/tag/v1.1.7

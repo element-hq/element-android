@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d টি নতুন কী এই ডিভাইসে যোগ করা হয়েছে।</item>
         <item quantity="other">%d টি নতুন কী এই ডিভাইসে যোগ করা হয়েছে।</item>
@@ -21,7 +20,6 @@
     <string name="keys_backup_setup_override_backup_prompt_description">দেখে মনে হচ্ছে আপনার অন্য সেশন থেকে ইতিমধ্যে সেটআপ কী ব্যাকআপ রয়েছে। আপনি কি এটি তৈরি করছেন তার সাথে প্রতিস্থাপন করতে চান\?</string>
     <string name="keys_backup_setup_override_backup_prompt_tile">আপনার হোম সার্ভারে ইতিমধ্যে একটি ব্যাকআপ রয়েছে</string>
     <string name="recovery_key_export_saved">পুনরুদ্ধার কী সংরক্ষণ করা হয়েছে।</string>
-
     <string name="keys_backup_setup_step3_save_button_title">ফাইল হিসাবে সংরক্ষণ করুন</string>
     <string name="keys_backup_setup_step3_share_recovery_file">অংশভাগ</string>
     <string name="keys_backup_setup_step3_copy_button_title">রিকভারি কী সংরক্ষণ করুন</string>
@@ -87,8 +85,6 @@
     <string name="reason_colon">কারণ: %1$s</string>
     <string name="has_been_banned">%2$s দ্বারা আপনাকে %1$s থেকে নিষিদ্ধ করা হয়েছে।</string>
     <string name="has_been_removed">আপনি %1$s থেকে %2$s দ্বারা লাথি খেয়েছেন</string>
-
-
     <string name="invited">আমন্ত্রিত</string>
     <string name="rooms">ঘরগুলি</string>
     <string name="group_details_home">ঘর</string>
@@ -288,14 +284,12 @@
     <string name="settings_profile_picture">নথির ছবি</string>
     <string name="room_settings_add_homescreen_shortcut">ঘরের পর্দার ছোটোখাটো যোগ করুন</string>
     <string name="room_settings_all_messages">সব বার্তাগুলি</string>
-
-
     <string name="search_no_results">কোনো ফলাফল নেই</string>
     <string name="search_members_hint">ছাঁকুন ঘরের সংখ্যাগুলো</string>
     <string name="search_hint">খোঁজা</string>
     <plurals name="room_details_selected">
         <item quantity="one">%d নির্বাচিত</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <string name="ssl_only_accept">কেবলমাত্র সার্ভার প্রশাসকটি উপরের মেলে এমন একটি আঙুলের ছাপ প্রকাশ করলেই শংসাপত্রটি গ্রহণ করবে।</string>
     <string name="ssl_expected_existing_expl">"সার্টিফিকেটটি পূর্বে বিশ্বাসযোগ্য এক থেকে একে বিশ্বস্ত নয়.সার্ভারটি এটির শংসাপত্র পুনর্বিকরণ করেছে।অনুমোদিত আঙুলের ছাপ এর জন্য  সার্ভার প্রশাসকের সাথে যোগাযোগ করুন।"</string>
@@ -358,10 +352,8 @@
     <string name="login_error_no_homeserver_found">এটি কোনও বৈধ ম্যাট্রিক্স সার্ভারের ঠিকানা নয়</string>
     <string name="login_error_invalid_home_server">একটি বৈধ URL প্রবেশ করুন</string>
     <string name="auth_accept_policies">পর্যালোচনা করুন এবং এই হোমসার্ভার এর নীতিগুলি গ্রহণ করুন:</string>
-
     <string name="auth_reset_password_error_unauthorized">ইমেল ঠিকানা যাচাই করতে ব্যর্থ: ইমেলটিতে লিঙ্কে আপনি ক্লিক করেছেন তা নিশ্চিত করুন</string>
     <string name="auth_recaptcha_message">এই হোম সার্ভার আপনি একটি রোবট না সেটা নিশ্চিত করবে</string>
-
     <string name="auth_forgot_password">পাসওয়ার্ড ভুলে গেছেন\?</string>
     <string name="auth_email_already_defined">এই ইমেইল ঠিকানা ইতিমধ্যে সংজ্ঞায়িত করা হয়।</string>
     <string name="auth_invalid_email">এটি একটি বৈধ ইমেল ঠিকানা মত দেখাচ্ছে না</string>
@@ -391,7 +383,6 @@
     <string name="call_failed_no_connection_description">রিয়েল টাইম সংযোগ স্থাপন করতে ব্যর্থ।
 \nকলগুলি নির্ভরযোগ্যতার সাথে কাজ করার জন্য দয়া করে আপনার হোমসার্ভারের প্রশাসককে একটি টার্ন সার্ভার কনফিগার করতে বলুন।</string>
     <string name="call_failed_no_connection">এলিমেন্ট কল ব্যর্থ</string>
-
     <string name="start_video_call_prompt_msg">আপনি কি একটি ভিডিও কল শুরু করতে চাওয়ার বিষয়ে নিশ্চিত\?</string>
     <string name="start_voice_call_prompt_msg">আপনি কি একটি ভয়েস কল শুরু করতে চাওয়ার বিষয়ে নিশ্চিত\?</string>
     <string name="option_send_voice">ভয়েস পাঠান</string>
@@ -500,7 +491,6 @@
     <string name="settings_home_server">হোম সার্ভার</string>
     <string name="settings_logged_in">লগ ইন করুন</string>
     <string name="devices_delete_dialog_title">প্রমাণীকরণ</string>
-
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_details_last_seen_title">শেষ দেখা</string>
     <string name="devices_details_device_name">সর্বজনীন নাম আপডেট করুন</string>
@@ -509,7 +499,6 @@
     <string name="settings_opt_in_of_analytics_summary">${app_name} আমাদের অ্যাপ্লিকেশন উন্নত করার অনুমতি দেওয়ার জন্য বেনামী বিশ্লেষণ সংগ্রহ করে।</string>
     <string name="settings_opt_in_of_analytics">বিশ্লেষণ তথ্য পাঠান</string>
     <string name="settings_analytics">বৈশ্লেষিক ন্যায়</string>
-
     <string name="settings_discovery_manage">আপনার আবিষ্কারের সেটিংস পরিচালনা করুন।</string>
     <string name="settings_discovery_category">আবিষ্কার</string>
     <string name="settings_deactivate_my_account">আমার একাউন্ট নিষ্ক্রিয় করুন</string>
@@ -566,7 +555,6 @@
     <string name="settings_olm_version">olm সংস্করণ</string>
     <string name="settings_version">সংস্করণ</string>
     <string name="settings_set_sync_delay">প্রতিটি সিঙ্কের মধ্যে বিলম্ব</string>
-
     <string name="settings_set_sync_timeout">সিঙ্ক অনুরোধ সময়সীমার</string>
     <string name="settings_start_on_boot">বুট করার সময় শুরু</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">অ্যাপটি ব্যাকগ্রাউন্ডে থাকা অবস্থায় আপনাকে আগত বার্তাগুলি সম্পর্কে অবহিত করা হবে না।</string>
@@ -581,7 +569,6 @@
     <string name="action_accept">স্বীকার</string>
     <string name="action_invite">আমন্ত্রণ</string>
     <string name="or">বা</string>
-
     <string name="action_dismiss">বাতিল</string>
     <string name="action_play">চালু</string>
     <string name="report_content">কন্টেন্ট রিপোর্ট করুন</string>
@@ -689,7 +676,6 @@
     <string name="initial_sync_start_importing_account">প্রাথমিক সিঙ্ক:
 \nঅ্যাকাউন্ট আমদানি করা হচ্ছে…</string>
     <string name="room_displayname_empty_room">খালি কক্ষ</string>
-
     <string name="room_displayname_two_members">%1$s এবং %2$s</string>
     <string name="room_displayname_room_invite">কক্ষ আমন্ত্রণ</string>
     <string name="medium_phone_number">ফোন নম্বর</string>
@@ -757,7 +743,6 @@
     <string name="notice_display_name_set">%1$s নিজের প্রদর্শন নাম %2$s রেখেছে</string>
     <string name="notice_avatar_url_changed_by_you">আপনি আপনার অবতারটি পরিবর্তন করেছেন</string>
     <string name="notice_avatar_url_changed">%1$s নিজের অবতার পরিবর্তন করেছে</string>
-
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">১ টি অপঠিত বিজ্ঞপ্তি বার্তা</item>
         <item quantity="other">%d টি অপঠিত বিজ্ঞপ্তি বার্তা</item>
@@ -766,7 +751,6 @@
     <string name="directory_server_all_rooms_on_server">%s সার্ভার থেকে সব রুমগুলি</string>
     <string name="directory_server_placeholder">হোমসেরভের ইউআরএল</string>
     <string name="select_room_directory">একটি রুম ডিরেক্টরি নির্বাচন করুন</string>
-
     <string name="encryption_information_verify_device_warning2">এটি মিললে, নীচের যাচাই বাটন টিপুন। যদি এটি না হয় তবে অন্য কেউ এই সেশানটিকে আটক করছে এবং আপনাকে সম্ভবত এটি কালো তালিকাভুক্ত করা উচিত। ভবিষ্যতে এই যাচাই প্রক্রিয়া আরো পরিশীলিত হবে।</string>
     <string name="encryption_information_verify_device_warning">এই সেশানটি বিশ্বাসযোগ্য হতে পারে তা যাচাই করতে, অন্য কোন উপায়ে (যেমন ব্যক্তি বা ফোন কল) ব্যবহার করে তার মালিকের সাথে যোগাযোগ করুন এবং এই সেশানটির জন্য তাদের ব্যবহারকারী সেটিংসে এ কুঞ্জি দেখছে তা তাদের জিজ্ঞাসা করুন নীচের কুঞ্জিটির সাথে মেলে কিনা:</string>
     <string name="encryption_information_verify">যাচাই করুন</string>
@@ -782,7 +766,6 @@
     <string name="encryption_settings_manage_message_recovery_summary">কুঞ্জি ব্যাকআপ পরিচালনা করুন</string>
     <string name="encryption_message_recovery">এনক্রিপ্ট করা বার্তা পুনরুদ্ধার</string>
     <string name="encryption_exported_successfully">কীগুলি সফলভাবে উত্পাদন হয়েছিল</string>
-
     <string name="encryption_export_notice">এক্সপোর্ট করা কুঞ্জিগুলি এনক্রিপ্ট করার জন্য একটি পাসফ্রেজ তৈরি করুন। কুঞ্জিগুলি ইম্পোর্ট করতে সক্ষম হবার জন্য আপনাকে একই পাসফ্রেজটি প্রবেশ করতে হবে।</string>
     <string name="encryption_export_export">এক্সপোর্ট</string>
     <string name="encryption_export_room_keys_summary">একটি স্থানীয় ফাইলে কুঞ্জি এক্সপোর্ট করুন</string>
@@ -793,7 +776,6 @@
     <string name="encryption_information_device_name">সর্বজনীন নাম</string>
     <string name="encryption_information_decryption_error">ডিক্রিপশন সমস্যা</string>
     <string name="settings_theme">থিম</string>
-
     <string name="room_settings_unset_main_address">প্রধান ঠিকানা হিসাবে আনসেট করুন</string>
     <string name="room_settings_set_main_address">প্রধান ঠিকানা হিসাবে সেট করুন</string>
     <string name="room_participants_action_unban">নিষেধাজ্ঞা মুক্ত</string>
@@ -803,16 +785,10 @@
     <string name="room_participants_header_direct_chats">সরাসরি বার্তা</string>
     <string name="room_participants_leave_prompt_msg">আপনি কি রুম ছেড়ে যেতে চান\?</string>
     <string name="room_participants_leave_prompt_title">রুম ছেড়ে দিন</string>
-
-
-
-
     <plurals name="room_title_members">
         <item quantity="one">১ জন সদস্য</item>
         <item quantity="other">"%d  জন সদস্য"</item>
     </plurals>
-
-
     <string name="room_jump_to_first_unread">প্রথম অপঠিত বার্তা তে ঝাঁপ দাও।</string>
     <string name="list_members">সদস্যদের তালিকা</string>
     <string name="action_reject">প্রত্যাখ্যান</string>
@@ -821,14 +797,10 @@
     <string name="_continue">প্রলম্বিত</string>
     <string name="no">না</string>
     <string name="yes">হ্যাঁ</string>
-
     <string name="permissions_rationale_msg_camera_and_audio">ভিডিও কল সম্পাদনের জন্য ${app_name} আপনার ক্যামেরা এবং আপনার মাইক্রোফোন অ্যাক্সেস করার অনুমতির প্রয়োজন।
 \n
 \nকল করতে সক্ষম হতে পরবর্তী পপ আপ অ্যাক্সেস অনুমতি দিন।</string>
-
     <string name="permissions_rationale_msg_record_audio">${app_name} এর প্রয়োজন অনুমতি নিয়ে প্রবেশ করতে আপনার মাইক্রোফোন আর মাধ্যমে শোনার কালএর সঞ্চালনা করতে।</string>
-
-
     <string name="permissions_rationale_popup_title">তথা</string>
     <string name="call_error_user_not_responding">দূরবর্তী এর একটি ধার নিতে ব্যর্থ হচ্ছে।</string>
     <string name="video_call_in_progress">দৃশ্য-রেকর্ড ডাক এর অগ্রগতি…</string>

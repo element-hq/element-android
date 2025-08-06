@@ -1,0 +1,2 @@
+Bu sürümdeki ana değişiklikler: Kripto SDK güncellemesi yapıldı.
+Tam değişiklik günlüğü: https://github.com/element-hq/element-android/releases

@@ -1,0 +1,2 @@
+التغييرات الرئيسية في هذا الإصدار: دعم تجريبي لـ Spaces. ضغط الفيديو قبل الإرسال.
+سجل التغييرات الكامل: https://github.com/element-hq/element-android/releases/tag/v1.1.7
