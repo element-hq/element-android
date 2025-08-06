@@ -498,7 +498,7 @@
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="other">%d 個聊天室</item>
     </plurals>
-    <string name="notification_unread_notified_messages_in_room">%1$s 則 %2$s 的通知</string>
+    <string name="notification_unread_notified_messages_in_room">%1$s 在 %2$s 中</string>
     <string name="font_size">字體大小</string>
     <string name="tiny">微小</string>
     <string name="small">小</string>
@@ -2922,4 +2922,6 @@
     <string name="room_profile_section_more_report">回報聊天室</string>
     <string name="room_profile_section_more_report_success_content">已成功回報聊天室。</string>
     <string name="power_level_owner">擁有者</string>
+    <string name="room_participants_leave_last_admin">您是此聊天室唯一的管理員。離開後將無人能控制它。</string>
+    <string name="room_member_power_level_owner_in">%1$s 中的擁有者</string>
 </resources>
