@@ -11,6 +11,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.Mavericks
@@ -37,6 +38,11 @@ import im.vector.lib.strings.CommonStrings
 class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), MatrixToBottomSheet.InteractionListener {
 
     override fun getBinding(): ActivitySimpleBinding = ActivitySimpleBinding.inflate(layoutInflater)
+
+    override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     override fun getTitleRes(): Int = CommonStrings.space_explore_activity_title
 

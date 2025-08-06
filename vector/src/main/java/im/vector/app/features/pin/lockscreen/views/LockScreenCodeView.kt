@@ -92,7 +92,7 @@ class LockScreenCodeView @JvmOverloads constructor(
      */
     fun deleteLast(): Int {
         if (code.size == 0) return code.size
-        code.removeLast()
+        code.removeAt(code.lastIndex)
         getCodeView(code.size)?.toggle()
         return code.size
     }

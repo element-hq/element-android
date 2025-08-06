@@ -64,6 +64,9 @@
 
         <!-- Material color -->
         <item name="colorPrimary">@color/element_accent_light</item>
+        <!-- Fix background color of status bar in home and room detail activity -->
+        <!--item name="colorPrimaryDark">@color/element_background_light</item-->
+        <item name="colorPrimaryDark">?vctr_toolbar_background</item>
         <item name="colorPrimaryVariant">@color/element_accent_light</item>
         <item name="colorOnPrimary">@android:color/white</item>
         <item name="colorSecondary">@color/element_accent_light</item>

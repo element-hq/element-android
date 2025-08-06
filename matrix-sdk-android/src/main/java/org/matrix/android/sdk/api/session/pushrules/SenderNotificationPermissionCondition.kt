@@ -16,8 +16,7 @@
 package org.matrix.android.sdk.api.session.pushrules
 
 import org.matrix.android.sdk.api.session.events.model.Event
-import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 
 class SenderNotificationPermissionCondition(
         /**
@@ -35,8 +34,7 @@ class SenderNotificationPermissionCondition(
 
     override fun technicalDescription() = "User power level <$key>"
 
-    fun isSatisfied(event: Event, powerLevels: PowerLevelsContent): Boolean {
-        val powerLevelsHelper = PowerLevelsHelper(powerLevels)
-        return event.senderId != null && powerLevelsHelper.getUserPowerLevelValue(event.senderId) >= powerLevels.notificationLevel(key)
+    fun isSatisfied(event: Event, roomPowerLevels: RoomPowerLevels): Boolean {
+        return event.senderId != null && roomPowerLevels.isUserAbleToTriggerNotification(event.senderId, key)
     }
 }

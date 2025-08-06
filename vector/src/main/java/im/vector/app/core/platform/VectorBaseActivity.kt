@@ -10,25 +10,27 @@ package im.vector.app.core.platform
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.MultiWindowModeChangedInfo
-import androidx.core.content.ContextCompat
 import androidx.core.util.Consumer
 import androidx.core.view.MenuProvider
+import androidx.core.view.ViewCompat
+import androidx.core.view.ViewGroupCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -208,6 +210,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         val activityEntryPoint = EntryPointAccessors.fromActivity(this, ActivityEntryPoint::class.java)
         ThemeUtils.setActivityTheme(this, getOtherThemes())
         viewModelFactory = activityEntryPoint.viewModelFactory()
+        enableEdgeToEdge()
+        ViewGroupCompat.installCompatInsetsDispatch(window.decorView)
         super.onCreate(savedInstanceState)
         addOnMultiWindowModeChangedListener(onMultiWindowModeChangedListener)
         setupMenu()
@@ -247,7 +251,9 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         if (vectorPreferences.isNewAppLayoutEnabled()) {
             tryOrNull { // Add to XML theme when feature flag is removed
                 val toolbarBackground = MaterialColors.getColor(views.root, im.vector.lib.ui.styles.R.attr.vctr_toolbar_background)
+                @Suppress("DEPRECATION")
                 window.statusBarColor = toolbarBackground
+                @Suppress("DEPRECATION")
                 window.navigationBarColor = toolbarBackground
             }
         }
@@ -334,7 +340,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     private fun handleCertificateError(certificateError: GlobalError.CertificateError) {
         singletonEntryPoint()
                 .unrecognizedCertificateDialog()
-                .show(this,
+                .show(
+                        this,
                         certificateError.fingerprint,
                         object : UnrecognizedCertificateDialog.Callback {
                             override fun onAccept() {
@@ -411,6 +418,21 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
             // Just log that a change occurred.
             Timber.w("MDM data has been updated")
         }
+
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, insets ->
+            val systemBars = insets.getInsets(
+                    WindowInsetsCompat.Type.systemBars() or
+                            WindowInsetsCompat.Type.displayCutout() or
+                            WindowInsetsCompat.Type.ime()
+            )
+            v.updatePadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    systemBars.bottom,
+            )
+            WindowInsetsCompat.CONSUMED
+        }
     }
 
     private val postResumeScheduledActions = mutableListOf<() -> Unit>()
@@ -444,14 +466,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         mdmService.unregisterListener(this)
     }
 
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-
-        if (hasFocus && displayInFullscreen()) {
-            setFullScreen()
-        }
-    }
-
     private val onMultiWindowModeChangedListener = Consumer<MultiWindowModeChangedInfo> {
         Timber.w("onMultiWindowModeChanged. isInMultiWindowMode: ${it.isInMultiWindowMode}")
         bugReporter.inMultiWindowMode = it.isInMultiWindowMode
@@ -460,30 +474,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     /* ==========================================================================================
      * PRIVATE METHODS
      * ========================================================================================== */
-
-    /**
-     * Force to render the activity in fullscreen.
-     */
-    private fun setFullScreen() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            // New API instead of SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN and SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            window.setDecorFitsSystemWindows(false)
-            // New API instead of SYSTEM_UI_FLAG_IMMERSIVE
-            window.decorView.windowInsetsController?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            // New API instead of FLAG_TRANSLUCENT_STATUS
-            window.statusBarColor = ContextCompat.getColor(this, im.vector.lib.ui.styles.R.color.half_transparent_status_bar)
-            // New API instead of FLAG_TRANSLUCENT_NAVIGATION
-            window.navigationBarColor = ContextCompat.getColor(this, im.vector.lib.ui.styles.R.color.half_transparent_status_bar)
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-        }
-    }
 
     private fun handleMenuItemHome(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -586,8 +576,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     abstract fun getBinding(): VB
 
-    open fun displayInFullscreen() = false
-
     open fun doBeforeSetContentView() = Unit
 
     open fun initUiAndData() = Unit
@@ -625,6 +613,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     }
 
     open fun getCoordinatorLayout(): CoordinatorLayout? = null
+
+    abstract val rootView: View
 
     /* ==========================================================================================
      * User Consent

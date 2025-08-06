@@ -9,13 +9,13 @@ package im.vector.app.features.roomprofile.permissions
 
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -24,7 +24,6 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 
@@ -59,21 +58,24 @@ class RoomPermissionsViewModel @AssistedInject constructor(
     }
 
     private fun observePowerLevel() {
-        PowerLevelsFlowFactory(room)
-                .createFlow()
-                .onEach { powerLevelContent ->
-                    val powerLevelsHelper = PowerLevelsHelper(powerLevelContent)
+        room.flow().liveRoomPowerLevels()
+                .onEach { roomPowerLevels ->
                     val permissions = RoomPermissionsViewState.ActionPermissions(
-                            canChangePowerLevels = powerLevelsHelper.isUserAllowedToSend(
+                            canChangePowerLevels = roomPowerLevels.isUserAllowedToSend(
                                     userId = session.myUserId,
                                     isState = true,
                                     eventType = EventType.STATE_ROOM_POWER_LEVELS
                             )
                     )
+                    val powerLevelsContent  = roomPowerLevels.powerLevelsContent
                     setState {
                         copy(
                                 actionPermissions = permissions,
-                                currentPowerLevelsContent = Success(powerLevelContent)
+                                currentPowerLevelsContent = if (powerLevelsContent != null) {
+                                    Success(powerLevelsContent)
+                                } else {
+                                    Uninitialized
+                                }
                         )
                     }
                 }.launchIn(viewModelScope)
@@ -94,26 +96,26 @@ class RoomPermissionsViewModel @AssistedInject constructor(
 
     private fun updatePermission(action: RoomPermissionsAction.UpdatePermission) {
         withState { state ->
-            val currentPowerLevel = state.currentPowerLevelsContent.invoke() ?: return@withState
+            val currentPowerLevelsContent = state.currentPowerLevelsContent.invoke() ?: return@withState
             postLoading(true)
             viewModelScope.launch {
                 try {
                     val newPowerLevelsContent = when (action.editablePermission) {
-                        is EditablePermission.EventTypeEditablePermission -> currentPowerLevel.copy(
-                                events = currentPowerLevel.events.orEmpty().toMutableMap().apply {
-                                    put(action.editablePermission.eventType, action.powerLevel)
+                        is EditablePermission.EventTypeEditablePermission -> currentPowerLevelsContent.copy(
+                                events = currentPowerLevelsContent.events.orEmpty().toMutableMap().apply {
+                                    put(action.editablePermission.eventType, action.powerLevel.value)
                                 }
                         )
-                        is EditablePermission.DefaultRole -> currentPowerLevel.copy(usersDefault = action.powerLevel)
-                        is EditablePermission.SendMessages -> currentPowerLevel.copy(eventsDefault = action.powerLevel)
-                        is EditablePermission.InviteUsers -> currentPowerLevel.copy(invite = action.powerLevel)
-                        is EditablePermission.ChangeSettings -> currentPowerLevel.copy(stateDefault = action.powerLevel)
-                        is EditablePermission.KickUsers -> currentPowerLevel.copy(kick = action.powerLevel)
-                        is EditablePermission.BanUsers -> currentPowerLevel.copy(ban = action.powerLevel)
-                        is EditablePermission.RemoveMessagesSentByOthers -> currentPowerLevel.copy(redact = action.powerLevel)
-                        is EditablePermission.NotifyEveryone -> currentPowerLevel.copy(
-                                notifications = currentPowerLevel.notifications.orEmpty().toMutableMap().apply {
-                                    put(PowerLevelsContent.NOTIFICATIONS_ROOM_KEY, action.powerLevel)
+                        is EditablePermission.DefaultRole -> currentPowerLevelsContent.copy(usersDefault = action.powerLevel.value)
+                        is EditablePermission.SendMessages -> currentPowerLevelsContent.copy(eventsDefault = action.powerLevel.value)
+                        is EditablePermission.InviteUsers -> currentPowerLevelsContent.copy(invite = action.powerLevel.value)
+                        is EditablePermission.ChangeSettings -> currentPowerLevelsContent.copy(stateDefault = action.powerLevel.value)
+                        is EditablePermission.KickUsers -> currentPowerLevelsContent.copy(kick = action.powerLevel.value)
+                        is EditablePermission.BanUsers -> currentPowerLevelsContent.copy(ban = action.powerLevel.value)
+                        is EditablePermission.RemoveMessagesSentByOthers -> currentPowerLevelsContent.copy(redact = action.powerLevel.value)
+                        is EditablePermission.NotifyEveryone -> currentPowerLevelsContent.copy(
+                                notifications = currentPowerLevelsContent.notifications.orEmpty().toMutableMap().apply {
+                                    put(PowerLevelsContent.NOTIFICATIONS_ROOM_KEY, action.powerLevel.value)
                                 }
                         )
                     }

@@ -7,6 +7,7 @@
 
 package im.vector.app.features.location
 
+import android.Manifest
 import android.graphics.drawable.Drawable
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
@@ -15,9 +16,9 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.utils.PermissionChecker
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.location.domain.usecase.CompareLocationsUseCase
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -32,8 +33,8 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.getUserOrDefault
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 /**
@@ -48,6 +49,7 @@ class LocationSharingViewModel @AssistedInject constructor(
         private val session: Session,
         private val compareLocationsUseCase: CompareLocationsUseCase,
         private val vectorPreferences: VectorPreferences,
+        private val permissionChecker: PermissionChecker,
 ) : VectorViewModel<LocationSharingViewState, LocationSharingAction, LocationSharingViewEvents>(initialState), LocationTracker.Callback {
 
     private val room = session.getRoom(initialState.roomId)!!
@@ -70,13 +72,12 @@ class LocationSharingViewModel @AssistedInject constructor(
     }
 
     private fun observePowerLevelsForLiveLocationSharing() {
-        PowerLevelsFlowFactory(room).createFlow()
+        room.flow().liveRoomPowerLevels()
                 .distinctUntilChanged()
-                .setOnEach {
-                    val powerLevelsHelper = PowerLevelsHelper(it)
+                .setOnEach { roomPowerLevels ->
                     val canShareLiveLocation = EventType.STATE_ROOM_BEACON_INFO.values
                             .all { beaconInfoType ->
-                                powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, beaconInfoType)
+                                roomPowerLevels.isUserAllowedToSend(session.myUserId, true, beaconInfoType)
                             }
 
                     copy(canShareLiveLocation = canShareLiveLocation)
@@ -88,7 +89,15 @@ class LocationSharingViewModel @AssistedInject constructor(
         locationTracker.locations
                 .onEach(::onLocationUpdate)
                 .launchIn(viewModelScope)
-        locationTracker.start()
+        if (permissionChecker.checkPermission(
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                )
+        ) {
+            locationTracker.start()
+        } else {
+            Timber.w("Not allowed to use location api.")
+        }
     }
 
     private fun setUserItem() {

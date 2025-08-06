@@ -15,6 +15,7 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.core.app.PictureInPictureModeChangedInfo
@@ -57,6 +58,9 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
     ) : Parcelable
 
     override fun getBinding() = ActivityJitsiBinding.inflate(layoutInflater)
+
+    override val rootView: View
+        get() = views.jitsiLayout
 
     private var jitsiMeetView: JitsiMeetView? = null
 

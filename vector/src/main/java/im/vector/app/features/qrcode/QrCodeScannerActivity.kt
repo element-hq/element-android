@@ -10,6 +10,7 @@ package im.vector.app.features.qrcode
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import com.airbnb.mvrx.viewModel
@@ -25,6 +26,9 @@ class QrCodeScannerActivity : VectorBaseActivity<ActivitySimpleBinding>() {
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     private val qrViewModel: QrCodeScannerViewModel by viewModel()
 

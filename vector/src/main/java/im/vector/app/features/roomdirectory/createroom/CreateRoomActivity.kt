@@ -11,6 +11,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,6 +36,9 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>() {
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     override fun initUiAndData() {
         if (isFirstCreation()) {

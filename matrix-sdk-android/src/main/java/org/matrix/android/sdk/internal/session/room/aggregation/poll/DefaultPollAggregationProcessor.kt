@@ -32,7 +32,7 @@ import org.matrix.android.sdk.api.session.room.model.VoteInfo
 import org.matrix.android.sdk.api.session.room.model.VoteSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
@@ -160,13 +160,13 @@ internal class DefaultPollAggregationProcessor @Inject constructor(
         return true
     }
 
-    override fun handlePollEndEvent(session: Session, powerLevelsHelper: PowerLevelsHelper, realm: Realm, event: Event): Boolean {
+    override fun handlePollEndEvent(session: Session, roomPowerLevels: RoomPowerLevels, realm: Realm, event: Event): Boolean {
         val roomId = event.roomId ?: return false
         val pollEventId = event.getRelationContent()?.eventId ?: return false
         val pollOwnerId = getPollEvent(session, roomId, pollEventId)?.root?.senderId
         val isPollOwner = pollOwnerId == event.senderId
 
-        if (!isPollOwner && !powerLevelsHelper.isUserAbleToRedact(event.senderId ?: "")) {
+        if (!isPollOwner && !roomPowerLevels.isUserAbleToRedact(event.senderId ?: "")) {
             return false
         }
 

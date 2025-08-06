@@ -23,7 +23,6 @@ import im.vector.app.features.home.room.detail.timeline.format.NoticeEventFormat
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.VectorHtmlCompressor
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.strings.CommonStrings
@@ -49,7 +48,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
@@ -116,12 +114,11 @@ class MessageActionsViewModel @AssistedInject constructor(
         if (room == null) {
             return
         }
-        PowerLevelsFlowFactory(room).createFlow()
-                .onEach {
-                    val powerLevelsHelper = PowerLevelsHelper(it)
-                    val canReact = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.REACTION)
-                    val canRedact = powerLevelsHelper.isUserAbleToRedact(session.myUserId)
-                    val canSendMessage = powerLevelsHelper.isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
+        room.flow().liveRoomPowerLevels()
+                .onEach { roomPowerLevels ->
+                    val canReact = roomPowerLevels.isUserAllowedToSend(session.myUserId, false, EventType.REACTION)
+                    val canRedact = roomPowerLevels.isUserAbleToRedact(session.myUserId)
+                    val canSendMessage = roomPowerLevels.isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
                     val permissions = ActionPermissions(canSendMessage = canSendMessage, canRedact = canRedact, canReact = canReact)
                     setState {
                         copy(actionPermissions = permissions)

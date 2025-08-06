@@ -16,7 +16,6 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -31,22 +30,19 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.api.session.crypto.model.UserVerificationLevel
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.getRoom
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
-import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
-import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
+import org.matrix.android.sdk.api.session.room.powerlevels.RoomPowerLevels
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.flow.mapOptional
 import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 
 class RoomMemberListViewModel @AssistedInject constructor(
         @Assisted initialState: RoomMemberListViewState,
-        private val roomMemberSummaryComparator: RoomMemberSummaryComparator,
+        private val roomMemberListComparator: RoomMemberListComparator,
         private val session: Session
 ) :
         VectorViewModel<RoomMemberListViewState, RoomMemberListAction, EmptyViewEvents>(initialState) {
@@ -75,14 +71,12 @@ class RoomMemberListViewModel @AssistedInject constructor(
             memberships = Membership.activeMemberships()
         }
 
+        val powerLevelsFlow = room.flow().liveRoomPowerLevels()
         combine(
                 roomFlow.liveRoomMembers(roomMemberQueryParams),
-                roomFlow
-                        .liveStateEvent(EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.IsEmpty)
-                        .mapOptional { it.content.toModel<PowerLevelsContent>() }
-                        .unwrap()
-        ) { roomMembers, powerLevelsContent ->
-            buildRoomMemberSummaries(powerLevelsContent, roomMembers)
+                powerLevelsFlow,
+        ) { roomMembers, roomPowerLevels ->
+            buildRoomMemberSummaries(roomPowerLevels, roomMembers)
         }
                 .execute { async ->
                     copy(roomMemberSummaries = async)
@@ -142,11 +136,11 @@ class RoomMemberListViewModel @AssistedInject constructor(
     }
 
     private fun observePowerLevel() {
-        PowerLevelsFlowFactory(room).createFlow()
-                .onEach {
+        room.flow().liveRoomPowerLevels()
+                .onEach { roomPowerLevels ->
                     val permissions = ActionPermissions(
-                            canInvite = PowerLevelsHelper(it).isUserAbleToInvite(session.myUserId),
-                            canRevokeThreePidInvite = PowerLevelsHelper(it).isUserAllowedToSend(
+                            canInvite = roomPowerLevels.isUserAbleToInvite(session.myUserId),
+                            canRevokeThreePidInvite = roomPowerLevels.isUserAllowedToSend(
                                     userId = session.myUserId,
                                     isState = true,
                                     eventType = EventType.STATE_ROOM_THIRD_PARTY_INVITE
@@ -184,31 +178,34 @@ class RoomMemberListViewModel @AssistedInject constructor(
                 }
     }
 
-    private fun buildRoomMemberSummaries(powerLevelsContent: PowerLevelsContent, roomMembers: List<RoomMemberSummary>): RoomMemberSummaries {
-        val admins = ArrayList<RoomMemberSummary>()
-        val moderators = ArrayList<RoomMemberSummary>()
-        val users = ArrayList<RoomMemberSummary>(roomMembers.size)
-        val customs = ArrayList<RoomMemberSummary>()
-        val invites = ArrayList<RoomMemberSummary>()
-        val powerLevelsHelper = PowerLevelsHelper(powerLevelsContent)
+    private fun buildRoomMemberSummaries(roomPowerLevels: RoomPowerLevels, roomMembers: List<RoomMemberSummary>): RoomMembersByRole {
+        val admins = ArrayList<RoomMemberWithPowerLevel>()
+        val moderators = ArrayList<RoomMemberWithPowerLevel>()
+        val users = ArrayList<RoomMemberWithPowerLevel>(roomMembers.size)
+        val invites = ArrayList<RoomMemberWithPowerLevel>()
         roomMembers
                 .forEach { roomMember ->
-                    val userRole = powerLevelsHelper.getUserRole(roomMember.userId)
+                    val powerLevel = roomPowerLevels.getUserPowerLevel(roomMember.userId)
+                    val userRole = Role.getSuggestedRole(powerLevel)
+                    val roomMemberWithPowerLevel = RoomMemberWithPowerLevel(
+                            powerLevel = powerLevel,
+                            summary = roomMember,
+                    )
                     when {
-                        roomMember.membership == Membership.INVITE -> invites.add(roomMember)
-                        userRole == Role.Admin -> admins.add(roomMember)
-                        userRole == Role.Moderator -> moderators.add(roomMember)
-                        userRole == Role.Default -> users.add(roomMember)
-                        else -> customs.add(roomMember)
+                        roomMember.membership == Membership.INVITE -> invites.add(roomMemberWithPowerLevel)
+                        userRole == Role.SuperAdmin ||
+                                userRole == Role.Creator ||
+                                userRole == Role.Admin -> admins.add(roomMemberWithPowerLevel)
+                        userRole == Role.Moderator -> moderators.add(roomMemberWithPowerLevel)
+                        userRole == Role.User -> users.add(roomMemberWithPowerLevel)
                     }
                 }
 
         return listOf(
-                RoomMemberListCategories.ADMIN to admins.sortedWith(roomMemberSummaryComparator),
-                RoomMemberListCategories.MODERATOR to moderators.sortedWith(roomMemberSummaryComparator),
-                RoomMemberListCategories.CUSTOM to customs.sortedWith(roomMemberSummaryComparator),
-                RoomMemberListCategories.INVITE to invites.sortedWith(roomMemberSummaryComparator),
-                RoomMemberListCategories.USER to users.sortedWith(roomMemberSummaryComparator)
+                RoomMemberListCategories.ADMIN to admins.sortedWith(roomMemberListComparator),
+                RoomMemberListCategories.MODERATOR to moderators.sortedWith(roomMemberListComparator),
+                RoomMemberListCategories.INVITE to invites.sortedWith(roomMemberListComparator),
+                RoomMemberListCategories.USER to users.sortedWith(roomMemberListComparator)
         )
     }
 

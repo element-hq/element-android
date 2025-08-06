@@ -9,6 +9,7 @@ package im.vector.app.features.attachments.preview
 
 import android.content.Context
 import android.content.Intent
+import android.view.View
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
@@ -46,6 +47,9 @@ class AttachmentsPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>() {
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
+
+    override val rootView: View
+        get() = views.coordinatorLayout
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
