@@ -161,6 +161,7 @@ class VectorApplication :
                 "Noto Color Emoji Compat",
                 R.array.com_google_android_gms_fonts_certs
         )
+        @Suppress("DEPRECATION")
         FontsContractCompat.requestFont(this, fontRequest, emojiCompatFontProvider, getFontThreadHandler())
         vectorLocale.init()
         ThemeUtils.init(this)
