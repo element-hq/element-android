@@ -3041,4 +3041,7 @@
     <string name="view_download_replacement_app_subtitle">Rychlejší, bezpečnější a s výkonnými nástroji pro spolupráci.</string>
     <string name="room_profile_section_more_report">Nahlásit místnost</string>
     <string name="room_profile_section_more_report_success_content">Místnost byla úspěšně nahlášena.</string>
+    <string name="power_level_owner">Vlastník</string>
+    <string name="room_participants_leave_last_admin">Jste jediným správcem této místnosti. Pokud ji opustíte, nikdo nad ní nebude mít kontrolu.</string>
+    <string name="room_member_power_level_owner_in">Vlastník v %1$s</string>
 </resources>
