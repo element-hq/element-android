@@ -1,2 +1,0 @@
-Suurimmat muutokset tässä versiossa: VoIP-parannuksia ja korjauksia (ääni- ja videopuhelut yksityiskeskusteluissa)
-Täysi muutosloki: https://github.com/element-hq/element-android/releases/tag/v1.1.0

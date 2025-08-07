@@ -1,3 +1,0 @@
-Novo Layout de App poder ser habilitado nas configurações de Labs. Por favor dê uma chance!
-Consertar problemas sobre notificação faltando, e sinc incremental longo.
-Changelog completo: https://github.com/element-hq/element-android/releases

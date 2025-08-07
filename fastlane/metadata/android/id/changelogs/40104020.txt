@@ -1,2 +1,0 @@
-Perubahan utama dalam versi ini: tambahkan dukungan untuk @room dan pemungutan suara tertutup dan banyak perubahan kecil lainnya.
-Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases/tag/v1.4.2

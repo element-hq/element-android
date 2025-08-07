@@ -1,2 +1,0 @@
-Perubahan utama dalam versi ini: Pratinjau URL, keyboard Emoji baru, kemampuan pengaturan ruangan baru, dan salju untuk Natal!
-Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases/tag/v1.0.12

@@ -1,2 +1,0 @@
-Perubahan utama dalam versi ini: Secara umum perbaikan kutu, terutama memperbaiki pesan-pesan tidak muncul di lini masa.
-Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases

@@ -1,2 +1,0 @@
-Perubahan utama dalam versi ini: memperbaiki masalah tentang pesan terenkripsi.
-Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases/tag/v1.1.14

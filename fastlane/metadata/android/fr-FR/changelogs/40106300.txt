@@ -1,2 +1,0 @@
-Principaux changements pour cette version : Correction du plantage lors des appels entrants sur Android 14+.
-Intégralité des changements : https://github.com/element-hq/element-android/releases

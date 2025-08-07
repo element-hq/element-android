@@ -1,2 +1,0 @@
-Huvudsakliga ändringar i den här versionen: tema- och stiluppdatering och fixa en krasch efter videosamtal.
-Full ändringslogg: https://github.com/element-hq/element-android/releases/tag/v1.1.12

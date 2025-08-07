@@ -1,2 +1,0 @@
-Perubahan utama dalam versi ini: Pesan Suara diaktifkan secara default
-Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases/tag/v1.2.0

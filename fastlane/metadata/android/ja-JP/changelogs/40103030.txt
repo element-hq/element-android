@@ -1,2 +1,0 @@
-このバージョンの主な変更点：IDサーバーの方針を設定画面に表示。Android Autoのサポートを一時的に削除。
-更新履歴：https://github.com/element-hq/element-android/releases/tag/v1.3.3

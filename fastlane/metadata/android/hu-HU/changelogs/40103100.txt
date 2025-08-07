@@ -1,2 +1,0 @@
-Fő változás ebben a verzióban: Szavazások támogatása (a laborok között). Új URL előnézet.
-Teljes változásnapló: https://github.com/element-hq/element-android/releases/tag/v1.3.10

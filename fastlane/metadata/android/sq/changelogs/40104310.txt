@@ -1,2 +1,0 @@
-Ndryshimet kryesore në këtë version: Bërje e mundur hapash të përmirësuar hyrje dhe dalje nga llogaria.
-Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases

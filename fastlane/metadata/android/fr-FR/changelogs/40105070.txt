@@ -1,2 +1,0 @@
-Principaux changements pour cette version : nouvelle interface de sélection d’une pièce jointe.
-Intégralité des changements : https://github.com/element-hq/element-android/releases

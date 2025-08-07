@@ -1,2 +1,0 @@
-Ndryshimet kryesore në këtë version: Bërje të dukshëm e rregullit(ave) të shërbyesit të identiteteve te rregullimet. Heqje përkohësisht e mbulimit për Android Auto.
-Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases/tag/v1.3.3

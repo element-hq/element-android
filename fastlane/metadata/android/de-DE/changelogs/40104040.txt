@@ -1,2 +1,0 @@
-Neuer Tippindikator und Bugfixes
-Alle Änderungen: https://github.com/element-hq/element-android/releases/tag/v1.4.4

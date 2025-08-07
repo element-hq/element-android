@@ -1,2 +1,0 @@
-Hlavné zmeny v tejto verzii: Rôzne opravy chýb a vylepšenia stability.
-Úplný zoznam zmien: https://github.com/element-hq/element-android/releases/tag/v1.4.7

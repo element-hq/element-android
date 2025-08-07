@@ -1,2 +1,0 @@
-Principais mudanças nesta versão: Mensagem de Voz está habilitada por default.
-Changelog completo: https://github.com/element-hq/element-android/releases/tag/v1.2.0

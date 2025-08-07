@@ -1,2 +1,0 @@
-Principaux changements pour cette version : notification utilisateur pour Element Call non pris en charge.
-Intégralité des changements : https://github.com/element-hq/element-android/releases

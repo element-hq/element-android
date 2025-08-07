@@ -1,2 +1,0 @@
-Główne zmiany w tej wesji: poprawki dla wesji 1.1.5
-Pełna lista zmian: https://github.com/element-hq/element-android/releases/tag/v1.1.6

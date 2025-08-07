@@ -1,2 +1,0 @@
-Főbb változtatások ebben a verzióban: Hibajavítások
-Teljes változásnapló: https://github.com/element-hq/element-android/releases/tag/v1.3.8

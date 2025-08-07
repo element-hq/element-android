@@ -1,2 +1,0 @@
-Principais mudanças nesta versão: Novo layout de app habilitado por default!
-Changelog completo: https://github.com/element-hq/element-android/releases

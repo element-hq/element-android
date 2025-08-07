@@ -1,2 +1,0 @@
-Perubahan utama dalam versi ini: peningkatan kinerja dan perbaikan bug!
-Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases/tag/v1.1.2

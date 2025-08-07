@@ -1,3 +1,0 @@
-Skema e re e Aplikacionit mund të aktivizohet që nga rregullimet Labs. Ju lutemi, provojeni!
-Ndreqje problemesh me njoftim që mungon dhe njëkohësim i gjatë shtues.
-Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases

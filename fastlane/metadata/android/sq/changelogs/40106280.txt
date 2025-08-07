@@ -1,2 +1,0 @@
-Ndryshimet kryesore në këtë version: Ridrejto përdoruesit te Element X, kur duan të krijojnë llogari në shërbyes që mbulojnë MAS.
-Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases

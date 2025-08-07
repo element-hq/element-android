@@ -1,2 +1,0 @@
-Hauptänderungen: Threads sind jetzt schneller, Fehlerbehebungen.
-Alle Änderungen: https://github.com/element-hq/element-android/releases

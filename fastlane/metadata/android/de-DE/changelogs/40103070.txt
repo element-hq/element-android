@@ -1,2 +1,0 @@
-Hauptänderungen: Fehler bei Benachrichtigungen gefixt
-Ganze Änderungsliste: https://github.com/element-hq/element-android/releases/tag/v1.3.7-RC2

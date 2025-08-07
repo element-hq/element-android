@@ -1,2 +1,0 @@
-Fő változás ebben a verzióban: Titkosított üzenetküldés hibájának javítása ha valaki kilépett a szobából.
-Teljes változásnapló: https://github.com/element-hq/element-android/releases/tag/v1.1.16

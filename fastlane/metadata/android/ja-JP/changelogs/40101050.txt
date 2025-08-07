@@ -1,2 +1,0 @@
-このバージョンの主な変更点：1.1.4のホットフィックス
-更新履歴：https://github.com/element-hq/element-android/releases/tag/v1.1.5

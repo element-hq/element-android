@@ -1,2 +1,0 @@
-Perubahan utama dalam versi ini: perbaikan VoIP (panggilan audio dan video dalam DM) dan perbaikan bug!
-Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases/tag/v1.1.0

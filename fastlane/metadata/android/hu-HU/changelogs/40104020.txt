@@ -1,2 +1,0 @@
-Fő változás ebben a verzióban: @room támogatás és nem nyilvános szavazások mellett kisebb változtatások.
-Teljes változásnapló: https://github.com/element-hq/element-android/releases/tag/v1.4.2

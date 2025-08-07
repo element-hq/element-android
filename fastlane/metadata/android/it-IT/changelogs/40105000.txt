@@ -1,2 +1,0 @@
-Modifiche principali in questa versione: messaggi diretti differiti attivati in modo predefinito.
-Cronologia completa: https://github.com/element-hq/element-android/releases

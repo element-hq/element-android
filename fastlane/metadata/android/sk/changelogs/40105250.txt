@@ -1,2 +1,0 @@
-Hlavné zmeny v tejto verzii: Hlavne opravy chýb, najmä oprava správy, ktorá sa nezobrazuje na časovej osi.
-Úplný zoznam zmien: https://github.com/element-hq/element-android/releases

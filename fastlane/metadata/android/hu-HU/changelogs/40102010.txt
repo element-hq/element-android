@@ -1,2 +1,0 @@
-Fő változás ebben a verzióban: Sok fejlesztés a VoIP és Terek kapcsán (még béta)
-Teljes változásnapló: https://github.com/element-hq/element-android/releases/tag/v1.2.1

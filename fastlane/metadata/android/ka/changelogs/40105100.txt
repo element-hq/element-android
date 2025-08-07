@@ -1,2 +1,0 @@
-ამ ვერსიის ძირითადი ცვლილებები: Rich Text Editor-ის სრული ეკრანის რეჟიმის ახალი რეალიზაცია და ხარვეზების გამოსწორება.
-სრული ცვლილებათა ჟურნალი: https://github.com/element-hq/element-android/releases

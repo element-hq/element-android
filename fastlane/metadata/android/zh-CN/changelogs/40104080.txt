@@ -1,2 +1,0 @@
-更新日志：对话串时间轴现已上线，速度更快，增加了稳定性。
-查看完整更新日志： https://github.com/element-hq/element-android/releases

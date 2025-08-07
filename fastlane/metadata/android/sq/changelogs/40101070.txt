@@ -1,2 +1,0 @@
-Ndryshimet kryesore në këtë version: mbulim për Hapësira, në fazë beta. Ngjeshje videosh, përpara dërgimi.
-Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases/tag/v1.1.7

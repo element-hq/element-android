@@ -1,2 +1,0 @@
-Hlavné zmeny v tejto verzii: Mnohé vylepšenia v oblasti VoIP a Priestorov (stále v beta verzii).
-Úplný zoznam zmien: https://github.com/element-hq/element-android/releases/tag/v1.2.1

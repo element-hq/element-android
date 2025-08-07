@@ -1,2 +1,0 @@
-تغغیرات عمده در این نگارش: ارائه تصحیحی.
-گزارش دگرگونی کامل: https://github.com/element-hq/element-android/releases

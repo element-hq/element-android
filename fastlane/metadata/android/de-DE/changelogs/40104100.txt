@@ -1,2 +1,0 @@
-Hauptänderungen: Scrollen in Sprachnachrichten, Fehlerbehebungen.
-Alle Änderungen: https://github.com/element-hq/element-android/releases

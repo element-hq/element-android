@@ -1,2 +1,0 @@
-Hlavné zmeny v tejto verzii: Použitie UnifiedPush a umožňuje používateľovi používať push bez FCM.
-Úplný zoznam zmien: https://github.com/element-hq/element-android/releases

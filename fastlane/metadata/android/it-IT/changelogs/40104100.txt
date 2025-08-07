@@ -1,2 +1,0 @@
-Modifiche principali in questa versione: scorrimento nei vocali. Varie correzioni e miglioramenti della stabilità.
-Cronologia completa: https://github.com/element-hq/element-android/releases

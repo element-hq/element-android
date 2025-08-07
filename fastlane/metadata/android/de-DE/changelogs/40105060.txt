@@ -1,2 +1,0 @@
-Die wichtigste Änderung in dieser Version: Neues Anhangauswahl-UI.
-Vollständiges Änderungsprotokoll: https://github.com/element-hq/element-android/releases
