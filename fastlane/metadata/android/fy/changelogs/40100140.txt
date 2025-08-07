@@ -1,2 +1,0 @@
-Haadferoaring yn disse ferzje: Keamer fjochten feroarje, automatysk ljocht/tsjuster tema, en breksferbetteringen.
-Folsleine feroaringslist: https://github.com/element-hq/element-android/releases/tag/v1.0.14

@@ -1,2 +1,0 @@
-Perubahan utama dalam versi ini: rilis perbaikan.
-Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases

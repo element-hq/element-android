@@ -1,2 +1,0 @@
-Основні зміни цієї версії: підтримка входу за допомогою суспільних мереж.
-Повний перелік змін: https://github.com/element-hq/element-android/releases/tag/v1.0.15

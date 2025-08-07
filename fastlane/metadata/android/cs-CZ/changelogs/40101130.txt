@@ -1,2 +1,0 @@
-Hlavní změny v této verzi: aktualizace hlavně kvůli stabilitě a opravám chyb
-Úplný seznam změn: https://github.com/element-hq/element-android/releases/tag/v1.1.13

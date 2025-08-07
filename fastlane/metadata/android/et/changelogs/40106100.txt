@@ -1,2 +1,0 @@
-Olulisemad muutused selles versioonis: MDM'i toe lisamine.
-Ingliskeelne muudatuste logi täismahus: https://github.com/element-hq/element-android/releases

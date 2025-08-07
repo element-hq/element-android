@@ -1,2 +1,0 @@
-このバージョンの主な変更点：アンケート機能のサポート（実験的）。URL プレビューの新規デザイン。
-更新履歴：https://github.com/element-hq/element-android/releases/tag/v1.3.10

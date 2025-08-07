@@ -1,2 +1,0 @@
-Huvudsakliga ändringar i den här versionen: Stöd för social inloggning.
-Full ändringslogg: https://github.com/element-hq/element-android/releases/tag/v1.0.15

@@ -1,2 +1,0 @@
-Perubahan utama dalam versi ini: ditambahkan dukungan Pengelolaan Perangkat Ponsel dan anggota berfungsi.
-Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases

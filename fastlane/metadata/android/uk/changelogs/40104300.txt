@@ -1,2 +1,0 @@
-Основні зміни в цій версії: Поліпшені вхід і реєстрація.
-Перелік усіх змін: https://github.com/element-hq/element-android/releases

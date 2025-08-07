@@ -1,2 +1,0 @@
-Principais mudanças nesta versão: novo UI para selecionar um anexo.
-Changelog completo: https://github.com/element-hq/element-android/releases

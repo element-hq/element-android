@@ -1,2 +1,0 @@
-Hlavné zmeny v tejto verzii: Pridanie podpory pre Android Auto. Množstvo opráv chýb!
-Úplný zoznam zmien: https://github.com/element-hq/element-android/releases/tag/v1.3.2

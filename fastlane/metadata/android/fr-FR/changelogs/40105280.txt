@@ -1,2 +1,0 @@
-Principaux changements pour cette version : Principalement des corrections de bugs.
-Intégralité des changements : https://github.com/element-hq/element-android/releases

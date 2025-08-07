@@ -1,2 +1,0 @@
-Huvudsakliga ändringar i den här versionen: Buggfixar som huvudsakligen rör aviseringar.
-Full ändringslogg: https://github.com/element-hq/element-android/releases/tag/v1.3.7-RC2

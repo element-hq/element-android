@@ -1,2 +1,0 @@
-Ndryshimet kryesore në këtë version: Kryesisht ndreqje të metash!
-Regjistër i plotë ndryshimesh: https://github.com/element-hq/element-android/releases

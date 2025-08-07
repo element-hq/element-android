@@ -1,2 +1,0 @@
-Modifiche principali in questa versione: modifica autorizzazioni stanza, tema chiaro/scuro automatico e varie correzioni di errori.
-Cronologia completa: https://github.com/element-hq/element-android/releases/tag/v1.0.14

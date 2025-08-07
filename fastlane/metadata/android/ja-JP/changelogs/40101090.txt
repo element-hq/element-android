@@ -1,2 +1,0 @@
-このバージョンの主な変更点：gitter.imに対応。
-更新履歴：https://github.com/element-hq/element-android/releases/tag/v1.1.9

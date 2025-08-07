@@ -1,2 +1,0 @@
-Modifiche principali in questa versione: introduce i percorsi migliorati di accesso e registrazione.
-Cronologia completa: https://github.com/element-hq/element-android/releases

@@ -1,2 +1,0 @@
-تغییرات اصلی در این نگارش: پیاده‌سازی پیام صوتی در تنظیمات آزمایشگاه‌ها.
-گزارش دگرگونی کامل: https://github.com/element-hq/element-android/releases/tag/v1.1.15

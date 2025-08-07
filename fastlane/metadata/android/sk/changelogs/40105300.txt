@@ -1,2 +1,0 @@
-Hlavné zmeny v tejto verzii: Trvalé odkazy na miestnosti, priestory, používateľov a správy sa teraz zobrazujú ako pilulky na časovej osi. Opravili sme aj niektoré problémy s vlastnými nálepkami a značkou prečítania, ktorá sa zasekávala v minulosti.
-Úplný zoznam zmien: https://github.com/element-hq/element-android/releases

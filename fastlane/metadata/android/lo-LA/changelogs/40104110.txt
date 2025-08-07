@@ -1,2 +1,0 @@
-ການປ່ຽນແປງຫຼັກໃນສະບັບນີ້: ການແກ້ໄຂ bug ຕ່າງໆແລະການປັບປຸງຄວາມສະຖຽນ.
-ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/element-hq/element-android/releases

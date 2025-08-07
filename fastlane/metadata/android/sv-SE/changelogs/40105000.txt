@@ -1,2 +1,0 @@
-Huvudsakliga ändringar i den här versionen: Fördröjda DM:er aktiverad som förval.
-Full ändringslogg: https://github.com/element-hq/element-android/releases

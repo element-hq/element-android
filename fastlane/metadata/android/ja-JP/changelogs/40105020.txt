@@ -1,2 +1,0 @@
-このバージョンの主な変更点：新しいレイアウトを既定で有効化！
-更新履歴：https://github.com/element-hq/element-android/releases

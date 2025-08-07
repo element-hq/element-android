@@ -1,2 +1,0 @@
-Главные изменения в этой версии: Обсуждения включены по умолчанию.
-Полный список: https://github.com/element-hq/element-android/releases

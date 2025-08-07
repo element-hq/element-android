@@ -1,2 +1,0 @@
-Bu sürümdeki başlıca değişiklikler: Hata düzeltmeleri!
-değişim günlüğünün tamamı: https://github.com/element-hq/element-android/releases/tag/v1.0.17

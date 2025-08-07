@@ -1,2 +1,0 @@
-Änderungen: Fehlerbehebungen und Stabilitätsverbesserungen
-Alle Änderungen: https://github.com/element-hq/element-android/releases

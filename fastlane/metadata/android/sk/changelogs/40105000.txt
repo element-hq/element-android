@@ -1,2 +1,0 @@
-Hlavné zmeny v tejto verzii: Oneskorené priame správy sú zapnuté ako predvolené.
-Úplný zoznam zmien: https://github.com/element-hq/element-android/releases

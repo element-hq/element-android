@@ -1,2 +1,0 @@
-Hovedendringene i denne versjonen: Bugfikser!
-Full endringslogg: https://github.com/element-hq/element-android/releases/tag/v1.0.17

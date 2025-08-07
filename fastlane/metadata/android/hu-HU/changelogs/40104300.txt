@@ -1,2 +1,0 @@
-Főbb változások ebben a verzióban: Lehetővé teszi a továbbfejlesztett bejelentkezési és regisztrációs utakat.
-Teljes változásjegyzék: https://github.com/element-hq/element-android/releases

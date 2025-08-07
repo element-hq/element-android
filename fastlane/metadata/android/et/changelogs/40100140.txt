@@ -1,2 +1,0 @@
-Olulisemad muutused selles versioonis: Jututoa õiguste muutmine, automaatne tumeda ja heleda teema vahetamine ning märgatav kogus veaparandusi.
-Muudatuste logi täismahus: https://github.com/element-hq/element-android/releases/tag/v1.0.14

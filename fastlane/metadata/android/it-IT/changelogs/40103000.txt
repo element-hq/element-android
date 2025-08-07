@@ -1,2 +1,0 @@
-Modifiche principali in questa versione: organizza le tue stanze usando gli Spazi!
-Cronologia completa: https://github.com/element-hq/element-android/releases/tag/v1.3.0

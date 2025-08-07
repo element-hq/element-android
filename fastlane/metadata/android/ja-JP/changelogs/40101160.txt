@@ -1,2 +1,0 @@
-このバージョンの主な変更点：ルームにて誰かがログアウトした際に発生するエラーを修正しました。
-更新履歴：https://github.com/element-hq/element-android/releases/tag/v1.1.16

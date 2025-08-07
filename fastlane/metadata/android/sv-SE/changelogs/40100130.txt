@@ -1,2 +1,0 @@
-Huvudsakliga ändringar i den här versionen: URL-förhandsgranskning, nya rumsinställningsförmågor, och en vit jul!
-Full ändringslogg: https://github.com/element-hq/element-android/releases/tag/v1.0.13

@@ -1,2 +1,0 @@
-Huvudsakliga ändringar i den här versionen: Ny implementering av fullskärmsläget för rik-textredigeraren och buggfixar.
-Full ändringslogg: https://github.com/element-hq/element-android/releases

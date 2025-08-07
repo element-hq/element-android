@@ -1,2 +1,0 @@
-Thay đổi chính trong phiên bản này: Hỗ trợ Android Auto. Sửa rất nhiều lỗi!
-Toàn bộ nhật ký sửa đổi: https://github.com/element-hq/element-android/releases/tag/v1.3.2
