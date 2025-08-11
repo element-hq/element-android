@@ -1,0 +1,1 @@
+Fix always empty search results when using a backend that doesn't return highlights (e.g. Synapse on SQLite)

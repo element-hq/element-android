@@ -139,6 +139,13 @@ class SearchResultController @Inject constructor(
      */
     private fun setHighLightedText(text: String, highlights: List<String>): Spannable? {
         val wordToSpan: Spannable = SpannableString(text)
+
+        // Some backends don't return highlights at all (this is the case of Synapse with the SQLite storage).
+        // In this case, don't attempt to filter based on the highlights, to avoid erasing all the results...
+        if (highlights.isEmpty()) {
+            return wordToSpan
+        }
+
         var found = false
         highlights.forEach { highlight ->
             var searchFromIndex = 0
