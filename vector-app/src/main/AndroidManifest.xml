@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-sdk tools:overrideLibrary="com.sayem.keepawake,com.splashview,com.facebook.react,com.facebook.hermes" />
+
     <application
         android:name="im.vector.app.VectorApplication"
         android:allowBackup="false"
