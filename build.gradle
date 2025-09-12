@@ -96,7 +96,7 @@ allprojects {
         }
         // Jitsi repo
         maven {
-            url "https://github.com/element-hq/jitsi_libre_maven/raw/main/mobile-sdk-10.2.0"
+            url "https://github.com/element-hq/jitsi_libre_maven/raw/main/mobile-sdk-11.4.0"
             // Note: to test Jitsi release you can use a local file like this:
             // url "file:///Users/bmarty/workspaces/jitsi_libre_maven/mobile-sdk-10.2.0"
             content {
