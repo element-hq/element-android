@@ -124,8 +124,6 @@
     <string name="power_level_admin">Administrator</string>
     <string name="power_level_moderator">Moderator</string>
     <string name="power_level_default">Standard</string>
-    <string name="power_level_custom">Benutzerdefiniert (%1$d)</string>
-    <string name="power_level_custom_no_value">Benutzerdefiniert</string>
     <string name="notice_power_level_changed_by_you">Du hast die Berechtigungsstufe von %1$s geändert.</string>
     <string name="notice_power_level_changed">%1$s hat die Berechtigungsstufe von %2$s geändert.</string>
     <string name="notice_power_level_diff">%1$s von %2$s zu %3$s</string>
@@ -1247,7 +1245,6 @@
     <string name="room_profile_leaving_room">Verlasse den Raum …</string>
     <string name="room_member_power_level_admins">Administratoren</string>
     <string name="room_member_power_level_moderators">Moderatoren</string>
-    <string name="room_member_power_level_custom">Benutzerdefiniert</string>
     <string name="room_member_power_level_invites">Eingeladen</string>
     <string name="room_member_power_level_users">Benutzer</string>
     <string name="room_member_power_level_admin_in">Administrator in %1$s</string>
@@ -1330,7 +1327,6 @@
     <string name="event_redacted_by_admin_reason_with_reason">Ereignis vom Raumadministrator moderiert, Grund: %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Schlüssel sind bereits aktuell!</string>
     <string name="spoiler">Spoiler</string>
-    <string name="room_member_power_level_custom_in">Benutzerdefiniert (%1$d) in %2$s</string>
     <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="settings_key_requests">Schlüsselanforderungen</string>
     <string name="e2e_use_keybackup">Schalte den verschlüsselten Nachrichtenverlauf frei</string>

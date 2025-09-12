@@ -125,8 +125,6 @@
     <string name="power_level_admin">Správca</string>
     <string name="power_level_moderator">Moderátor</string>
     <string name="power_level_default">Predvolený</string>
-    <string name="power_level_custom">Vlastná úroveň (%1$d)</string>
-    <string name="power_level_custom_no_value">Vlastná úroveň</string>
     <string name="notice_power_level_changed_by_you">Zmenili ste úroveň oprávnenia používateľa %1$s.</string>
     <string name="notice_power_level_changed">%1$s zmenil úroveň oprávnenia používateľa %2$s.</string>
     <string name="notice_power_level_diff">%1$s z %2$s na %3$s</string>
@@ -1196,7 +1194,6 @@
     <string name="unignore">Prestať ignorovať</string>
     <string name="room_member_power_level_users">Používatelia</string>
     <string name="room_member_power_level_invites">Pozvánky</string>
-    <string name="room_member_power_level_custom">Vlastná úroveň</string>
     <string name="room_member_power_level_moderators">Moderátori</string>
     <string name="room_member_power_level_admins">Správcovia</string>
     <string name="room_profile_section_more_uploads">Nahrané súbory</string>
@@ -1633,7 +1630,6 @@
     <string name="error_network_timeout">Zdá sa, že serveru trvá príliš dlho, kým odpovie, čo môže byť spôsobené buď zlým pripojením, alebo chybou servera. Skúste to o chvíľu znova.</string>
     <string name="identity_server_consent_dialog_content_question">Súhlasíte so zaslaním týchto informácií\?</string>
     <string name="room_member_jump_to_read_receipt">Preskočiť na potvrdenie o prečítaní</string>
-    <string name="room_member_power_level_custom_in">Vlastné (%1$d) v %2$s</string>
     <string name="room_member_power_level_default_in">Predvolené v %1$s</string>
     <string name="verification_no_scan_emoji_title">Overiť porovnaním emotikonov</string>
     <string name="verification_scan_self_emoji_subtitle">Namiesto toho overte porovnaním emotikonov</string>

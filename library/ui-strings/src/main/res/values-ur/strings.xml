@@ -102,7 +102,6 @@
     <string name="power_level_moderator">ناظم</string>
     <string name="power_level_default">معین</string>
     <string name="notice_power_level_changed_by_you">آپنے درجۂ طاقت بدلے %1$s کے۔</string>
-    <string name="power_level_custom">حسب ضرورت (%1$d)</string>
     <string name="notice_power_level_changed">%1$s نے درجۂ طاقت بدلے %2$s کے۔</string>
     <string name="notice_power_level_diff">%1$s از %2$s تا %3$s</string>
     <string name="medium_phone_number">ہاتفی عدد</string>
@@ -147,7 +146,6 @@
     <string name="notice_widget_removed">%1$s نے %2$s وجیٹ ہٹا دیا</string>
     <string name="notice_widget_removed_by_you">آپنے %1$s وجیٹ ہٹا دیا</string>
     <string name="notice_widget_modified_by_you">آپنے %1$s وجیٹ ترمیم کیا</string>
-    <string name="power_level_custom_no_value">حسب ضرورت</string>
     <string name="notice_crypto_unable_to_decrypt">**ناقابل رمز کشائی: %s**</string>
     <string name="notice_crypto_error_unknown_inbound_session_id">ارسال کنندہ کے آلے نے ہمیں اس پیغام کیلئے چابیاں نہیں بھیجیں۔</string>
     <string name="unable_to_send_message">پیغام بھیجنے کے قابل نہیں</string>

@@ -133,8 +133,6 @@
     <string name="notice_power_level_diff">%1$s de %2$s à %3$s</string>
     <string name="notice_power_level_changed">%1$s a modifié le rang de %2$s.</string>
     <string name="notice_power_level_changed_by_you">Vous avez modifié le rang de %1$s.</string>
-    <string name="power_level_custom_no_value">Personnalisé</string>
-    <string name="power_level_custom">Personnalisé (%1$d)</string>
     <string name="power_level_default">Défaut</string>
     <string name="power_level_moderator">Modérateur</string>
     <string name="power_level_admin">Admin</string>
@@ -1222,12 +1220,10 @@
     <string name="room_profile_leaving_room">En train de quitter le salon…</string>
     <string name="room_member_power_level_admins">Administrateurs</string>
     <string name="room_member_power_level_moderators">Modérateurs</string>
-    <string name="room_member_power_level_custom">Personnalisé</string>
     <string name="room_member_power_level_invites">Invitations</string>
     <string name="room_member_power_level_users">Utilisateurs</string>
     <string name="room_member_power_level_admin_in">Administrateur dans %1$s</string>
     <string name="room_member_power_level_moderator_in">Modérateur dans %1$s</string>
-    <string name="room_member_power_level_custom_in">Personnalisé (%1$d) dans %2$s</string>
     <string name="room_member_jump_to_read_receipt">Aller à l’accusé de lecture</string>
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} ne gère pas les évènements de type « %1$s »</string>
     <string name="rendering_event_error_exception">${app_name} a rencontré un problème lors de l’affichage du contenu de l’évènement ayant pour identifiant « %1$s »</string>

@@ -1250,13 +1250,11 @@
     <string name="system_theme">ברירת מחדל מערכת</string>
     <string name="room_member_jump_to_read_receipt">קפצו לקבלת קריאה</string>
     <string name="room_member_open_or_create_dm">הודעה ישירה</string>
-    <string name="room_member_power_level_custom_in">מותאם אישית (%1$d) ב-%2$s</string>
     <string name="room_member_power_level_default_in">ברירת מחדל ב-%1$s</string>
     <string name="room_member_power_level_moderator_in">מנחה ב-%1$s</string>
     <string name="room_member_power_level_admin_in">מנהל מערכת ב-%1$s</string>
     <string name="room_member_power_level_users">משתמשים</string>
     <string name="room_member_power_level_invites">הזמנות</string>
-    <string name="room_member_power_level_custom">מותאם אישית</string>
     <string name="room_member_power_level_moderators">מנחים</string>
     <plurals name="room_profile_section_more_member_list">
         <item quantity="one">אדם אחד</item>
@@ -1801,8 +1799,6 @@
     <string name="notice_power_level_diff">%1$s מ-%2$s עד %3$s</string>
     <string name="notice_power_level_changed">%1$s שינה את רמת העוצמה של %2$s.</string>
     <string name="notice_power_level_changed_by_you">שינית את רמת העוצמה של %1$s.</string>
-    <string name="power_level_custom_no_value">מותאם אישית</string>
-    <string name="power_level_custom">מותאם אישית (%1$d)</string>
     <string name="power_level_default">ברירת מחדל</string>
     <string name="power_level_moderator">מַנחֶה</string>
     <string name="power_level_admin">מנהל מערכת</string>

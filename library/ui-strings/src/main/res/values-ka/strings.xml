@@ -69,7 +69,6 @@
     <string name="power_level_admin">ადმინისტრატორი</string>
     <string name="power_level_moderator">მოდერატორი</string>
     <string name="power_level_default">ნაგულისხმევი</string>
-    <string name="power_level_custom">მორგებული (%1$d)</string>
     <string name="notice_power_level_changed">%1$s შეცვალა %2$s-ის ძალაუფლების დონე.</string>
     <string name="notice_power_level_diff">%1$s %2$s-დან %3$s-მდე</string>
     <string name="notice_crypto_unable_to_decrypt">** ვერ ხერხდება დეშიფრაცია: %s **</string>
@@ -148,7 +147,6 @@
     <string name="notice_room_leave_by_you">თქვენ დატოვეთ ოთახი</string>
     <string name="notice_widget_modified_by_you">თქვენ შეცვალეთ %1$s ვიჯეტი</string>
     <string name="notice_direct_room_leave">%1$s დატოვა ოთახი</string>
-    <string name="power_level_custom_no_value">მორგებული</string>
     <string name="notice_room_remove">%1$s ამოიღო %2$s</string>
     <string name="notice_power_level_changed_by_you">თქვენ შეცვალეთ %1$s-ის ძალაუფლების დონე.</string>
     <string name="notice_room_unban_by_you">თქვენ მოხსენით აკრძალვა %1$s-ზე</string>
@@ -1574,7 +1572,6 @@
     <string name="room_member_power_level_users">მომხმარებლები</string>
     <string name="room_member_power_level_admin_in">ადმინი %1$s-ში</string>
     <string name="room_member_power_level_default_in">ნაგულისხმები %1$s-ში</string>
-    <string name="room_member_power_level_custom_in">მორგებული (%1$d) %2$s-ში</string>
     <string name="room_member_open_or_create_dm">პირდაპირი შეტყობინება</string>
     <string name="unignore">უარყოფა</string>
     <string name="command_description_rainbow">გზავნის მოცემულ შეტყობინებას ცისარტყელას ფერებში</string>
@@ -2123,7 +2120,6 @@
     <string name="direct_room_profile_section_more_settings">პარამეტრები</string>
     <string name="room_profile_section_more_uploads">ატვირთვები</string>
     <string name="room_profile_leaving_room">ოთახის დატოვება…</string>
-    <string name="room_member_power_level_custom">მორგებული</string>
     <string name="room_member_power_level_moderator_in">მოდერატორი %1$s-ში</string>
     <string name="room_member_jump_to_read_receipt">გადასვლა წაკითხულ მისამართზე</string>
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} ვერ ამუშავებს ტიპის \'%1$s\' მოვლენებს</string>

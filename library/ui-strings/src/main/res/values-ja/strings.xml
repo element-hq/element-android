@@ -537,13 +537,11 @@
     <string name="room_profile_leaving_room">ルームから退出しています…</string>
     <string name="room_member_power_level_admins">管理者</string>
     <string name="room_member_power_level_moderators">モデレーター</string>
-    <string name="room_member_power_level_custom">ユーザー定義</string>
     <string name="room_member_power_level_invites">招待中</string>
     <string name="room_member_power_level_users">ユーザー</string>
     <string name="room_member_power_level_admin_in">%1$sの管理者</string>
     <string name="room_member_power_level_moderator_in">%1$sのモデレーター</string>
     <string name="room_member_power_level_default_in">%1$sの既定のユーザー</string>
-    <string name="room_member_power_level_custom_in">%2$sのユーザー定義（%1$d）</string>
     <string name="settings_category_timeline">タイムライン</string>
     <string name="room_settings_enable_encryption">エンドツーエンド暗号化を有効にする…</string>
     <string name="room_settings_enable_encryption_dialog_submit">暗号化を有効にする</string>
@@ -911,8 +909,6 @@
     <string name="room_displayname_4_members">%1$s、%2$s、%3$sと%4$s</string>
     <string name="room_displayname_3_members">%1$s、%2$sと%3$s</string>
     <string name="notice_power_level_diff">%1$sの権限レベルを%2$sから%3$sへ</string>
-    <string name="power_level_custom_no_value">ユーザー定義</string>
-    <string name="power_level_custom">ユーザー定義 (%1$d)</string>
     <string name="power_level_default">既定</string>
     <string name="power_level_moderator">モデレーター</string>
     <string name="power_level_admin">管理者</string>

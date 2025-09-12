@@ -85,7 +85,6 @@
     <string name="ok">Ceart go leor</string>
     <string name="loading">Ag lódáil…</string>
     <string name="title_activity_settings">Socruithe</string>
-    <string name="power_level_custom_no_value">Saincheaptha</string>
     <string name="power_level_default">Réamhshocrú</string>
     <string name="power_level_moderator">Modhnóir</string>
     <string name="power_level_admin">Riarthóir</string>

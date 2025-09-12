@@ -8,7 +8,6 @@
     </plurals>
     <string name="notice_room_server_acl_updated_no_change">Үзгәреш юк.</string>
     <string name="power_level_default">Килешенгәнчә</string>
-    <string name="power_level_custom_no_value">Шәхси</string>
     <string name="matrix_error">Matrix хатасы</string>
     <string name="room_displayname_two_members">%1$s һәм %2$s</string>
     <string name="room_displayname_3_members">%1$s, %2$s һәм %3$s</string>

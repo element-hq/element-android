@@ -56,8 +56,6 @@
     <string name="unable_to_send_message">Не могу да пошаљем поруку</string>
     <string name="notice_crypto_error_unknown_inbound_session_id">Уређај пошиљаоца није нам послао кључеве за ову поруку.</string>
     <string name="notice_power_level_changed_by_you">Изменили сте ниво снаге корисника %1$s.</string>
-    <string name="power_level_custom_no_value">посебно</string>
-    <string name="power_level_custom">посебно (%1$d)</string>
     <string name="power_level_default">подразумевано</string>
     <string name="power_level_moderator">модератор</string>
     <string name="power_level_admin">админ</string>

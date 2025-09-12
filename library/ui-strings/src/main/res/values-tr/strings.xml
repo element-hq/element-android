@@ -1177,7 +1177,6 @@
     <string name="event_status_sending_message">Mesaj gönderiliyor…</string>
     <string name="room_displayname_empty_room">Boş oda</string>
     <string name="room_displayname_3_members">%1$s, %2$s ve %3$s</string>
-    <string name="power_level_custom_no_value">Özel</string>
     <string name="notice_widget_removed_by_you">%1$s widgetını kaldırdınız</string>
     <string name="notice_widget_added_by_you">%1$s widgetını eklediniz</string>
     <string name="room_displayname_room_invite">Oda daveti</string>
@@ -1388,7 +1387,6 @@
     <string name="notice_power_level_diff">%1$s, %2$s ile %3$s arasında</string>
     <string name="notice_power_level_changed">%1$s, %2$s\'nin güç seviyesini değiştirdi.</string>
     <string name="notice_power_level_changed_by_you">%1$s\'nin güç seviyesini değiştirdiniz.</string>
-    <string name="power_level_custom">Özel (%1$d)</string>
     <string name="power_level_moderator">Moderatör</string>
     <string name="power_level_admin">Admin</string>
     <string name="notice_widget_modified_by_you">%1$s widget\'ını değiştirdiniz</string>

@@ -785,8 +785,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="notice_crypto_unable_to_decrypt">** Tidak dapat mendekripsi: %s **</string>
     <string name="notice_power_level_diff">%1$s dari %2$s ke %3$s</string>
     <string name="notice_power_level_changed_by_you">Anda mengubah tingkat daya %1$s.</string>
-    <string name="power_level_custom_no_value">Kustom</string>
-    <string name="power_level_custom">Kustom (%1$d)</string>
     <string name="power_level_default">Standar</string>
     <string name="power_level_moderator">Moderator</string>
     <string name="power_level_admin">Admin</string>
@@ -1468,12 +1466,10 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} tidak mendukung peristiwa dengan tipe \'%1$s\'</string>
     <string name="room_member_open_or_create_dm">Pesan langsung</string>
     <string name="room_member_power_level_default_in">Standar di %1$s</string>
-    <string name="room_member_power_level_custom_in">Kustom (%1$d) di %2$s</string>
     <string name="room_member_power_level_admin_in">Admin di %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderator di %1$s</string>
     <string name="room_member_power_level_users">Pengguna</string>
     <string name="room_member_power_level_invites">Undangan</string>
-    <string name="room_member_power_level_custom">Kustom</string>
     <string name="room_member_power_level_moderators">Moderator</string>
     <string name="room_member_power_level_admins">Admin</string>
     <string name="room_profile_leaving_room">Meninggalkan ruangan…</string>
