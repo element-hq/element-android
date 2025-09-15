@@ -549,8 +549,6 @@
     <string name="notice_power_level_diff">%1$s ຈາກ %2$s ຫາ %3$s</string>
     <string name="notice_power_level_changed">%1$s ໄດ້ປ່ຽນລະດັບພະລັງງານຂອງ %2$s.</string>
     <string name="notice_power_level_changed_by_you">ທ່ານໄດ້ປ່ຽນລະດັບພະລັງງານຂອງ %1$s.</string>
-    <string name="power_level_custom_no_value">ກຳນົດເອງ</string>
-    <string name="power_level_custom">ກຳນົດເອງ (%1$d)</string>
     <string name="power_level_admin">ຜູ້ເບີ່ງເເຍງລະບົບ</string>
     <string name="power_level_default">ຄ່າເລີ່ມຕົ້ນ</string>
     <string name="power_level_moderator">ຜູ້ຄວບຄຸມ</string>
@@ -2222,13 +2220,11 @@
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} ບໍ່ໄດ້ຈັດການ ເຫດການຂອງປະເພດ \'%1$s\'</string>
     <string name="room_member_jump_to_read_receipt">ໄປເພື່ອອ່ານ</string>
     <string name="room_member_open_or_create_dm">ຂໍ້ຄວາມໂດຍກົງ</string>
-    <string name="room_member_power_level_custom_in">ກຳນົດເອງ (%1$d) ໃນ %2$s</string>
     <string name="room_member_power_level_default_in">ຄ່າເລີ່ມຕົ້ນໃນ %1$s</string>
     <string name="room_member_power_level_moderator_in">ຜູ້ຄວບຄຸມໃນ %1$s</string>
     <string name="room_member_power_level_admin_in">ຜູ້ເບິ່ງແຍງລະບົບໃນ %1$s</string>
     <string name="room_member_power_level_users">ຜູ້ໃຊ້</string>
     <string name="room_member_power_level_invites">ເຊີນ</string>
-    <string name="room_member_power_level_custom">ກຳນົດເອງ</string>
     <string name="room_member_power_level_moderators">ຜູ້ຄວບຄຸມ</string>
     <string name="room_member_power_level_admins">ຜູ້ເບິ່ງແຍງລະບົບ</string>
     <string name="room_member_override_nick_color">ໂຊທັບສີຂອງຊື່ນີ້</string>

@@ -250,7 +250,7 @@ dependencies {
     implementation "androidx.emoji2:emoji2:1.3.0"
 
     // Jitsi
-    api('org.jitsi.react:jitsi-meet-sdk:10.2.0') {
+    api('org.jitsi.react:jitsi-meet-sdk:11.4.0') {
         exclude group: 'com.google.firebase'
         exclude group: 'com.google.android.gms'
         exclude group: 'com.android.installreferrer'

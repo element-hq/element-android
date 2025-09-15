@@ -629,7 +629,6 @@
     <string name="new_session">Ný innskráning. Varst þetta þú\?</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">Flugvélahamur er virkur</string>
     <string name="not_trusted">Ekki treyst</string>
-    <string name="room_member_power_level_custom_in">Sérsniðið (%1$d) í %2$s</string>
     <string name="room_member_power_level_default_in">Sjálfgefið í %1$s</string>
     <string name="room_member_power_level_moderator_in">Umsjónarmaður í %1$s</string>
     <string name="room_member_power_level_admin_in">Stjórnandi í %1$s</string>
@@ -1139,7 +1138,6 @@
     <string name="unignore">Hætta að hunsa</string>
     <string name="room_member_power_level_users">Notendur</string>
     <string name="room_member_power_level_invites">Boðsgestir</string>
-    <string name="room_member_power_level_custom">Sérsniðið</string>
     <string name="room_member_power_level_moderators">Umsjónarmenn</string>
     <string name="direct_room_profile_section_more_leave">Fara út</string>
     <string name="room_profile_section_more_leave">Fara af spjallrás</string>
@@ -1518,8 +1516,6 @@
         <item quantity="other">%1$s, %2$s, %3$s og %4$d til viðbótar</item>
     </plurals>
     <string name="room_displayname_3_members">%1$s, %2$s og %3$s</string>
-    <string name="power_level_custom_no_value">Sérsniðið</string>
-    <string name="power_level_custom">Sérsniðið (%1$d)</string>
     <string name="power_level_default">Sjálfgefið</string>
     <string name="power_level_moderator">Umsjónarmaður</string>
     <string name="notice_direct_room_third_party_invite">%1$s bauð %2$s</string>

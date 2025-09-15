@@ -122,8 +122,6 @@
     <string name="medium_email">E-mailadres</string>
     <string name="medium_phone_number">Telefoannûmer</string>
     <string name="notice_crypto_unable_to_decrypt">** Koe net ûntsiferje: %s **</string>
-    <string name="power_level_custom_no_value">Oanpast</string>
-    <string name="power_level_custom">Oanpast (%1$d)</string>
     <string name="power_level_default">Standert</string>
     <string name="power_level_admin">Behearder</string>
     <string name="notice_room_server_acl_updated_no_change">Gjin wizigingen.</string>

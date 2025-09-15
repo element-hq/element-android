@@ -836,8 +836,6 @@
     <string name="notice_power_level_diff">%1$s van %2$s naar %3$s</string>
     <string name="notice_power_level_changed">%1$s heeft het machtigingsniveau van %2$s aangepast.</string>
     <string name="notice_power_level_changed_by_you">Je hebt het machtigingsniveau van %1$s aangepast.</string>
-    <string name="power_level_custom_no_value">Speciaal</string>
-    <string name="power_level_custom">Speciaal (%1$d)</string>
     <string name="power_level_default">Standaardlid</string>
     <string name="power_level_admin">Beheerder</string>
     <string name="notice_widget_modified_by_you">Je hebt de widget %1$s aangepast</string>
@@ -1120,7 +1118,6 @@
     <string name="unignore">Negeren opheffen</string>
     <string name="room_member_power_level_users">Personen</string>
     <string name="room_member_power_level_invites">Genodigden</string>
-    <string name="room_member_power_level_custom">Aangepast</string>
     <string name="room_member_power_level_moderators">Moderatoren</string>
     <string name="room_member_power_level_admins">Administrators</string>
     <string name="room_profile_section_more_uploads">Uploads</string>
@@ -2036,7 +2033,6 @@
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} verwerkt geen gebeurtenissen van het type \'%1$s\'</string>
     <string name="room_member_jump_to_read_receipt">Ga naar ontvangstbewijs lezen</string>
     <string name="room_member_open_or_create_dm">Direct bericht</string>
-    <string name="room_member_power_level_custom_in">Aangepast (%1$d) in %2$s</string>
     <string name="room_member_power_level_default_in">Standaard in %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderator in %1$s</string>
     <string name="room_member_power_level_admin_in">Beheerder in %1$s</string>

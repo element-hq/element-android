@@ -134,8 +134,6 @@
     <string name="notice_power_level_diff">%1$s de %2$s a %3$s</string>
     <string name="notice_power_level_changed">%1$s cambiou de categoría a %2$s.</string>
     <string name="notice_power_level_changed_by_you">Cambiaches a categoría de %1$s.</string>
-    <string name="power_level_custom_no_value">Personalizado</string>
-    <string name="power_level_custom">Personalizado (%1$d)</string>
     <string name="power_level_default">Por defecto</string>
     <string name="power_level_moderator">Moderadora</string>
     <string name="power_level_admin">Admin</string>

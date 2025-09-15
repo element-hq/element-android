@@ -99,8 +99,6 @@
     <string name="room_displayname_empty_room_was">Tyhjä huone (oli %s)</string>
     <string name="room_displayname_4_members">%1$s, %2$s, %3$s ja %4$s</string>
     <string name="room_displayname_3_members">%1$s, %2$s ja %3$s</string>
-    <string name="power_level_custom_no_value">Mukautettu</string>
-    <string name="power_level_custom">Mukautettu (%1$d)</string>
     <string name="power_level_default">Oletus</string>
     <string name="power_level_moderator">Valvoja</string>
     <string name="power_level_admin">Ylläpitäjä</string>
@@ -1285,8 +1283,6 @@
     <string name="bootstrap_crosssigning_print_it">Tulosta se jos mahdollista ja säilytä tuloste turvallisessa paikassa</string>
     <string name="bootstrap_crosssigning_save_usb">Tallenna se muistitikulle tai varmuuskopiolevylle talteen</string>
     <string name="bootstrap_crosssigning_save_cloud">Kopioi se henkilökohtaiseen pilvitallennustilaasi</string>
-    <string name="room_member_power_level_custom">Mukautettu</string>
-    <string name="room_member_power_level_custom_in">Mukautettu (%1$d) %2$s:ssä</string>
     <string name="delete_event_dialog_reason_hint">Syy poistoon</string>
     <string name="message_key">Viestin avain</string>
     <string name="audio_video_meeting_description">Tapaamiset käyttävät Jitsin turvallisuus- ja käyttöoikeuskäytäntöjä. Kaikki huoneessa olevat henkilöt näkevät kutsun tapaamiseen liittymiseksi niin kauan kuin tapaaminen on käynnissä.</string>

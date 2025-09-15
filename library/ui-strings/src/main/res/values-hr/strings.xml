@@ -759,12 +759,10 @@
     <string name="room_profile_leaving_room">Napuštanje sobe…</string>
     <string name="room_member_power_level_admins">Administratori</string>
     <string name="room_member_power_level_moderators">Moderatori</string>
-    <string name="room_member_power_level_custom">Prilagođeno</string>
     <string name="room_member_power_level_invites">Pozivnice</string>
     <string name="room_member_power_level_users">Korisnici</string>
     <string name="room_member_power_level_admin_in">Administrator u %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderator u %1$s</string>
-    <string name="room_member_power_level_custom_in">Prilagođeno (%1$d) u %2$s</string>
     <string name="room_member_jump_to_read_receipt">Skoči na potvrdu o pročitanoj poruci</string>
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} ne podržava događaje tipa \'%1$s\'</string>
     <string name="rendering_event_error_exception">${app_name} je naišao na problem pri prikazu sadržaja događaja s identitetom \'%1$s\'</string>

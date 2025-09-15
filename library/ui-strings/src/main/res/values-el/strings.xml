@@ -477,8 +477,6 @@
     <string name="notice_room_topic_removed_by_you">Έχεις αφαιρέσει το θέμα του δωματίου</string>
     <string name="notice_room_third_party_registered_invite_by_you">Αποδέχτηκες την πρόσκληση για το %1$s</string>
     <string name="power_level_default">Προεπιλογή</string>
-    <string name="power_level_custom">Custom (%1$d)</string>
-    <string name="power_level_custom_no_value">Προσαρμοσμένο</string>
     <string name="notice_room_server_acl_allow_is_empty">🎉Όλοι οι Servers έχουν αποκλειστεί από συμμετέχοντες!Το δωμάτιο αυτό δεν μπορεί πια να χρησιμοποιηθεί.</string>
     <string name="notice_room_third_party_invite_by_you">Έστειλες μια πρόσκληση στο %1$s για να συνδεθείς στο δωμάτιο</string>
     <string name="event_status_sent_message">Το μήνυμα στάλθηκε</string>

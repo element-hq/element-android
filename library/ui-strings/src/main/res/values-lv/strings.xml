@@ -175,8 +175,6 @@
     <string name="notice_power_level_diff">%1$s no %2$s uz %3$s</string>
     <string name="notice_power_level_changed">%1$s nomainīja %2$s pieejas līmeni.</string>
     <string name="notice_power_level_changed_by_you">Tu nomainīji %1$s pieejas līmeni.</string>
-    <string name="power_level_custom_no_value">Pielāgots</string>
-    <string name="power_level_custom">Pielāgots (%1$d)</string>
     <string name="power_level_default">Noklusējuma</string>
     <string name="power_level_moderator">Moderators</string>
     <string name="power_level_admin">Administrators</string>
@@ -783,11 +781,9 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="action_download">Lejupielādēt</string>
     <string name="are_you_sure">Vai tiešām to vēlaties\?</string>
     <string name="system_theme">Sistēmas noklusējuma</string>
-    <string name="room_member_power_level_custom_in">Pielāgots (%1$d) iekš %2$s</string>
     <string name="room_member_power_level_default_in">%1$s noklusējums</string>
     <string name="room_member_power_level_moderator_in">%1$s moderators</string>
     <string name="room_member_power_level_admin_in">%1$s administrators</string>
-    <string name="room_member_power_level_custom">Pielāgots</string>
     <string name="room_member_power_level_moderators">Moderators</string>
     <string name="room_member_power_level_admins">Administrators</string>
     <string name="encryption_information_unknown_ip">nepazīstama ip</string>

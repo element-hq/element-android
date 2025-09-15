@@ -229,7 +229,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         super.onNewIntent(intent)
     }
 
-    override fun requestPermissions(permissions: Array<out String>?, requestCode: Int, listener: PermissionListener?) {
+    override fun requestPermissions(permissions: Array<String>, requestCode: Int, listener: PermissionListener?) {
         JitsiMeetActivityDelegate.requestPermissions(this, permissions, requestCode, listener)
     }
 
