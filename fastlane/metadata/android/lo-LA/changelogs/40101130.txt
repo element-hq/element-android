@@ -1,2 +1,0 @@
-ການປ່ຽນແປງຫຼັກໃນສະບັບນີ້: ແກ້ໄຂບັນຫາກ່ຽວຄວາມສະຖຽນ.
-ບັນທຶກການປ່ຽນແປງສະບັບເຕັມ: https://github.com/element-hq/element-android/releases/tag/v1.1.13

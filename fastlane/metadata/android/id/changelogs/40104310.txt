@@ -1,2 +1,0 @@
-Perubahan utama dalam versi ini: Mengaktifkan perjalanan masuk dan keluar yang diperbaiki.
-Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases

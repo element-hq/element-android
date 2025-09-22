@@ -125,8 +125,6 @@
     <string name="initial_sync_start_importing_account">Початкова синхронізація:
 \nІмпортування даних облікового запису…</string>
     <string name="room_displayname_empty_room_was">Порожня кімната (була %s)</string>
-    <string name="power_level_custom_no_value">Не типовий</string>
-    <string name="power_level_custom">Не типовий (%1$d)</string>
     <string name="notice_widget_modified_by_you">Ви змінили віджет %1$s</string>
     <string name="notice_widget_modified">%1$s змінює віджет %2$s</string>
     <string name="notice_direct_room_update_by_you">Ви оновили кімнату.</string>
@@ -1376,8 +1374,6 @@
     <string name="room_settings_enable_encryption_dialog_title">Увімкнути шифрування\?</string>
     <string name="command_description_rainbow_emote">Надсилає емоджі розмальоване веселково</string>
     <string name="room_member_open_or_create_dm">Особисте повідомлення</string>
-    <string name="room_member_power_level_custom_in">Не типовий (%1$d) у %2$s</string>
-    <string name="room_member_power_level_custom">Не типовий</string>
     <string name="notice_power_level_diff">%1$s з %2$s до %3$s</string>
     <string name="notice_power_level_changed">%1$s змінює рівень повноважень %2$s.</string>
     <string name="room_profile_section_admin">Дії адміністратора</string>

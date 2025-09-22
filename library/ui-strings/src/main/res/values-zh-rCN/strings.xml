@@ -124,8 +124,6 @@
     <string name="power_level_admin">管理员</string>
     <string name="power_level_moderator">协管员</string>
     <string name="power_level_default">默认</string>
-    <string name="power_level_custom">自定义（%1$d）</string>
-    <string name="power_level_custom_no_value">自定义</string>
     <string name="notice_power_level_changed_by_you">你更改了 %1$s 的权限等级。</string>
     <string name="notice_power_level_changed">%1$s 更改了 %2$s 的权限等级。</string>
     <string name="notice_power_level_diff">%1$s 从 %2$s 到 %3$s</string>
@@ -1268,13 +1266,11 @@
     <string name="room_profile_leaving_room">正在离开房间……</string>
     <string name="room_member_power_level_admins">管理员</string>
     <string name="room_member_power_level_moderators">协管员</string>
-    <string name="room_member_power_level_custom">自定义</string>
     <string name="room_member_power_level_invites">邀请</string>
     <string name="room_member_power_level_users">用户</string>
     <string name="room_member_power_level_admin_in">%1$s里的管理员</string>
     <string name="room_member_power_level_moderator_in">%1$s里的协管员</string>
     <string name="room_member_power_level_default_in">%1$s里的默认</string>
-    <string name="room_member_power_level_custom_in">%2$s里的自定义（%1$d）</string>
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} 无法处理类型为 \'%1$s\' 的事件</string>
     <string name="rendering_event_error_exception">${app_name} 在呈现 ID 为“%1$s”的事件内容时遇到问题</string>
     <string name="unignore">取消忽略</string>

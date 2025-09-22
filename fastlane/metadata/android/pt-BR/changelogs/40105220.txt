@@ -1,2 +1,0 @@
-Principais mudanças nesta versão: Basicamente melhorias no recurso de transmissão de voz.
-Changelog completo: https://github.com/element-hq/element-android/releases

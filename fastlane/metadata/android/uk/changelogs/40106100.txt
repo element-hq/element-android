@@ -1,2 +1,0 @@
-Основні зміни у цій версії: додано Mobile Device Management і функціональну підтримку учасників.
-Перелік усіх змін: https://github.com/element-hq/element-android/releases

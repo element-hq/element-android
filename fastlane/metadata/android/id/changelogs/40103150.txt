@@ -1,2 +1,0 @@
-Perubahan utama dalam versi ini: Perubahan pertama di layar permulaan, termasuk analitik opt-in. Dukungan untuk Peristiwa dengan Matematika ditambahkan di Uji Coba.
-Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases/tag/v1.3.15

@@ -1,2 +1,0 @@
-Modifiche principali in questa versione: i messaggi in conversazioni sono attivi in modo predefinito.
-Cronologia completa: https://github.com/element-hq/element-android/releases

@@ -125,8 +125,6 @@
     <string name="power_level_admin">Administrador</string>
     <string name="power_level_moderator">Moderador</string>
     <string name="power_level_default">Por defecto</string>
-    <string name="power_level_custom">Personalizado (%1$d)</string>
-    <string name="power_level_custom_no_value">Personalizado</string>
     <string name="notice_power_level_changed_by_you">Cambiaste el nivel de permisos de %1$s.</string>
     <string name="notice_power_level_changed">%1$s cambió el nivel de permisos de %2$s.</string>
     <string name="notice_power_level_diff">%1$s de %2$s a %3$s</string>
@@ -1210,13 +1208,11 @@
     <string name="room_profile_leaving_room">Saliendo de la sala…</string>
     <string name="room_member_power_level_admins">Administradores</string>
     <string name="room_member_power_level_moderators">Moderadores</string>
-    <string name="room_member_power_level_custom">Nivel Personalizado</string>
     <string name="room_member_power_level_invites">Invitados</string>
     <string name="room_member_power_level_users">Usuarios</string>
     <string name="room_member_power_level_admin_in">Administrador en %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderador en %1$s</string>
     <string name="room_member_power_level_default_in">Nivel Personalizado en %1$s</string>
-    <string name="room_member_power_level_custom_in">Nivel Personalizado (%1$d) en %2$s</string>
     <string name="room_member_jump_to_read_receipt">Saltar para leer el recibo</string>
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} no maneja eventos de tipo \'%1$s\'</string>
     <string name="rendering_event_error_exception">${app_name} encontró un problema al representar el contenido del evento con el ID \'%1$s\'</string>

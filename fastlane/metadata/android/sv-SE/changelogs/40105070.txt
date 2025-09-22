@@ -1,2 +1,0 @@
-Huvudsakliga ändringar i den här versionen: nytt gränssnitt för val av bilaga.
-Full ändringslogg: https://github.com/element-hq/element-android/releases

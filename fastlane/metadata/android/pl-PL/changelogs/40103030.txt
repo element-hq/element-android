@@ -1,2 +1,0 @@
-Główne zmiany w tej wersji: Uwidocznij politykę(-i) serwera tożsamości w ustawieniach. Tymczasowo usunięto obsługę Androida Auto.
-Pełna lista zmian: https://github.com/element-hq/element-android/releases/tag/v1.3.3

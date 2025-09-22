@@ -1,2 +1,0 @@
-このバージョンの主な変更点：ソーシャルログインのサポート。
-更新履歴：https://github.com/element-hq/element-android/releases/tag/v1.0.15 and https://github.com/element-hq/element-android/releases/tag/v1.0.16

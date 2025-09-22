@@ -90,6 +90,7 @@
                 "hushed-face",
                 "astonished-face",
                 "flushed-face",
+                "distorted-face",
                 "pleading-face",
                 "face-holding-back-tears",
                 "frowning-face-with-open-mouth",
@@ -163,6 +164,7 @@
                 "kiss-mark",
                 "hundred-points",
                 "anger-symbol",
+                "fight-cloud",
                 "collision",
                 "dizzy",
                 "sweat-droplets",
@@ -413,6 +415,7 @@
                 "man-zombie",
                 "woman-zombie",
                 "troll",
+                "hairy-creature",
                 "person-getting-massage",
                 "man-getting-massage",
                 "woman-getting-massage",
@@ -458,6 +461,7 @@
                 "person-running-facing-right",
                 "woman-running-facing-right",
                 "man-running-facing-right",
+                "ballet-dancer",
                 "woman-dancing",
                 "man-dancing",
                 "person-in-suit-levitating",
@@ -672,6 +676,7 @@
                 "spouting-whale",
                 "whale",
                 "dolphin",
+                "orca",
                 "seal",
                 "fish",
                 "tropical-fish",
@@ -883,6 +888,7 @@
                 "compass",
                 "snowcapped-mountain",
                 "mountain",
+                "landslide",
                 "volcano",
                 "mount-fuji",
                 "camping",
@@ -1255,10 +1261,11 @@
                 "headphone",
                 "radio",
                 "saxophone",
+                "trumpet",
+                "trombone",
                 "accordion",
                 "guitar",
                 "musical-keyboard",
-                "trumpet",
                 "violin",
                 "banjo",
                 "drum",
@@ -1319,8 +1326,9 @@
                 "bookmark-tabs",
                 "bookmark",
                 "label",
-                "money-bag",
                 "coin",
+                "money-bag",
+                "treasure-chest",
                 "yen-banknote",
                 "dollar-banknote",
                 "euro-banknote",
@@ -3198,7 +3206,7 @@
             ]
         },
         "face-with-bags-under-eyes": {
-            "a": "⊛ Face with Bags Under Eyes",
+            "a": "Face with Bags Under Eyes",
             "b": "1FAE9",
             "j": [
                 "bags",
@@ -3741,6 +3749,18 @@
                 "open",
                 "shame",
                 "wide"
+            ]
+        },
+        "distorted-face": {
+            "a": "⊛ Distorted Face",
+            "b": "1FAEA",
+            "j": [
+                "anxiety",
+                "bloated",
+                "panic",
+                "shocked",
+                "surprised",
+                "vulnerable"
             ]
         },
         "pleading-face": {
@@ -5198,6 +5218,19 @@
                 "pop",
                 "sign",
                 "vein"
+            ]
+        },
+        "fight-cloud": {
+            "a": "⊛ Fight Cloud",
+            "b": "1FAEF",
+            "j": [
+                "argument",
+                "brawl",
+                "debate",
+                "disagreement",
+                "fight",
+                "ruckus",
+                "wrestle"
             ]
         },
         "collision": {
@@ -9528,6 +9561,20 @@
                 "shrek"
             ]
         },
+        "hairy-creature": {
+            "a": "⊛ Hairy Creature",
+            "b": "1FAC8",
+            "j": [
+                "bigfoot",
+                "cryptid",
+                "forest",
+                "giant",
+                "hairy",
+                "sasquatch",
+                "woodwose",
+                "yeti"
+            ]
+        },
         "person-getting-massage": {
             "a": "Person Getting Massage",
             "b": "1F486",
@@ -9723,16 +9770,18 @@
             ]
         },
         "person-walking-facing-right": {
-            "a": "Person Walking Facing Right",
+            "a": "Person Walking: Facing Right",
             "b": "1F6B6-200D-27A1-FE0F",
             "j": [
                 "amble",
+                "facing",
                 "gait",
                 "hike",
                 "man",
                 "pace",
                 "pedestrian",
                 "person",
+                "right",
                 "stride",
                 "stroll",
                 "walk",
@@ -9742,15 +9791,17 @@
             ]
         },
         "woman-walking-facing-right": {
-            "a": "Woman Walking Facing Right",
+            "a": "Woman Walking: Facing Right",
             "b": "1F6B6-200D-2640-FE0F-200D-27A1-FE0F",
             "j": [
                 "amble",
+                "facing",
                 "gait",
                 "hike",
                 "man",
                 "pace",
                 "pedestrian",
+                "right",
                 "stride",
                 "stroll",
                 "walk",
@@ -9761,15 +9812,17 @@
             ]
         },
         "man-walking-facing-right": {
-            "a": "Man Walking Facing Right",
+            "a": "Man Walking: Facing Right",
             "b": "1F6B6-200D-2642-FE0F-200D-27A1-FE0F",
             "j": [
                 "amble",
+                "facing",
                 "gait",
                 "hike",
                 "man",
                 "pace",
                 "pedestrian",
+                "right",
                 "stride",
                 "stroll",
                 "walk",
@@ -9853,36 +9906,42 @@
             ]
         },
         "person-kneeling-facing-right": {
-            "a": "Person Kneeling Facing Right",
+            "a": "Person Kneeling: Facing Right",
             "b": "1F9CE-200D-27A1-FE0F",
             "j": [
+                "facing",
                 "kneel",
                 "kneeling",
                 "knees",
                 "person",
+                "right",
                 "pray"
             ]
         },
         "woman-kneeling-facing-right": {
-            "a": "Woman Kneeling Facing Right",
+            "a": "Woman Kneeling: Facing Right",
             "b": "1F9CE-200D-2640-FE0F-200D-27A1-FE0F",
             "j": [
+                "facing",
                 "kneel",
                 "kneeling",
                 "knees",
+                "right",
                 "woman",
                 "pray",
                 "worship"
             ]
         },
         "man-kneeling-facing-right": {
-            "a": "Man Kneeling Facing Right",
+            "a": "Man Kneeling: Facing Right",
             "b": "1F9CE-200D-2642-FE0F-200D-27A1-FE0F",
             "j": [
+                "facing",
                 "kneel",
                 "kneeling",
                 "knees",
                 "man",
+                "right",
                 "pray",
                 "worship"
             ]
@@ -9901,14 +9960,16 @@
             ]
         },
         "person-with-white-cane-facing-right": {
-            "a": "Person with White Cane Facing Right",
+            "a": "Person with White Cane: Facing Right",
             "b": "1F9D1-200D-1F9AF-200D-27A1-FE0F",
             "j": [
                 "accessibility",
                 "blind",
                 "cane",
+                "facing",
                 "person",
                 "probing",
+                "right",
                 "white",
                 "walk",
                 "visually impaired"
@@ -9930,14 +9991,16 @@
             ]
         },
         "man-with-white-cane-facing-right": {
-            "a": "Man with White Cane Facing Right",
+            "a": "Man with White Cane: Facing Right",
             "b": "1F468-200D-1F9AF-200D-27A1-FE0F",
             "j": [
                 "accessibility",
                 "blind",
                 "cane",
+                "facing",
                 "man",
                 "probing",
+                "right",
                 "white",
                 "visually impaired",
                 "walk",
@@ -9960,13 +10023,15 @@
             ]
         },
         "woman-with-white-cane-facing-right": {
-            "a": "Woman with White Cane Facing Right",
+            "a": "Woman with White Cane: Facing Right",
             "b": "1F469-200D-1F9AF-200D-27A1-FE0F",
             "j": [
                 "accessibility",
                 "blind",
                 "cane",
+                "facing",
                 "probing",
+                "right",
                 "white",
                 "woman",
                 "stick",
@@ -9985,12 +10050,14 @@
             ]
         },
         "person-in-motorized-wheelchair-facing-right": {
-            "a": "Person in Motorized Wheelchair Facing Right",
+            "a": "Person in Motorized Wheelchair: Facing Right",
             "b": "1F9D1-200D-1F9BC-200D-27A1-FE0F",
             "j": [
                 "accessibility",
+                "facing",
                 "motorized",
                 "person",
+                "right",
                 "wheelchair",
                 "disability"
             ]
@@ -10009,12 +10076,14 @@
             ]
         },
         "man-in-motorized-wheelchair-facing-right": {
-            "a": "Man in Motorized Wheelchair Facing Right",
+            "a": "Man in Motorized Wheelchair: Facing Right",
             "b": "1F468-200D-1F9BC-200D-27A1-FE0F",
             "j": [
                 "accessibility",
+                "facing",
                 "man",
                 "motorized",
+                "right",
                 "wheelchair",
                 "disability",
                 "mobility"
@@ -10034,11 +10103,13 @@
             ]
         },
         "woman-in-motorized-wheelchair-facing-right": {
-            "a": "Woman in Motorized Wheelchair Facing Right",
+            "a": "Woman in Motorized Wheelchair: Facing Right",
             "b": "1F469-200D-1F9BC-200D-27A1-FE0F",
             "j": [
                 "accessibility",
+                "facing",
                 "motorized",
+                "right",
                 "wheelchair",
                 "woman",
                 "mobility",
@@ -10057,12 +10128,14 @@
             ]
         },
         "person-in-manual-wheelchair-facing-right": {
-            "a": "Person in Manual Wheelchair Facing Right",
+            "a": "Person in Manual Wheelchair: Facing Right",
             "b": "1F9D1-200D-1F9BD-200D-27A1-FE0F",
             "j": [
                 "accessibility",
+                "facing",
                 "manual",
                 "person",
+                "right",
                 "wheelchair",
                 "mobility",
                 "disability"
@@ -10082,12 +10155,14 @@
             ]
         },
         "man-in-manual-wheelchair-facing-right": {
-            "a": "Man in Manual Wheelchair Facing Right",
+            "a": "Man in Manual Wheelchair: Facing Right",
             "b": "1F468-200D-1F9BD-200D-27A1-FE0F",
             "j": [
                 "accessibility",
+                "facing",
                 "man",
                 "manual",
+                "right",
                 "wheelchair",
                 "mobility",
                 "disability"
@@ -10107,11 +10182,13 @@
             ]
         },
         "woman-in-manual-wheelchair-facing-right": {
-            "a": "Woman in Manual Wheelchair Facing Right",
+            "a": "Woman in Manual Wheelchair: Facing Right",
             "b": "1F469-200D-1F9BD-200D-27A1-FE0F",
             "j": [
                 "accessibility",
+                "facing",
                 "manual",
+                "right",
                 "wheelchair",
                 "woman",
                 "disability",
@@ -10189,9 +10266,10 @@
             ]
         },
         "person-running-facing-right": {
-            "a": "Person Running Facing Right",
+            "a": "Person Running: Facing Right",
             "b": "1F3C3-200D-27A1-FE0F",
             "j": [
+                "facing",
                 "fast",
                 "hurry",
                 "marathon",
@@ -10200,6 +10278,7 @@
                 "quick",
                 "race",
                 "racing",
+                "right",
                 "run",
                 "rush",
                 "speed",
@@ -10208,9 +10287,10 @@
             ]
         },
         "woman-running-facing-right": {
-            "a": "Woman Running Facing Right",
+            "a": "Woman Running: Facing Right",
             "b": "1F3C3-200D-2640-FE0F-200D-27A1-FE0F",
             "j": [
+                "facing",
                 "fast",
                 "hurry",
                 "marathon",
@@ -10218,6 +10298,7 @@
                 "quick",
                 "race",
                 "racing",
+                "right",
                 "run",
                 "rush",
                 "speed",
@@ -10227,9 +10308,10 @@
             ]
         },
         "man-running-facing-right": {
-            "a": "Man Running Facing Right",
+            "a": "Man Running: Facing Right",
             "b": "1F3C3-200D-2642-FE0F-200D-27A1-FE0F",
             "j": [
+                "facing",
                 "fast",
                 "hurry",
                 "man",
@@ -10238,11 +10320,23 @@
                 "quick",
                 "race",
                 "racing",
+                "right",
                 "run",
                 "rush",
                 "speed",
                 "jog",
                 "exercise"
+            ]
+        },
+        "ballet-dancer": {
+            "a": "⊛ Ballet Dancer",
+            "b": "1F9D1-200D-1FA70",
+            "j": [
+                "ballet",
+                "dancer",
+                "graceful",
+                "perform",
+                "twirl"
             ]
         },
         "woman-dancing": {
@@ -12517,7 +12611,7 @@
             ]
         },
         "fingerprint": {
-            "a": "⊛ Fingerprint",
+            "a": "Fingerprint",
             "b": "1FAC6",
             "j": [
                 "clue",
@@ -13893,6 +13987,15 @@
                 "fins"
             ]
         },
+        "orca": {
+            "a": "⊛ Orca",
+            "b": "1FACD",
+            "j": [
+                "marine",
+                "ocean",
+                "whale"
+            ]
+        },
         "seal": {
             "a": "Seal",
             "b": "1F9AD",
@@ -14697,7 +14800,7 @@
             ]
         },
         "leafless-tree": {
-            "a": "⊛ Leafless Tree",
+            "a": "Leafless Tree",
             "b": "1FABE",
             "j": [
                 "bare",
@@ -15213,7 +15316,7 @@
             ]
         },
         "root-vegetable": {
-            "a": "⊛ Root Vegetable",
+            "a": "Root Vegetable",
             "b": "1FADC",
             "j": [
                 "beet",
@@ -16733,6 +16836,19 @@
                 "photo",
                 "nature",
                 "environment"
+            ]
+        },
+        "landslide": {
+            "a": "⊛ Landslide",
+            "b": "1F6D8",
+            "j": [
+                "avalanche",
+                "danger",
+                "disaster",
+                "earthquake",
+                "mountain",
+                "mudslide",
+                "rocks"
             ]
         },
         "volcano": {
@@ -22296,6 +22412,31 @@
                 "entertainment"
             ]
         },
+        "trumpet": {
+            "a": "Trumpet",
+            "b": "1F3BA",
+            "j": [
+                "instrument",
+                "music",
+                "brass",
+                "activity",
+                "entertainment",
+                "horn",
+                "jazz"
+            ]
+        },
+        "trombone": {
+            "a": "⊛ Trombone",
+            "b": "1FA8A",
+            "j": [
+                "brass",
+                "instrument",
+                "jazz",
+                "music",
+                "sad",
+                "slide"
+            ]
+        },
         "accordion": {
             "a": "Accordion",
             "b": "1FA97",
@@ -22336,19 +22477,6 @@
                 "compose",
                 "activity",
                 "entertainment"
-            ]
-        },
-        "trumpet": {
-            "a": "Trumpet",
-            "b": "1F3BA",
-            "j": [
-                "instrument",
-                "music",
-                "brass",
-                "activity",
-                "entertainment",
-                "horn",
-                "jazz"
             ]
         },
         "violin": {
@@ -22438,7 +22566,7 @@
             ]
         },
         "harp": {
-            "a": "⊛ Harp",
+            "a": "Harp",
             "b": "1FA89",
             "j": [
                 "cupid",
@@ -23215,6 +23343,21 @@
                 "sale"
             ]
         },
+        "coin": {
+            "a": "Coin",
+            "b": "1FA99",
+            "j": [
+                "dollar",
+                "euro",
+                "gold",
+                "metal",
+                "money",
+                "rich",
+                "silver",
+                "treasure",
+                "currency"
+            ]
+        },
         "money-bag": {
             "a": "Money Bag",
             "b": "1F4B0-FE0F",
@@ -23242,19 +23385,19 @@
                 "moneybags"
             ]
         },
-        "coin": {
-            "a": "Coin",
-            "b": "1FA99",
+        "treasure-chest": {
+            "a": "⊛ Treasure Chest",
+            "b": "1FA8E",
             "j": [
-                "dollar",
-                "euro",
+                "gem",
                 "gold",
-                "metal",
+                "jewels",
+                "loot",
                 "money",
-                "rich",
+                "prize",
                 "silver",
-                "treasure",
-                "currency"
+                "valuables",
+                "wealth"
             ]
         },
         "yen-banknote": {
@@ -24465,7 +24608,7 @@
             ]
         },
         "shovel": {
-            "a": "⊛ Shovel",
+            "a": "Shovel",
             "b": "1FA8F",
             "j": [
                 "bury",
@@ -27351,7 +27494,7 @@
             ]
         },
         "splatter": {
-            "a": "⊛ Splatter",
+            "a": "Splatter",
             "b": "1FADF",
             "j": [
                 "drip",
@@ -27377,12 +27520,12 @@
             "a": "Keycap: 0",
             "b": "0030-FE0F-20E3",
             "j": [
-                "keycap",
                 "0",
+                "keycap",
+                "zero",
                 "numbers",
                 "blue-square",
                 "null",
-                "zero",
                 "digit"
             ]
         },
@@ -27390,11 +27533,11 @@
             "a": "Keycap: 1",
             "b": "0031-FE0F-20E3",
             "j": [
+                "1",
                 "keycap",
+                "one",
                 "blue-square",
                 "numbers",
-                "1",
-                "one",
                 "digit"
             ]
         },
@@ -27402,12 +27545,12 @@
             "a": "Keycap: 2",
             "b": "0032-FE0F-20E3",
             "j": [
-                "keycap",
-                "numbers",
                 "2",
+                "keycap",
+                "two",
+                "numbers",
                 "prime",
                 "blue-square",
-                "two",
                 "digit"
             ]
         },
@@ -27415,12 +27558,12 @@
             "a": "Keycap: 3",
             "b": "0033-FE0F-20E3",
             "j": [
-                "keycap",
                 "3",
+                "keycap",
+                "three",
                 "numbers",
                 "prime",
                 "blue-square",
-                "three",
                 "digit"
             ]
         },
@@ -27428,11 +27571,11 @@
             "a": "Keycap: 4",
             "b": "0034-FE0F-20E3",
             "j": [
-                "keycap",
                 "4",
+                "four",
+                "keycap",
                 "numbers",
                 "blue-square",
-                "four",
                 "digit"
             ]
         },
@@ -27440,12 +27583,12 @@
             "a": "Keycap: 5",
             "b": "0035-FE0F-20E3",
             "j": [
-                "keycap",
                 "5",
+                "five",
+                "keycap",
                 "numbers",
                 "blue-square",
                 "prime",
-                "five",
                 "digit"
             ]
         },
@@ -27453,11 +27596,11 @@
             "a": "Keycap: 6",
             "b": "0036-FE0F-20E3",
             "j": [
-                "keycap",
                 "6",
+                "keycap",
+                "six",
                 "numbers",
                 "blue-square",
-                "six",
                 "digit"
             ]
         },
@@ -27465,12 +27608,12 @@
             "a": "Keycap: 7",
             "b": "0037-FE0F-20E3",
             "j": [
-                "keycap",
                 "7",
+                "keycap",
+                "seven",
                 "numbers",
                 "blue-square",
                 "prime",
-                "seven",
                 "digit"
             ]
         },
@@ -27478,11 +27621,11 @@
             "a": "Keycap: 8",
             "b": "0038-FE0F-20E3",
             "j": [
-                "keycap",
                 "8",
+                "eight",
+                "keycap",
                 "blue-square",
                 "numbers",
-                "eight",
                 "digit"
             ]
         },
@@ -27490,11 +27633,11 @@
             "a": "Keycap: 9",
             "b": "0039-FE0F-20E3",
             "j": [
+                "9",
                 "keycap",
+                "nine",
                 "blue-square",
                 "numbers",
-                "9",
-                "nine",
                 "digit"
             ]
         },
@@ -29514,7 +29657,7 @@
             ]
         },
         "flag-sark": {
-            "a": "⊛ Flag: Sark",
+            "a": "Flag: Sark",
             "b": "1F1E8-1F1F6",
             "j": [
                 "flag",

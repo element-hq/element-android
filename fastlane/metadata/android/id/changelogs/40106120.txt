@@ -1,2 +1,0 @@
-Perubahan utama dalam versi ini: Rilis keamanan.
-Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases

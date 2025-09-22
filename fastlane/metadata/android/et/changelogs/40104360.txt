@@ -1,3 +1,0 @@
-Testide alt saad sisse lülitada uue kujunduse - palun proovi seda!
-Parandasime teavitustega seotud vigu ning andmete sünkroniseerimist pika viitega.
-Kogu ingliskeelne muudatuste logi: https://github.com/element-hq/element-android/releases

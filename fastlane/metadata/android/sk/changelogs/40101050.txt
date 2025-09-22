@@ -1,2 +1,0 @@
-Hlavné zmeny v tejto verzii: rýchle opravy pre verziu 1.1.4
-Úplný zoznam zmien: https://github.com/element-hq/element-android/releases/tag/v1.1.5

@@ -75,8 +75,6 @@
     <string name="power_level_admin">Admin</string>
     <string name="power_level_moderator">Moderator</string>
     <string name="power_level_default">Standard</string>
-    <string name="power_level_custom">Anpassad (%1$d)</string>
-    <string name="power_level_custom_no_value">Anpassad</string>
     <string name="notice_power_level_changed_by_you">Du ändrade behörighetsnivå för %1$s.</string>
     <string name="notice_power_level_changed">%1$s ändrade behörighetsnivå för %2$s.</string>
     <string name="notice_power_level_diff">%1$s från %2$s till %3$s</string>
@@ -1480,13 +1478,11 @@
     <string name="room_profile_section_security">Säkerhet</string>
     <string name="room_profile_section_admin">Adminhandlingar</string>
     <string name="room_profile_leaving_room">Lämnar rummet…</string>
-    <string name="room_member_power_level_custom">Anpassad</string>
     <string name="room_member_power_level_invites">Inbjudningar</string>
     <string name="room_member_power_level_users">Användare</string>
     <string name="room_member_power_level_admin_in">Administratör i %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderator i %1$s</string>
     <string name="room_member_power_level_default_in">Standardbehörig i %1$s</string>
-    <string name="room_member_power_level_custom_in">Anpassad (%1$d) i %2$s</string>
     <string name="room_member_jump_to_read_receipt">Hoppa till läskvitto</string>
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} hanterar inte händelser av typen \'%1$s\'</string>
     <string name="rendering_event_error_exception">${app_name} stötte på ett fel vid rendering av innehållet i händelsen med id \'%1$s\'</string>

@@ -1,2 +1,0 @@
-Principaux changements pour cette version : Principalement des améliorations sur la fonction de diffusion audio.
-Intégralité des changements : https://github.com/element-hq/element-android/releases

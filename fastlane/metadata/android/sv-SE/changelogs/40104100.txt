@@ -1,2 +1,0 @@
-Huvudsakliga ändringar i denna version: Scrolla i röstmeddelanden. Diverse buggfixar och förbättrad stabilitet.
-Fullständig lista över ändringar: https://github.com/element-hq/element-android/releases

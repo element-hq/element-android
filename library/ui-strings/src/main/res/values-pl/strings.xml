@@ -1080,12 +1080,10 @@
     <string name="room_profile_leaving_room">Opuszczanie pokoju…</string>
     <string name="room_member_power_level_admins">Administratorzy</string>
     <string name="room_member_power_level_moderators">Moderatorzy</string>
-    <string name="room_member_power_level_custom">Niestandardowy</string>
     <string name="room_member_power_level_invites">Zaproszenia</string>
     <string name="room_member_power_level_users">Użytkownicy</string>
     <string name="room_member_power_level_admin_in">Administrator w %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderator w %1$s</string>
-    <string name="room_member_power_level_custom_in">Niestandardowy (%1$d) w %2$s</string>
     <string name="room_member_jump_to_read_receipt">Przeskocz do znacznika odczytania</string>
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} nie obsługuje wydarzeń typu \'%1$s\'</string>
     <string name="rendering_event_error_exception">${app_name} napotkał problem przy wyświetlaniu zawartości wydarzenia z ID \'%1$s\'</string>
@@ -2022,8 +2020,6 @@
         <item quantity="other">%1$s, %2$s, %3$s i %4$d innych</item>
     </plurals>
     <string name="room_displayname_4_members">%1$s, %2$s, %3$s i %4$s</string>
-    <string name="power_level_custom_no_value">Niestandardowe</string>
-    <string name="power_level_custom">Niestandardowe (%1$d)</string>
     <string name="power_level_default">Domyślne</string>
     <string name="power_level_moderator">Moderator</string>
     <string name="power_level_admin">Administrator</string>

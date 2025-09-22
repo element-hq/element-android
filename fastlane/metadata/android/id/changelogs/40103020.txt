@@ -1,2 +1,0 @@
-Perubahan utama dalam versi ini: Penambahan dukungan untuk Android Auto. Banyak perbaikan bug!
-Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases/tag/v1.3.2

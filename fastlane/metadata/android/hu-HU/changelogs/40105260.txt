@@ -1,2 +1,0 @@
-Legnagyobb változtatás ebben a verzióban: Hibajavítások.
-Teljes változási napló: https://github.com/element-hq/element-android/releases

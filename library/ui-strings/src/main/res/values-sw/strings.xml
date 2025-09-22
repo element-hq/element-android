@@ -111,8 +111,6 @@
     <string name="notice_widget_removed_by_you">Umeondoa %1$s wijeti</string>
     <string name="notice_widget_modified">%1$s imebadilishwa%2$s wijeti</string>
     <string name="notice_widget_modified_by_you">Umerekebisha %1$s wijeti</string>
-    <string name="power_level_custom">Desturi (%1$d)</string>
-    <string name="power_level_custom_no_value">Desturi</string>
     <string name="notice_power_level_changed">%1$s ilibadilisha kiwango cha nguvu %2$s.</string>
     <string name="notice_power_level_diff">%1$s kutoka %2$s kwa %3$s</string>
     <string name="notice_crypto_unable_to_decrypt">** Imeshindwa kusimbua: %s **</string>

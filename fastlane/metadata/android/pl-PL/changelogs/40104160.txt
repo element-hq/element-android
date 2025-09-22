@@ -1,2 +1,0 @@
-Główne zmiany w tej wersji: Lepsze zarządzanie zaszyfrowanymi wiadomościami. , Poprawki błędów i stabilności.
-Pełna lista zmian: https://github.com/element-hq/element-android/releases

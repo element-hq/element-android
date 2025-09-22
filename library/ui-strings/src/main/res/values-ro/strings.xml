@@ -244,8 +244,6 @@
     <string name="notice_room_server_acl_set_title">%s Setați listele ACL pentru acestă cameră.</string>
     <string name="notice_room_unban_by_you">Ai deblocat %1$s</string>
     <string name="notice_room_unban">%1$s deblocat %2$s</string>
-    <string name="power_level_custom_no_value">Personalizat</string>
-    <string name="power_level_custom">Personalizat (%1$d)</string>
     <string name="power_level_default">Implicit</string>
     <string name="power_level_moderator">Moderator</string>
     <string name="power_level_admin">Administrator</string>

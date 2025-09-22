@@ -1,2 +1,0 @@
-Главна измена у овој верзији: сређене грешке!
-Цео дневник измена: https://github.com/element-hq/element-android/releases/tag/v1.0.15 и https://github.com/element-hq/element-android/releases/tag/v1.0.17

@@ -1,2 +1,0 @@
-Principaux changements pour cette version : Fils de discussion activés par défaut.
-Intégralité des changements : https://github.com/element-hq/element-android/releases

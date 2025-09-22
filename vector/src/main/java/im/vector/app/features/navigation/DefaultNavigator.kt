@@ -446,8 +446,8 @@ class DefaultNavigator @Inject constructor(
 
     override fun openRoomWidget(context: Context, roomId: String, widget: Widget, options: Map<String, Any>?) {
         if (widget.type is WidgetType.Jitsi) {
-            // Jitsi SDK is now for API 24+
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            // Jitsi SDK is now for API 26+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                 MaterialAlertDialogBuilder(context)
                         .setTitle(CommonStrings.dialog_title_error)
                         .setMessage(CommonStrings.error_jitsi_not_supported_on_old_device)

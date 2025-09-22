@@ -1,2 +1,0 @@
-Principais mudanças nesta versão: Element Android está agora usando o Crypto Rust SDK.
-Changelog completo: https://github.com/element-hq/element-android/releases

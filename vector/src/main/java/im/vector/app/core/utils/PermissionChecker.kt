@@ -32,7 +32,7 @@ class AndroidPermissionChecker @Inject constructor(
 ) : PermissionChecker {
     override fun checkPermission(vararg permissions: String): Boolean {
         return permissions.any { permission ->
-            ActivityCompat.checkSelfPermission(applicationContext, permission) != PackageManager.PERMISSION_GRANTED
+            ActivityCompat.checkSelfPermission(applicationContext, permission) == PackageManager.PERMISSION_GRANTED
         }
     }
 }

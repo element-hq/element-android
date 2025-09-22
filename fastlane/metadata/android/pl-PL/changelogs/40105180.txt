@@ -1,2 +1,0 @@
-Główne zmiany w tej wersji: Wątki są włączone domyślnie.
-Pełna lista zmian: https://github.com/element-hq/element-android/releases

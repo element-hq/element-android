@@ -126,8 +126,6 @@
     <string name="power_level_admin">مدیر</string>
     <string name="power_level_moderator">ناظم</string>
     <string name="power_level_default">پیش‌گزیده</string>
-    <string name="power_level_custom">سفارشی (%1$d)</string>
-    <string name="power_level_custom_no_value">سفارشی</string>
     <string name="notice_power_level_changed_by_you">سطح قدرت %1$s را تغییر دادید.</string>
     <string name="notice_power_level_changed">%1$s سطح قدرت %2$s را تغییر داد.</string>
     <string name="notice_power_level_diff">%1$s از %2$s به %3$s</string>
@@ -956,13 +954,11 @@
     <string name="room_profile_leaving_room">ترک کردن اتاق…</string>
     <string name="room_member_power_level_admins">مدیران</string>
     <string name="room_member_power_level_moderators">ناظم‌ها</string>
-    <string name="room_member_power_level_custom">سفارشی</string>
     <string name="room_member_power_level_invites">دعوت‌ها</string>
     <string name="room_member_power_level_users">کاربران</string>
     <string name="room_member_power_level_admin_in">مدیر در %1$s</string>
     <string name="room_member_power_level_moderator_in">ناظم در %1$s</string>
     <string name="room_member_power_level_default_in">پیش گزیده در %1$s</string>
-    <string name="room_member_power_level_custom_in">سفارشی (%1$d) در %2$s</string>
     <string name="room_member_jump_to_read_receipt">پرش به رسیدِ خواندن</string>
     <string name="unignore">لغو نادیده‌گرفتن</string>
     <string name="room_settings_enable_encryption_dialog_submit">به کار انداختن رمزنگاری</string>

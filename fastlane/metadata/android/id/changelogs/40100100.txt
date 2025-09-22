@@ -1,2 +1,0 @@
-Versi baru ini terutama berisi perbaikan bug dan peningkatan. Mengirim pesan sekarang jauh lebih cepat.
-Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases/tag/v1.0.10

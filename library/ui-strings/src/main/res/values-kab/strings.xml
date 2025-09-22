@@ -19,7 +19,6 @@
     <string name="power_level_admin">Anedbal</string>
     <string name="power_level_moderator">Aseɣyad</string>
     <string name="power_level_default">Amezwer</string>
-    <string name="power_level_custom_no_value">Sagen</string>
     <string name="notice_power_level_diff">%1$s seg %2$s ɣer %3$s</string>
     <string name="medium_email">Tansa n yimayl</string>
     <string name="notice_room_unban">%1$s yekkes agdal i %2$s</string>
@@ -74,7 +73,6 @@
     <string name="notice_widget_removed_by_you">Tekkseḍ awiǧit %1$s</string>
     <string name="notice_widget_modified">%1$s ibeddel awiǧit %2$s</string>
     <string name="notice_widget_modified_by_you">Tbeddleḍ awiǧit %1$s</string>
-    <string name="power_level_custom">Sagen (%1$d)</string>
     <string name="notice_power_level_changed_by_you">Tbeddleḍ aswir n tezmert n %1$s.</string>
     <string name="notice_power_level_changed">%1$s ibeddel aswir n tezmert n %2$s.</string>
     <string name="notice_crypto_unable_to_decrypt">** Awgelhen d awezɣi: %s **</string>
@@ -431,7 +429,6 @@
     <string name="room_profile_section_more_notifications">Ilɣa</string>
     <string name="room_profile_section_more_leave">Ffeɣ seg texxamt</string>
     <string name="room_member_power_level_admins">Inedbalen</string>
-    <string name="room_member_power_level_custom">Sagen</string>
     <string name="room_member_power_level_invites">Inced-d</string>
     <string name="room_member_power_level_users">Iseqdacen</string>
     <string name="room_member_jump_to_read_receipt">Ɛeddi ɣer tɣuri n wawwaḍ</string>
@@ -1446,7 +1443,6 @@
     <string name="room_member_power_level_admin_in">Anedbal deg %1$s</string>
     <string name="room_member_power_level_moderator_in">D amaẓrag deg %1$s</string>
     <string name="room_member_power_level_default_in">Amezwer deg %1$s</string>
-    <string name="room_member_power_level_custom_in">D udmawan (%1$d) deg %2$s</string>
     <string name="rendering_event_error_type_of_event_not_handled">"${app_name} ur isekker ara ineḍruyen n wanaw  \'%1$s\'"</string>
     <string name="rendering_event_error_exception">${app_name} yemlal-d ugur mi ara d-yettarra agbur n uneḍru s usulay \'%1$s\'</string>
     <string name="verify_cannot_cross_sign">Tiɣimit-a ulamek ara tebḍu aselken-a akked tqimiyin-nniḍen.

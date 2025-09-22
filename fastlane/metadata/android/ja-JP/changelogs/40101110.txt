@@ -1,2 +1,0 @@
-このバージョンの主な変更点：テーマとスタイルの更新、スペースの新しい機能（1.1.10の不具合の修正）
-更新履歴：https://github.com/element-hq/element-android/releases/tag/v1.1.11

@@ -240,7 +240,6 @@
     <string name="room_profile_section_more_notifications">Varsler</string>
     <string name="room_profile_section_more_uploads">Opplastinger</string>
     <string name="room_member_power_level_moderators">Ordstyrere</string>
-    <string name="room_member_power_level_custom">Tilpasset</string>
     <string name="room_member_power_level_invites">Invitasjoner</string>
     <string name="room_member_power_level_users">Brukere</string>
     <string name="unignore">Opphev ignorering</string>
@@ -1146,8 +1145,6 @@
     <string name="unable_to_send_message">Kan ikke sende melding</string>
     <string name="notice_crypto_error_unknown_inbound_session_id">Avsenderens enhet har ikke sendt oss nøklene til denne meldingen.</string>
     <string name="notice_crypto_unable_to_decrypt">** Kan ikke dekryptere: %s **</string>
-    <string name="power_level_custom_no_value">Tilpasset</string>
-    <string name="power_level_custom">Tilpasset (%1$d)</string>
     <string name="power_level_default">Standard</string>
     <string name="power_level_admin">Administrator</string>
     <string name="notice_room_third_party_registered_invite_by_you">Du godtok invitasjonen til %1$s</string>

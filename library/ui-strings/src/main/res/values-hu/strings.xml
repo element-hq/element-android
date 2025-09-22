@@ -109,8 +109,6 @@
     <string name="notice_direct_room_created_by_you">Elkészítette a beszélgetést</string>
     <string name="notice_direct_room_created">%1$s elkészítette a beszélgetést</string>
     <string name="notice_room_created_by_you">Elkészítette a szobát</string>
-    <string name="power_level_custom_no_value">Egyéni</string>
-    <string name="power_level_custom">Egyéni (%1$d)</string>
     <string name="power_level_default">Alapértelmezett</string>
     <string name="power_level_moderator">Moderátor</string>
     <string name="power_level_admin">Admin</string>
@@ -1179,12 +1177,10 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="room_profile_leaving_room">Kilépés a szobából…</string>
     <string name="room_member_power_level_admins">Adminok</string>
     <string name="room_member_power_level_moderators">Moderátorok</string>
-    <string name="room_member_power_level_custom">Egyedi</string>
     <string name="room_member_power_level_invites">Meghívók</string>
     <string name="room_member_power_level_users">Felhasználók</string>
     <string name="room_member_power_level_admin_in">Adminisztrátor itt: %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderátor itt: %1$s</string>
-    <string name="room_member_power_level_custom_in">Egyedi (%1$d) itt: %2$s</string>
     <string name="room_member_jump_to_read_receipt">Olvasási visszaigazolásra ugrás</string>
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} nem kezeli ezt az eseményt: \'%1$s\'</string>
     <string name="rendering_event_error_exception">${app_name} problémába ütközött az esemény (azon: %1$s) megjelenítésekor</string>

@@ -1,2 +1,0 @@
-Hauptänderungen: Bedingungen des Identitätsservers in Einstellungen anzeigen. Unterstützung für Android Auto temporär entfernt.
-Alle Änderungen: https://github.com/element-hq/element-android/releases/tag/v1.3.3

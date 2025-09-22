@@ -1,2 +1,0 @@
-Những thay đổi chính trong phiên bản này: cập nhật chủ đề và phong cách và sửa lỗi sau khi gọi video
-Log thay đổi đầy đủ: https://github.com/element-hq/element-android/releases/tag/v1.1.12

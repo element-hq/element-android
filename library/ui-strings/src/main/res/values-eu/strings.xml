@@ -1106,12 +1106,10 @@ Errore hau ${app_name}-en kontroletik kanpo dago. Ez dago Google konturik gailua
     <string name="room_profile_leaving_room">Gelatik ateratzen…</string>
     <string name="room_member_power_level_admins">Administratzaileak</string>
     <string name="room_member_power_level_moderators">Moderatzaileak</string>
-    <string name="room_member_power_level_custom">Pertsonalizatua</string>
     <string name="room_member_power_level_invites">Gonbidapenak</string>
     <string name="room_member_power_level_users">Erabiltzaileak</string>
     <string name="room_member_power_level_admin_in">%1$s gelako administratzailea</string>
     <string name="room_member_power_level_moderator_in">%1$s gelako moderatzailea</string>
-    <string name="room_member_power_level_custom_in">Pertsonalizatua (%1$d) %2$s gelan</string>
     <string name="room_member_jump_to_read_receipt">Saltatu irakurragirira</string>
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} aplikazioak ez ditu \'%1$s\' motako gertaerak kudeatzen</string>
     <string name="rendering_event_error_exception">${app_name} aplikazioak arazo bat izan du \'%1$s\' id-a duen edukia erakusteko</string>

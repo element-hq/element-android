@@ -1,2 +1,0 @@
-Hlavné zmeny v tejto verzii: Lepšia spravovanie zašifrovaných správ. Rôzne opravy chýb a vylepšenia stability.
-Úplný zoznam zmien: https://github.com/element-hq/element-android/releases

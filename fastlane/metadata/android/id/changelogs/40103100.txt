@@ -1,2 +1,0 @@
-Perubahan utama dalam versi ini: Dukungan untuk fitur poll (dalam Uji Coba), dan desain tampilan URL baru.
-Catatan perubahan lanjutan: https://github.com/element-hq/element-android/releases/tag/v1.3.10

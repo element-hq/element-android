@@ -82,8 +82,6 @@
     <string name="notice_widget_modified_by_you">عدَّلتَ ودجة %1$s</string>
     <string name="power_level_admin">مدير</string>
     <string name="power_level_default">الاِفتراضي</string>
-    <string name="power_level_custom">مُخصَّص (⁨%1$d⁩)</string>
-    <string name="power_level_custom_no_value">مخصَّص</string>
     <string name="notice_power_level_changed_by_you">غيَّرتَ مُستوى سلطة %1$s.</string>
     <string name="notice_power_level_changed">غيَّرَ %1$s مُستوى سلطة %2$s.</string>
     <string name="notice_power_level_diff">%1$s مِن %2$s إلى %3$s</string>
@@ -981,7 +979,6 @@
     <string name="room_member_power_level_admin_in">مدير لـ %1$s</string>
     <string name="room_member_power_level_users">المستخدمون</string>
     <string name="room_member_power_level_invites">الدعوات</string>
-    <string name="room_member_power_level_custom">مخصص</string>
     <string name="room_member_power_level_moderators">المشرفون</string>
     <string name="room_member_power_level_admins">المديرون</string>
     <string name="room_profile_leaving_room">يغادر الغرفة.…</string>

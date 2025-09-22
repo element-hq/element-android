@@ -494,12 +494,10 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="room_profile_section_more_leave">Forlat rom</string>
     <string name="room_member_power_level_admins">Administratorar</string>
     <string name="room_member_power_level_moderators">Moderatorar</string>
-    <string name="room_member_power_level_custom">Tilpassa</string>
     <string name="room_member_power_level_invites">Invitasjonar</string>
     <string name="room_member_power_level_users">Brukarar</string>
     <string name="room_member_power_level_admin_in">Administrator i %1$s</string>
     <string name="room_member_power_level_moderator_in">Moderator i %1$s</string>
-    <string name="room_member_power_level_custom_in">Tilpassa (%1$d) i %2$s</string>
     <string name="verify_cannot_cross_sign">Denne økta klarde ikkje å dele denne verifikasjonen med dine andre økter.
 \nVerifikasjonsdata er lagra lokalt, og vil bli delt i ein framtidig versjon av programmet.</string>
     <string name="settings_category_timeline">Historikk</string>

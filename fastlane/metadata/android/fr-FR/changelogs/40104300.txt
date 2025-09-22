@@ -1,2 +1,0 @@
-Principaux changements pour cette version : Activation de l’authentification et du parcours d’inscription améliorés.
-Intégralité des changements : https://github.com/element-hq/element-android/releases

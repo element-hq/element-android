@@ -1,2 +1,0 @@
-Những thay đổi chính trong phiên bản này: Tin nhắn Thoại được bật mặc định.
-Log thay đổi đầy đủ: https://github.com/element-hq/element-android/releases/tag/v1.2.0

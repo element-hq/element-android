@@ -204,8 +204,6 @@
     <string name="notice_crypto_error_unknown_inbound_session_id">Thiết bị của người gửi chưa gửi cho chúng tôi mã khoá cho tin nhắn này.</string>
     <string name="notice_crypto_unable_to_decrypt">** Không thể giải mã: %s **</string>
     <string name="notice_power_level_diff">%1$s từ %2$s thành %3$s</string>
-    <string name="power_level_custom_no_value">Tuỳ chỉnh</string>
-    <string name="power_level_custom">Tuỳ chỉnh (%1$d)</string>
     <string name="power_level_default">Mặc định</string>
     <string name="power_level_moderator">Người điều hành</string>
     <string name="power_level_admin">Quản trị viên</string>
@@ -1614,13 +1612,11 @@
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} không xử lý các sự kiện thuộc loại \'%1$s\'</string>
     <string name="room_member_jump_to_read_receipt">Nhảy để đọc biên nhận</string>
     <string name="room_member_open_or_create_dm">Tin nhắn trực tiếp</string>
-    <string name="room_member_power_level_custom_in">Tùy chỉnh (%1$d) trong %2$s</string>
     <string name="room_member_power_level_default_in">Mặc định trong %1$s</string>
     <string name="room_member_power_level_moderator_in">Người điều hành trong %1$s</string>
     <string name="room_member_power_level_admin_in">Quản trị viên trong %1$s</string>
     <string name="room_member_power_level_users">Người dùng</string>
     <string name="room_member_power_level_invites">Mời</string>
-    <string name="room_member_power_level_custom">Tùy chọn</string>
     <string name="room_member_power_level_moderators">Điều hành viên</string>
     <string name="room_member_power_level_admins">Quản trị viên</string>
     <string name="room_profile_leaving_room">Đang rời phòng…</string>

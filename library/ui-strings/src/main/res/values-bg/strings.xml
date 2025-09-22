@@ -129,8 +129,6 @@
     <string name="notice_power_level_diff">%1$s от %2$s на %3$s</string>
     <string name="notice_power_level_changed">%1$s промени нивото на достъп на %2$s.</string>
     <string name="notice_power_level_changed_by_you">Променихте нивото на достъп на %1$s.</string>
-    <string name="power_level_custom_no_value">Собствено ниво</string>
-    <string name="power_level_custom">Собствено ниво (%1$d)</string>
     <string name="power_level_default">По подразбиране</string>
     <string name="power_level_moderator">Модератор</string>
     <string name="power_level_admin">Администратор</string>
@@ -1227,13 +1225,11 @@
     <string name="rendering_event_error_exception">${app_name} срещна проблем опитвайки се да визуализира съдържанието на събитие с идентификатор \'%1$s\'</string>
     <string name="rendering_event_error_type_of_event_not_handled">${app_name} не може да обработва събития от тип \'%1$s\'</string>
     <string name="room_member_jump_to_read_receipt">Отиди на последното прочетено съобщение</string>
-    <string name="room_member_power_level_custom_in">Собствено ниво (%1$d) в %2$s</string>
     <string name="room_member_power_level_default_in">По подразбиране в %1$s</string>
     <string name="room_member_power_level_moderator_in">Модератор в %1$s</string>
     <string name="room_member_power_level_admin_in">Администратор в %1$s</string>
     <string name="room_member_power_level_users">Потребители</string>
     <string name="room_member_power_level_invites">Поканени</string>
-    <string name="room_member_power_level_custom">Собствено ниво</string>
     <string name="room_member_power_level_moderators">Модератори</string>
     <string name="room_member_power_level_admins">Администратори</string>
     <string name="room_profile_leaving_room">Напускане на стаята…</string>
