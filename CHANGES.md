@@ -1,3 +1,11 @@
+Changes in Element v1.6.46 (2025-09-22)
+=======================================
+
+Other changes
+-------------
+ - Bump Jitsi to v 11.4.0 with 16KB page size. ([#9080](https://github.com/element-hq/element-android/issues/9080))
+
+
 Changes in Element v1.6.44 (2025-08-06)
 =======================================
 
