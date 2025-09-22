@@ -1,0 +1,2 @@
+Main changes in this version: Bump Jitsi to v 11.4.0.
+Full changelog: https://github.com/element-hq/element-android/releases
