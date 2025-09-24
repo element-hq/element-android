@@ -31,10 +31,12 @@ The documentation describes what we do to have one, using [Synapse](https://gith
 
 Steps:
 
-- Install virtualenv
+- Install poetry
 
 ```bash
-python3 -m pip install virtualenv
+pip install --user pipx
+pipx install poetry
+python3 -m pipx ensurepath   # To run if `pipx install poetry` complained about PATH not being correctly set 
 ```
 
 - Clone Synapse repository
@@ -52,11 +54,8 @@ You should have the develop branch cloned by default.
 - Run synapse, from the Synapse folder you just cloned
 
 ```bash
-virtualenv -p python3 env
-source env/bin/activate
-pip install -e .
-demo/start.sh --no-rate-limit
-
+poetry install --extras all
+poetry run ./demo/start.sh --no-rate-limit
 ```
 
 Alternatively, to install the latest Synapse release package (and not a cloned branch) you can run the following instead of `git clone` and `pip install -e .`:
@@ -86,13 +85,7 @@ It can be done using this command:
 To stop Synapse, you can run the following commands:
 
 ```bash
-./demo/stop.sh
-```
-
-And you can deactivate the virtualenv:
-
-```bash
-deactivate
+poetry run ./demo/stop.sh
 ```
 
 ## Troubleshoot
@@ -113,19 +106,4 @@ Ensure you have the following configuration in `demo/etc/8080.config`.
 public_baseurl: http://10.0.2.2:8080/
 ```
 
-After changing this you will need to restart synapse using `demo/stop.sh` and `demo/start.sh` to load the new configuration.
-
-### virtualenv command fails
-
-You can try using
-```bash
-python3 -m venv env
-```
-or
-```bash
-python3 -m virtualenv env
-```
-instead of
-```bash
-virtualenv -p python3 env
-```
+After changing this you will need to restart synapse using `poetry run demo/stop.sh` and `poetry run demo/start.sh` to load the new configuration.
