@@ -5,7 +5,7 @@
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=element-android&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=element-android)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=element-android&metric=bugs)](https://sonarcloud.io/summary/new_code?id=element-android)
 
-# Element Android ManaGap
+# Element Android ManaGap Temp
 
 Element Classic Android is a previous-generation [Matrix](https://matrix.org/) client provided by [Element](https://element.io/). The app can be run on every Android devices with Android OS Lollipop and more (API 21). This client is still supported and receives security updates but no new features or usability enhancements are made. It is recommended to use [Element X](https://github.com/element-hq/element-x-android) that is the next-generation mobile app.
 
