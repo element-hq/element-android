@@ -38,7 +38,7 @@ class FieldNameFormatter {
                 if (previousCodepoint != null) {
                     if (Character.isUpperCase(currentCodepoint) &&
                             !Character.isUpperCase(previousCodepoint) &&
-                            previousCodepoint === 'm'.code as Int? &&
+                            previousCodepoint == 'm'.code  &&
                             result.length == 1
                     ) {
                         // Hungarian notation starting with: mX
@@ -53,7 +53,7 @@ class FieldNameFormatter {
                             }
                         }
                         result.appendCodePoint(currentCodepoint)
-                    } else if (currentCodepoint === '-'.code as Int? || currentCodepoint === '_'.code as Int?) {
+                    } else if (currentCodepoint == '-'.code || currentCodepoint == '_'.code) {
                         // Word-separator: x-x or x_x
                         result.append("_")
                     } else if (Character.isUpperCase(currentCodepoint) && !Character.isUpperCase(previousCodepoint) && Character.isLetterOrDigit(

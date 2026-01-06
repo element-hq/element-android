@@ -164,6 +164,7 @@ ext.groups = [
                         'io.sentry',
                         'it.unimi.dsi',
                         'jakarta.activation',
+                        'jakarta.inject',
                         'jakarta.xml.bind',
                         'javax.activation',
                         'javax.annotation',

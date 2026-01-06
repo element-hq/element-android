@@ -7,11 +7,11 @@ ext.versions = [
         'jvmTarget'         : "21",
 ]
 
-def gradle = "8.11.0"
+def gradle = "8.13.2"
 // Ref: https://kotlinlang.org/releases.html
-def kotlin = "1.9.24"
-def kotlinCoroutines = "1.8.1"
-def dagger = "2.51.1"
+def kotlin = "2.3.0"
+def kotlinCoroutines = "1.10.2"
+def dagger = "2.57.2"
 def firebaseBom = "33.1.1"
 def appDistribution = "16.0.0-beta08"
 def retrofit = "2.11.0"
