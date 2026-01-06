@@ -90,6 +90,8 @@ android {
                 "-opt-in=kotlinx.coroutines.FlowPreview",
                 // Opt in for kotlinx.coroutines.ExperimentalCoroutinesApi too
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                // Fix warning
+                "-Xannotation-default-target=param-property",
         ]
     }
 

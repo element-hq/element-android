@@ -365,6 +365,8 @@ android {
                 "-opt-in=kotlinx.coroutines.FlowPreview",
                 // Opt in for kotlinx.coroutines.ExperimentalCoroutinesApi too
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                // Fix warning
+                "-Xannotation-default-target=param-property",
         ]
     }
 
@@ -398,7 +400,7 @@ dependencies {
     debugImplementation(libs.flipper.flipperNetworkPlugin) {
         exclude group: 'com.facebook.fbjni', module: 'fbjni'
     }
-    debugImplementation 'com.facebook.soloader:soloader:0.10.5'
+    debugImplementation 'com.facebook.soloader:soloader:0.12.1'
     debugImplementation "com.kgurgul.flipper:flipper-realm-android:2.3.0"
 
     gplayImplementation "com.google.android.gms:play-services-location:21.3.0"
@@ -417,7 +419,7 @@ dependencies {
     nightlyImplementation libs.google.appdistribution
 
     // OSS License, gplay flavor only
-    gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.1.0'
+    gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.3.0'
     kapt libs.dagger.hiltCompiler
     ksp libs.airbnb.epoxyProcessor
 
@@ -442,7 +444,7 @@ dependencies {
     androidTestImplementation libs.mockk.mockkAndroid
     androidTestUtil libs.androidx.orchestrator
     androidTestImplementation libs.androidx.fragmentTesting
-    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:1.8.21"
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:2.2.20"
     debugImplementation libs.androidx.fragmentTestingManifest
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
 }

@@ -43,6 +43,10 @@ android {
 
     kotlinOptions {
         jvmTarget = versions.jvmTarget
+        freeCompilerArgs += [
+                // Fix warning
+                "-Xannotation-default-target=param-property",
+        ]
     }
 }
 
@@ -63,7 +67,7 @@ dependencies {
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid
 
-    testImplementation 'org.json:json:20230227'
+    testImplementation 'org.json:json:20251224'
     testImplementation libs.tests.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espressoCore

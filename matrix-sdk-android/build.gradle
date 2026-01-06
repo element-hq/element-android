@@ -161,7 +161,7 @@ dependencies {
 
 
 //    implementation(name: 'crypto-android-release', ext: 'aar')
-    implementation 'net.java.dev.jna:jna:5.13.0@aar'
+    implementation 'net.java.dev.jna:jna:5.18.1@aar'
 
  //   implementation libs.androidx.appCompat
     implementation libs.androidx.core
@@ -181,7 +181,7 @@ dependencies {
     // - https://github.com/square/okhttp/issues/3278
     // - https://github.com/square/okhttp/issues/4455
     // - https://github.com/square/okhttp/issues/3146
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.11.0"))
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:5.3.2"))
     implementation 'com.squareup.okhttp3:okhttp'
     implementation 'com.squareup.okhttp3:logging-interceptor'
 
@@ -189,7 +189,8 @@ dependencies {
     implementation libs.squareup.moshiAdapters
     kapt libs.squareup.moshiKotlin
 
-    api "com.atlassian.commonmark:commonmark:0.13.0"
+    // api "org.commonmark:commonmark:0.27.0" cannot work, markwon uses an old version
+    api "com.atlassian.commonmark:commonmark:0.17.0"
 
     // Image
     implementation libs.androidx.exifinterface
@@ -214,7 +215,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho-okhttp3:1.6.0'
 
     // Video compression
-    implementation 'com.otaliastudios:transcoder:0.10.5'
+    implementation 'com.otaliastudios:transcoder:0.11.2'
 
     // Exif data handling
     implementation libs.apache.commonsImaging

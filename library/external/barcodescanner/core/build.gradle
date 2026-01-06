@@ -16,7 +16,7 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.annotation:annotation-jvm:1.6.0'
+    implementation 'androidx.annotation:annotation-jvm:1.9.1'
 }
 
 afterEvaluate {
