@@ -1930,7 +1930,7 @@ class TimelineFragment :
     private fun handleSummarizeAction() {
         val messages = timelineEventController.getRecentTextMessages(50)
         if (messages.isEmpty()) {
-            showSnackWithMessage("Aucun message texte trouv\u00e9")
+            showSnackWithMessage(getString(R.string.no_text_messages_found))
             return
         }
         val formatted = messages.joinToString("\n") { (sender, timestamp, body) ->

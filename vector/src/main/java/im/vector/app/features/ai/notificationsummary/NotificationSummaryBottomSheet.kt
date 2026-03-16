@@ -16,6 +16,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
@@ -30,9 +31,6 @@ import javax.inject.Inject
 class NotificationSummaryBottomSheet : BottomSheetDialogFragment() {
 
     @Inject lateinit var notificationSummaryService: NotificationSummaryService
-
-    var onDismiss: (() -> Unit)? = null
-    var onMarkAllRead: (() -> Unit)? = null
 
     private var notificationsData: ArrayList<String> = arrayListOf()
 
@@ -90,7 +88,10 @@ class NotificationSummaryBottomSheet : BottomSheetDialogFragment() {
         val dismissButton = Button(context).apply {
             text = getString(R.string.notification_summary_dismiss)
             setOnClickListener {
-                onDismiss?.invoke()
+                parentFragmentManager.setFragmentResult(
+                        REQUEST_KEY,
+                        bundleOf(RESULT_ACTION to ACTION_DISMISS)
+                )
                 dismissAllowingStateLoss()
             }
         }
@@ -99,7 +100,10 @@ class NotificationSummaryBottomSheet : BottomSheetDialogFragment() {
         val markReadButton = Button(context).apply {
             text = getString(R.string.notification_summary_mark_read)
             setOnClickListener {
-                onMarkAllRead?.invoke()
+                parentFragmentManager.setFragmentResult(
+                        REQUEST_KEY,
+                        bundleOf(RESULT_ACTION to ACTION_MARK_READ)
+                )
                 dismissAllowingStateLoss()
             }
         }
@@ -112,7 +116,7 @@ class NotificationSummaryBottomSheet : BottomSheetDialogFragment() {
             if (parts.size == 2) parts[0] to parts[1] else "" to line
         }
 
-        Timber.d("TRANSLATION_DEBUG NotificationSummaryBottomSheet: generating summary for ${notifPairs.size} notifications")
+        Timber.d("NotificationSummaryBottomSheet: generating summary for ${notifPairs.size} notifications")
 
         lifecycleScope.launch {
             try {
@@ -123,13 +127,13 @@ class NotificationSummaryBottomSheet : BottomSheetDialogFragment() {
                     summaryText.text = result
                     scrollView.isVisible = true
                     buttonsLayout.isVisible = true
-                    Timber.d("TRANSLATION_DEBUG NotificationSummaryBottomSheet: summary generated successfully")
+                    Timber.d("NotificationSummaryBottomSheet: summary generated successfully")
                 } else {
                     statusText.text = getString(R.string.notification_summary_failed)
-                    Timber.d("TRANSLATION_DEBUG NotificationSummaryBottomSheet: summary generation returned null")
+                    Timber.d("NotificationSummaryBottomSheet: summary generation returned null")
                 }
             } catch (e: Exception) {
-                Timber.e(e, "TRANSLATION_DEBUG NotificationSummaryBottomSheet: summary generation failed")
+                Timber.e(e, "NotificationSummaryBottomSheet: summary generation failed")
                 progressBar.isVisible = false
                 statusText.text = getString(R.string.notification_summary_failed)
             }
@@ -141,20 +145,20 @@ class NotificationSummaryBottomSheet : BottomSheetDialogFragment() {
     companion object {
         private const val ARG_NOTIFICATIONS = "arg_notifications"
         private const val TAG = "NotificationSummaryBottomSheet"
+        const val REQUEST_KEY = "notification_summary_result"
+        const val RESULT_ACTION = "action"
+        const val ACTION_DISMISS = "dismiss"
+        const val ACTION_MARK_READ = "mark_read"
 
         fun show(
                 fragmentManager: FragmentManager,
-                notifications: List<String>,
-                onDismiss: (() -> Unit)? = null,
-                onMarkAllRead: (() -> Unit)? = null
+                notifications: List<String>
         ) {
             // Avoid showing multiple instances
             if (fragmentManager.findFragmentByTag(TAG) != null) return
 
             val sheet = NotificationSummaryBottomSheet().apply {
                 arguments = Bundle().apply { putStringArrayList(ARG_NOTIFICATIONS, ArrayList(notifications)) }
-                this.onDismiss = onDismiss
-                this.onMarkAllRead = onMarkAllRead
             }
             sheet.show(fragmentManager, TAG)
         }

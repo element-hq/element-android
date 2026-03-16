@@ -39,12 +39,14 @@ class NotificationSummaryService @Inject constructor(
             "[$room] $textToUse"
         }
 
-        Timber.d("TRANSLATION_DEBUG NotificationSummary: generating summary for ${notificationTexts.size} notifications")
+        Timber.d("NotificationSummary: generating summary for ${notificationTexts.size} notifications")
+
+        val language = config.targetLanguage
 
         return try {
             translationService.complete(
-                    "Résume les notifications manquées suivantes de manière concise en français. " +
-                            "Groupe par salon. Mentionne les mentions directes, les décisions, et les questions en attente.",
+                    "Summarize the following missed notifications concisely in $language. " +
+                            "Group by room. Mention direct mentions, decisions, and pending questions.",
                     formatted
             )
         } catch (e: Exception) {

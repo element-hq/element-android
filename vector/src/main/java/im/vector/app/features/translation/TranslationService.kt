@@ -23,6 +23,11 @@ class TranslationService @Inject constructor(
         private val cache: TranslationCache,
         private val rateLimiter: TranslationRateLimiter
 ) {
+    companion object {
+        /** Maximum number of characters to send to the API. */
+        private const val MAX_INPUT_LENGTH = 4000
+    }
+
     private var currentApiUrl: String? = null
     private var currentApiKey: String? = null
     private var api: TranslateApi? = null
@@ -41,6 +46,12 @@ class TranslationService @Inject constructor(
         synchronized(apiLock) {
             val url = config.apiUrl.trimEnd('/')
             val key = config.apiKey
+
+            // Enforce HTTPS for non-localhost URLs
+            if (!isLocalhost(url) && !url.startsWith("https://")) {
+                throw IllegalArgumentException("Non-localhost API URLs must use HTTPS")
+            }
+
             if (api == null || currentApiUrl != url || currentApiKey != key) {
                 // Shutdown previous client to avoid resource leaks
                 currentClient?.dispatcher?.executorService?.shutdown()
@@ -77,11 +88,18 @@ class TranslationService @Inject constructor(
         }
     }
 
+    private fun isLocalhost(url: String): Boolean {
+        return url.contains("localhost") || url.contains("127.0.0.1") || url.contains("0.0.0.0")
+    }
+
     suspend fun translate(text: String, targetLanguage: String): String? {
         if (text.isBlank()) return text
 
         // Check cache first
         cache.get(text, targetLanguage)?.let { return it }
+
+        // Truncate input to limit
+        val truncatedText = text.take(MAX_INPUT_LENGTH)
 
         return try {
             rateLimiter.execute {
@@ -98,7 +116,7 @@ class TranslationService @Inject constructor(
                                 ),
                                 ChatMessage(
                                         role = "user",
-                                        content = text
+                                        content = truncatedText
                                 )
                         )
                 )
@@ -110,7 +128,7 @@ class TranslationService @Inject constructor(
                 translated
             }
         } catch (e: Exception) {
-            Timber.e(e, "Translation failed for text: ${text.take(50)}...")
+            Timber.e(e, "Translation failed")
             null
         }
     }
@@ -132,13 +150,16 @@ class TranslationService @Inject constructor(
     }
 
     suspend fun complete(systemPrompt: String, userMessage: String): String? {
+        // Truncate input to limit
+        val truncatedMessage = userMessage.take(MAX_INPUT_LENGTH)
+
         return try {
             rateLimiter.execute {
                 val request = ChatCompletionRequest(
                         model = config.model,
                         messages = listOf(
                                 ChatMessage(role = "system", content = systemPrompt),
-                                ChatMessage(role = "user", content = userMessage)
+                                ChatMessage(role = "user", content = truncatedMessage)
                         )
                 )
                 val response = getApi().translate(request)

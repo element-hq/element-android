@@ -125,8 +125,10 @@ class ConversationSummaryBottomSheet : BottomSheetDialogFragment() {
         private const val TAG = "ConversationSummaryBottomSheet"
 
         fun show(fragmentManager: FragmentManager, messagesText: String) {
+            // Truncate to avoid TransactionTooLargeException from Bundle size limit
+            val safeText = messagesText.take(500_000)
             val sheet = ConversationSummaryBottomSheet().apply {
-                arguments = Bundle().apply { putString(ARG_MESSAGES, messagesText) }
+                arguments = Bundle().apply { putString(ARG_MESSAGES, safeText) }
             }
             sheet.show(fragmentManager, TAG)
         }

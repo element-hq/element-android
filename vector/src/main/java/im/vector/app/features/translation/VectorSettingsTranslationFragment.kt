@@ -72,6 +72,14 @@ class VectorSettingsTranslationFragment : VectorSettingsBaseFragment() {
 
         apiUrlPref.setOnPreferenceChangeListener { _, newValue ->
             val url = newValue as String
+            if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                Toast.makeText(requireContext(), "URL must start with http:// or https://", Toast.LENGTH_SHORT).show()
+                return@setOnPreferenceChangeListener false
+            }
+            val isLocalhost = url.contains("localhost") || url.contains("127.0.0.1") || url.contains("0.0.0.0")
+            if (!isLocalhost && !url.startsWith("https://")) {
+                Toast.makeText(requireContext(), "Warning: Non-localhost URLs should use HTTPS. Message content will be sent to this server.", Toast.LENGTH_LONG).show()
+            }
             translateConfig.apiUrl = url
             apiUrlPref.summary = url
             true

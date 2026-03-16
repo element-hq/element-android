@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
@@ -28,8 +29,6 @@ import javax.inject.Inject
 class ReformulationBottomSheet : BottomSheetDialogFragment() {
 
     @Inject lateinit var translationService: TranslationService
-
-    var onResult: ((String) -> Unit)? = null
 
     private var originalText: String = ""
 
@@ -83,7 +82,10 @@ class ReformulationBottomSheet : BottomSheetDialogFragment() {
                     lifecycleScope.launch {
                         val result = translationService.complete(prompt, originalText)
                         if (result != null) {
-                            onResult?.invoke(result)
+                            parentFragmentManager.setFragmentResult(
+                                    REQUEST_KEY,
+                                    bundleOf(RESULT_TEXT to result)
+                            )
                             dismissAllowingStateLoss()
                         } else {
                             statusText.text = getString(R.string.reformulate_failed)
@@ -104,11 +106,12 @@ class ReformulationBottomSheet : BottomSheetDialogFragment() {
     companion object {
         private const val ARG_TEXT = "arg_text"
         private const val TAG = "ReformulationBottomSheet"
+        const val REQUEST_KEY = "reformulation_result"
+        const val RESULT_TEXT = "text"
 
-        fun show(fragmentManager: FragmentManager, text: String, onResult: (String) -> Unit) {
+        fun show(fragmentManager: FragmentManager, text: String) {
             val sheet = ReformulationBottomSheet().apply {
                 arguments = Bundle().apply { putString(ARG_TEXT, text) }
-                this.onResult = onResult
             }
             sheet.show(fragmentManager, TAG)
         }

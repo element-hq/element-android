@@ -182,6 +182,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         setupComposer()
         setupEmojiButton()
         setupReformulationButton()
+        setupReformulationResultListener()
         setupSuggestedReplies()
 
         views.composerLayout.isGone = vectorPreferences.isRichTextEditorEnabled()
@@ -575,9 +576,7 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
                     val text = composerEditText.text?.toString() ?: ""
                     if (text.isNotBlank()) {
                         originalTextBeforeReformulation = text
-                        ReformulationBottomSheet.show(childFragmentManager, text) { result ->
-                            composer.setTextIfDifferent(result)
-                        }
+                        ReformulationBottomSheet.show(childFragmentManager, text)
                     }
                     mode.finish()
                     true
@@ -591,6 +590,18 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
 
         composerEditText.customSelectionActionModeCallback = reformulationCallback
         composerEditText.customInsertionActionModeCallback = reformulationCallback
+    }
+
+    private fun setupReformulationResultListener() {
+        childFragmentManager.setFragmentResultListener(
+                ReformulationBottomSheet.REQUEST_KEY,
+                viewLifecycleOwner
+        ) { _, bundle ->
+            val text = bundle.getString(ReformulationBottomSheet.RESULT_TEXT)
+            if (text != null) {
+                composer.setTextIfDifferent(text)
+            }
+        }
     }
 
     @Suppress("UNUSED_VARIABLE")

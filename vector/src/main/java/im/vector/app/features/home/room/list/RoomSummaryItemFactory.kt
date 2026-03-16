@@ -143,11 +143,11 @@ class RoomSummaryItemFactory @Inject constructor(
             val clearContent = latestEvent.root.getClearContent()
             val msgContent = clearContent?.toModel<MessageContent>()
             val body = msgContent?.body
-            Timber.w("TRANSLATION_DEBUG Room list: room=${roomSummary.displayName} clearContent=${clearContent != null} msgContent=${msgContent != null} body=${body?.take(50)} autoTranslate=${timelineTranslationManager.getCachedTranslation(body ?: "") != null}")
+            Timber.d("TRANSLATION_DEBUG Room list: room=${roomSummary.displayName} clearContent=${clearContent != null} msgContent=${msgContent != null} body=${body?.take(50)} autoTranslate=${timelineTranslationManager.getCachedTranslation(body ?: "") != null}")
             if (body != null) {
                 val translatedPreview = timelineTranslationManager.getCachedTranslation(body)
                 if (translatedPreview != null) {
-                    Timber.w("TRANSLATION_DEBUG Room list preview translated for room ${roomSummary.displayName}: $translatedPreview")
+                    Timber.d("TRANSLATION_DEBUG Room list preview translated for room ${roomSummary.displayName}: $translatedPreview")
                     latestFormattedEvent = if (roomSummary.isDirect.not()) {
                         // For non-DM rooms, prepend the sender name with proper styling like DisplayableEventFormatter.simpleFormat()
                         val senderName = latestEvent.senderInfo.disambiguatedDisplayName

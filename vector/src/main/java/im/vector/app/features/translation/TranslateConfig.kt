@@ -7,15 +7,20 @@
 
 package im.vector.app.features.translation
 
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import im.vector.app.core.di.DefaultPreferences
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class TranslateConfig @Inject constructor(
-        @DefaultPreferences private val prefs: SharedPreferences
+        @DefaultPreferences private val prefs: SharedPreferences,
+        private val context: Context
 ) {
     companion object {
         private const val KEY_API_URL = "translate_api_url"
@@ -31,13 +36,36 @@ class TranslateConfig @Inject constructor(
         private const val KEY_NOTIFICATION_SUMMARY_ENABLED = "translate_notification_summary_enabled"
     }
 
+    /**
+     * Secure SharedPreferences for storing sensitive data like API keys.
+     * Falls back to regular SharedPreferences if EncryptedSharedPreferences fails
+     * (can happen on some devices with Keystore issues).
+     */
+    private val securePrefs: SharedPreferences by lazy {
+        try {
+            val masterKey = MasterKey.Builder(context)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build()
+            EncryptedSharedPreferences.create(
+                    context,
+                    "translate_secure_prefs",
+                    masterKey,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            )
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to create EncryptedSharedPreferences, falling back to regular prefs")
+            prefs
+        }
+    }
+
     var apiUrl: String
         get() = prefs.getString(KEY_API_URL, "http://localhost:11434/v1") ?: "http://localhost:11434/v1"
         set(value) = prefs.edit { putString(KEY_API_URL, value) }
 
     var apiKey: String
-        get() = prefs.getString(KEY_API_KEY, "") ?: ""
-        set(value) = prefs.edit { putString(KEY_API_KEY, value) }
+        get() = securePrefs.getString(KEY_API_KEY, "") ?: ""
+        set(value) = securePrefs.edit { putString(KEY_API_KEY, value) }
 
     var model: String
         get() = prefs.getString(KEY_MODEL, "llama3") ?: "llama3"

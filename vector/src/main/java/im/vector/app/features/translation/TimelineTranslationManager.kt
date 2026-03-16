@@ -11,7 +11,9 @@ import android.text.Html
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import java.lang.ref.WeakReference
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,14 +32,21 @@ class TimelineTranslationManager @Inject constructor(
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val pendingTranslations = mutableSetOf<String>()
     private val pendingLock = Any()
-    private var listener: TranslationListener? = null
+    private var listenerRef: WeakReference<TranslationListener>? = null
 
     interface TranslationListener {
         fun onTranslationReady(eventId: String)
     }
 
     fun setListener(listener: TranslationListener?) {
-        this.listener = listener
+        listenerRef = listener?.let { WeakReference(it) }
+    }
+
+    /**
+     * Cancel pending coroutines. Good practice even though singletons live for app lifetime.
+     */
+    fun destroy() {
+        scope.cancel()
     }
 
     /**
@@ -162,9 +171,9 @@ class TimelineTranslationManager @Inject constructor(
                             val translatedQuote = translationService.translate(cleanedQuote, targetLang)
                             if (translatedQuote != null) {
                                 translationCache.put(quoteCacheKey, targetLang, translatedQuote)
-                                Timber.w("TRANSLATION_DEBUG Reply quote CACHED (late) for event $eventId: $translatedQuote")
+                                Timber.d("TRANSLATION_DEBUG Reply quote CACHED (late) for event $eventId: $translatedQuote")
                                 kotlinx.coroutines.withContext(Dispatchers.Main) {
-                                    listener?.onTranslationReady(eventId)
+                                    listenerRef?.get()?.onTranslationReady(eventId)
                                 }
                             }
                         } catch (e: Exception) {
@@ -194,7 +203,7 @@ class TimelineTranslationManager @Inject constructor(
                             val translatedQuote = translationService.translate(cleanedQuote, targetLang)
                             if (translatedQuote != null) {
                                 translationCache.put(quoteCacheKey, targetLang, translatedQuote)
-                                Timber.w("TRANSLATION_DEBUG Reply quote CACHED for event $eventId: $translatedQuote")
+                                Timber.d("TRANSLATION_DEBUG Reply quote CACHED for event $eventId: $translatedQuote")
                             }
                         } catch (e: Exception) {
                             Timber.e(e, "Reply quote translation failed for event $eventId")
@@ -206,7 +215,7 @@ class TimelineTranslationManager @Inject constructor(
                     Timber.d("Translation ready for event $eventId")
                     // Notify on main thread
                     kotlinx.coroutines.withContext(Dispatchers.Main) {
-                        listener?.onTranslationReady(eventId)
+                        listenerRef?.get()?.onTranslationReady(eventId)
                     }
                 }
             } catch (e: Exception) {

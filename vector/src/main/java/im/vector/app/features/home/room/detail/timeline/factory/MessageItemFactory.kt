@@ -633,7 +633,7 @@ class MessageItemFactory @Inject constructor(
                     if (quoteTranslation == null) {
                         quoteTranslation = timelineTranslationManager.getTranslatedReplyQuote(informationData.eventId)
                     }
-                    Timber.w("TRANSLATION_DEBUG buildItem eventId=${informationData.eventId} parentEventId=$parentEventId quoteTranslation=$quoteTranslation replyBlock=${replyBlock.take(300)}")
+                    Timber.d("TRANSLATION_DEBUG buildItem eventId=${informationData.eventId} parentEventId=$parentEventId quoteTranslation=$quoteTranslation replyBlock=${replyBlock.take(300)}")
                     if (quoteTranslation != null) {
                         // Try <br/> first, then <br>, then <br /> — Matrix HTML varies
                         val brPatterns = listOf("<br/>", "<br>", "<br />")
@@ -649,9 +649,9 @@ class MessageItemFactory @Inject constructor(
                         if (lastBrIndex != -1) {
                             val beforeQuoteText = replyBlock.substring(0, lastBrIndex + brLen)
                             replyBlock = "$beforeQuoteText$quoteTranslation</blockquote>"
-                            Timber.w("TRANSLATION_DEBUG replaced quote HTML OK for ${informationData.eventId}")
+                            Timber.d("TRANSLATION_DEBUG replaced quote HTML OK for ${informationData.eventId}")
                         } else {
-                            Timber.w("TRANSLATION_DEBUG NO <br> found in replyBlock for ${informationData.eventId}")
+                            Timber.d("TRANSLATION_DEBUG NO <br> found in replyBlock for ${informationData.eventId}")
                         }
                     }
 

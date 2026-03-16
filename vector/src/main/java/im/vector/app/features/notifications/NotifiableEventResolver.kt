@@ -15,7 +15,7 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.app.features.translation.TranslateConfig
-import im.vector.app.features.translation.TranslationService
+import im.vector.app.features.translation.TranslationCache
 import im.vector.lib.core.utils.timer.Clock
 import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -60,12 +60,16 @@ class NotifiableEventResolver @Inject constructor(
         private val clock: Clock,
         private val buildMeta: BuildMeta,
         private val translateConfig: TranslateConfig,
-        private val translationService: TranslationService,
+        private val translationCache: TranslationCache,
 ) {
 
-    private suspend fun translateBodyIfEnabled(body: String): String {
-        if (!translateConfig.enabled) return body
-        return translationService.translate(body, translateConfig.targetLanguage) ?: body
+    /**
+     * Only use cached translations for notifications to avoid blocking delivery with network calls.
+     * If no cached translation exists, the original text is returned.
+     */
+    private fun translateBodyIfEnabled(body: String): String {
+        if (!translateConfig.enabled || !translateConfig.autoTranslate) return body
+        return translationCache.get(body, translateConfig.targetLanguage) ?: body
     }
 
     suspend fun resolveEvent(event: Event, session: Session, isNoisy: Boolean): NotifiableEvent? {

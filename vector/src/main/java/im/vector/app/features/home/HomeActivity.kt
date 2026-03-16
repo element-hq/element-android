@@ -742,7 +742,7 @@ class HomeActivity :
         val messageEvents = notificationDrawerManager.getQueuedMessageEvents()
         if (messageEvents.isEmpty()) return
 
-        Timber.d("TRANSLATION_DEBUG NotificationSummary: ${messageEvents.size} unread notifications after ${awayDurationMs / 1000}s away")
+        Timber.d("NotificationSummary: ${messageEvents.size} unread notifications after ${awayDurationMs / 1000}s away")
 
         // Format as "roomName|messageBody" strings for the bottom sheet
         val notificationStrings = messageEvents.mapNotNull { event ->

@@ -53,6 +53,10 @@
     <!-- For ScreenCaptureAndroidService -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
 
+    <permission
+        android:name="im.vector.app.permission.APP_FUNCTIONS"
+        android:protectionLevel="signature" />
+
     <!-- Jitsi SDK is now API26+ -->
     <uses-sdk tools:overrideLibrary="com.worklets,com.swmansion.gesturehandler,org.jitsi.meet.sdk,com.oney.WebRTCModule,com.learnium.RNDeviceInfo,com.reactnativecommunity.asyncstorage,com.ocetnik.timer,com.calendarevents,com.reactnativecommunity.netinfo,com.kevinresol.react_native_default_preference,com.rnimmersive,com.rnimmersivemode,com.corbt.keepawake,com.BV.LinearGradient,com.horcrux.svg,com.oblador.performance,com.reactnativecommunity.slider,com.brentvatne.react,com.reactnativecommunity.clipboard,com.swmansion.gesturehandler.react,org.linusu,org.reactnative.maskedview,com.reactnativepagerview,com.swmansion.reanimated,com.th3rdwave.safeareacontext,com.swmansion.rnscreens,org.devio.rn.splashscreen,com.reactnativecommunity.webview,org.wonday.orientation,com.sayem.keepawake,com.splashview,com.facebook.react,com.facebook.hermes" />
 
@@ -414,6 +418,21 @@
             android:exported="false"
             android:foregroundServiceType="microphone"
             android:permission="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+
+        <!-- AppFunctions Service for AI agent inter-app orchestration -->
+        <service
+            android:name=".features.appfunctions.ElementAppFunctionService"
+            android:exported="true"
+            android:permission="im.vector.app.permission.APP_FUNCTIONS">
+            <intent-filter>
+                <action android:name="im.vector.app.ACTION_SEARCH_MESSAGES" />
+                <action android:name="im.vector.app.ACTION_READ_MESSAGES" />
+                <action android:name="im.vector.app.ACTION_SEND_MESSAGE" />
+                <action android:name="im.vector.app.ACTION_LIST_ROOMS" />
+                <action android:name="im.vector.app.ACTION_SUMMARIZE_ROOM" />
+                <action android:name="im.vector.app.ACTION_UNREAD_SUMMARY" />
+            </intent-filter>
+        </service>
 
         <!-- Receivers -->
 
