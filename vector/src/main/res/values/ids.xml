@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="space_item_home" type="id" />
+    <item name="menu_reformulate" type="id" />
 </resources>

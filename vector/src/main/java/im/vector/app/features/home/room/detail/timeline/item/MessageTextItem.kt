@@ -10,6 +10,7 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.text.Spanned
 import android.text.method.MovementMethod
 import android.view.ViewStub
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
 import androidx.core.view.isVisible
@@ -63,6 +64,9 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     @EpoxyAttribute
     var useRichTextEditorStyle: Boolean = false
 
+    @EpoxyAttribute
+    var originalMessage: EpoxyCharSequence? = null
+
     private val previewUrlViewUpdater = PreviewUrlViewUpdater()
 
     override fun bind(holder: Holder) {
@@ -105,6 +109,30 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         messageView.onLongClickIgnoringLinks(attributes.itemLongClickListener)
         messageView.setTextWithEmojiSupport(message?.charSequence, bindingOptions)
         markwonPlugins?.forEach { plugin -> plugin.afterSetText(messageView) }
+
+        // Translation toggle
+        val toggleView = holder.translationToggle
+        val originalTextView = holder.originalTextView
+        if (originalMessage != null) {
+            toggleView.isVisible = true
+            toggleView.text = holder.view.context.getString(R.string.translation_toggle_show_original)
+            originalTextView.isVisible = false
+            originalTextView.text = originalMessage?.charSequence
+            toggleView.setOnClickListener {
+                val isShowing = originalTextView.isVisible
+                if (isShowing) {
+                    originalTextView.isVisible = false
+                    toggleView.text = holder.view.context.getString(R.string.translation_toggle_show_original)
+                } else {
+                    originalTextView.isVisible = true
+                    toggleView.text = holder.view.context.getString(R.string.translation_toggle_hide_original)
+                }
+            }
+        } else {
+            toggleView.isVisible = false
+            originalTextView.isVisible = false
+            toggleView.setOnClickListener(null)
+        }
     }
 
     private fun AppCompatTextView.setTextWithEmojiSupport(message: CharSequence?, bindingOptions: BindingOptions?) {
@@ -128,6 +156,8 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val previewUrlView by bind<PreviewUrlView>(R.id.messageUrlPreview)
+        val translationToggle by bind<TextView>(R.id.messageTranslationToggle)
+        val originalTextView by bind<TextView>(R.id.messageOriginalText)
         private val richMessageStub by bind<ViewStub>(R.id.richMessageTextViewStub)
         private val plainMessageStub by bind<ViewStub>(R.id.plainMessageTextViewStub)
         var richMessageView: EditorStyledTextView? = null

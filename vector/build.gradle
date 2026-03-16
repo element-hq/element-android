@@ -140,12 +140,17 @@ dependencies {
     implementation "androidx.media:media:1.6.0"
     implementation "androidx.transition:transition:1.4.1"
     implementation libs.androidx.biometric
+    implementation "androidx.security:security-crypto:1.1.0-alpha06"
 
     api "org.threeten:threetenbp:1.4.0:no-tzdb"
     api "com.gabrielittner.threetenbp:lazythreetenbp:0.16.0"
 
     implementation libs.squareup.moshi
     kapt libs.squareup.moshiKotlin
+    implementation libs.squareup.retrofit
+    implementation libs.squareup.retrofitMoshi
+    implementation platform("com.squareup.okhttp3:okhttp-bom:4.11.0")
+    implementation 'com.squareup.okhttp3:okhttp'
 
     // Lifecycle
     implementation libs.androidx.lifecycleLivedata

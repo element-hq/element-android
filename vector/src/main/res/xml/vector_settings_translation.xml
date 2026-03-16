@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.preference.PreferenceCategory android:title="@string/translation_category_general">
+
+        <androidx.preference.SwitchPreference
+            android:defaultValue="false"
+            android:key="translate_enabled"
+            android:title="@string/translation_enable" />
+
+        <androidx.preference.SwitchPreference
+            android:defaultValue="false"
+            android:key="translate_auto_translate"
+            android:title="@string/translation_auto_translate"
+            android:summary="@string/translation_auto_translate_summary" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory android:title="@string/translation_category_api">
+
+        <androidx.preference.EditTextPreference
+            android:defaultValue="http://localhost:11434/v1"
+            android:key="translate_api_url"
+            android:title="@string/translation_api_url" />
+
+        <im.vector.app.core.preference.VectorPreference
+            android:key="translate_test_connection"
+            android:title="@string/translation_test_connection"
+            android:summary="@string/translation_test_connection_summary" />
+
+        <androidx.preference.EditTextPreference
+            android:defaultValue=""
+            android:key="translate_api_key"
+            android:title="@string/translation_api_key"
+            android:summary="@string/translation_api_key_summary"
+            app:useSimpleSummaryProvider="false" />
+
+        <androidx.preference.EditTextPreference
+            android:defaultValue="llama3"
+            android:key="translate_model"
+            android:title="@string/translation_model" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory android:title="@string/translation_category_languages">
+
+        <androidx.preference.EditTextPreference
+            android:defaultValue="French"
+            android:key="translate_target_language"
+            android:title="@string/translation_target_language"
+            android:summary="@string/translation_target_language_summary" />
+
+        <androidx.preference.EditTextPreference
+            android:defaultValue=""
+            android:key="translate_room_language"
+            android:title="@string/translation_room_language"
+            android:summary="@string/translation_room_language_summary" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory android:title="@string/translation_category_ai_features">
+
+        <androidx.preference.SwitchPreference
+            android:defaultValue="true"
+            android:key="translate_reformulation_enabled"
+            android:title="@string/translation_reformulation_enabled"
+            android:summary="@string/translation_reformulation_summary" />
+
+        <androidx.preference.SwitchPreference
+            android:defaultValue="true"
+            android:key="translate_summary_enabled"
+            android:title="@string/translation_summary_enabled"
+            android:summary="@string/translation_summary_summary" />
+
+        <androidx.preference.SwitchPreference
+            android:defaultValue="true"
+            android:key="translate_suggested_replies_enabled"
+            android:title="@string/translation_suggested_replies_enabled"
+            android:summary="@string/translation_suggested_replies_summary" />
+
+        <androidx.preference.SwitchPreference
+            android:defaultValue="true"
+            android:key="translate_notification_summary_enabled"
+            android:title="@string/translation_notification_summary_enabled"
+            android:summary="@string/translation_notification_summary_summary" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory android:title="@string/translation_category_cache">
+
+        <im.vector.app.core.preference.VectorPreference
+            android:key="translate_cache_info"
+            android:title="@string/translation_cache_info"
+            android:selectable="false" />
+
+        <im.vector.app.core.preference.VectorPreference
+            android:key="translate_clear_cache"
+            android:title="@string/translation_clear_cache" />
+
+    </androidx.preference.PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

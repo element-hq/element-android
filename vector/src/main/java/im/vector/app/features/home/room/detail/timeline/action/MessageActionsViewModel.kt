@@ -25,6 +25,7 @@ import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.translation.TranslateConfig
 import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -70,6 +71,7 @@ class MessageActionsViewModel @AssistedInject constructor(
         private val stringProvider: StringProvider,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val vectorPreferences: VectorPreferences,
+        private val translateConfig: TranslateConfig,
         private val checkIfCanReplyEventUseCase: CheckIfCanReplyEventUseCase,
         private val checkIfCanRedactEventUseCase: CheckIfCanRedactEventUseCase,
 ) : VectorViewModel<MessageActionState, MessageActionsAction, EmptyViewEvents>(initialState) {
@@ -351,6 +353,10 @@ class MessageActionsViewModel @AssistedInject constructor(
             if (canCopy(msgType)) {
                 // TODO copy images? html? see ClipBoard
                 add(EventSharedAction.Copy(messageContent!!.body))
+            }
+
+            if (translateConfig.enabled && canCopy(msgType) && messageContent != null) {
+                add(EventSharedAction.Translate(eventId, messageContent.body))
             }
 
             if (timelineEvent.canReact() && actionPermissions.canReact) {

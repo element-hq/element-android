@@ -18,6 +18,7 @@ import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.VisibilityState
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.extensions.getVectorLastMessageContent
 import im.vector.app.core.epoxy.LoadingItem_
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.extensions.nextOrNull
@@ -69,6 +70,8 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import timber.log.Timber
+import im.vector.app.core.utils.Debouncer
+import im.vector.app.core.utils.createUIHandler
 import javax.inject.Inject
 import kotlin.math.min
 import kotlin.system.measureTimeMillis
@@ -291,6 +294,72 @@ class TimelineEventController @Inject constructor(
 
     override fun intercept(models: MutableList<EpoxyModel<*>>) = synchronized(modelCache) {
         interceptorHelper.intercept(models, partialState.unreadState, timeline, callback)
+    }
+
+    private val translationDebouncer = Debouncer(Handler(Looper.getMainLooper()))
+    private val pendingTranslationInvalidations = mutableSetOf<String>()
+
+    /**
+     * Invalidate the cached model for a specific event, forcing it to be rebuilt.
+     * Uses debouncing to batch multiple invalidations into a single requestModelBuild().
+     */
+    fun invalidateCacheForEvent(eventId: String) {
+        synchronized(pendingTranslationInvalidations) {
+            pendingTranslationInvalidations.add(eventId)
+        }
+        translationDebouncer.debounce("translation_invalidation", 200) {
+            synchronized(modelCache) {
+                val toInvalidate: Set<String>
+                synchronized(pendingTranslationInvalidations) {
+                    toInvalidate = pendingTranslationInvalidations.toSet()
+                    pendingTranslationInvalidations.clear()
+                }
+                var invalidated = false
+                toInvalidate.forEach { id ->
+                    val position = currentSnapshot.indexOfFirst { it.root.eventId == id }
+                    if (position != -1 && position < modelCache.size) {
+                        modelCache[position] = null
+                        invalidated = true
+                    }
+                }
+                if (invalidated) {
+                    requestModelBuild()
+                }
+            }
+        }
+    }
+
+    /**
+     * Invalidate all cached models, forcing a full rebuild.
+     * Used when auto-translate setting changes.
+     */
+    fun invalidateAllCache() {
+        synchronized(modelCache) {
+            for (i in modelCache.indices) {
+                modelCache[i] = null
+            }
+            requestModelBuild()
+        }
+    }
+
+    /**
+     * Get recent text messages from the current snapshot for summarization.
+     */
+    fun getRecentTextMessages(count: Int): List<Triple<String, Long?, String>> {
+        val result = mutableListOf<Triple<String, Long?, String>>()
+        synchronized(modelCache) {
+            for (event in currentSnapshot) {
+                if (result.size >= count) break
+                val content = event.getVectorLastMessageContent()
+                if (content is org.matrix.android.sdk.api.session.room.model.message.MessageTextContent) {
+                    val senderName = event.senderInfo.disambiguatedDisplayName
+                    val timestamp = event.root.originServerTs
+                    val body = content.body
+                    result.add(Triple(senderName, timestamp, body))
+                }
+            }
+        }
+        return result.reversed() // chronological order
     }
 
     fun update(viewState: RoomDetailViewState) {

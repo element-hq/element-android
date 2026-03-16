@@ -14,6 +14,8 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.detail.timeline.format.NoticeEventFormatter
+import im.vector.app.features.translation.TranslateConfig
+import im.vector.app.features.translation.TranslationCache
 import im.vector.lib.core.utils.timer.Clock
 import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -57,7 +59,18 @@ class NotifiableEventResolver @Inject constructor(
         private val displayableEventFormatter: DisplayableEventFormatter,
         private val clock: Clock,
         private val buildMeta: BuildMeta,
+        private val translateConfig: TranslateConfig,
+        private val translationCache: TranslationCache,
 ) {
+
+    /**
+     * Only use cached translations for notifications to avoid blocking delivery with network calls.
+     * If no cached translation exists, the original text is returned.
+     */
+    private fun translateBodyIfEnabled(body: String): String {
+        if (!translateConfig.enabled || !translateConfig.autoTranslate) return body
+        return translationCache.get(body, translateConfig.targetLanguage) ?: body
+    }
 
     suspend fun resolveEvent(event: Event, session: Session, isNoisy: Boolean): NotifiableEvent? {
         val roomID = event.roomId ?: return null
@@ -130,7 +143,7 @@ class NotifiableEventResolver @Inject constructor(
         return if (room == null) {
             Timber.e("## Unable to resolve room for eventId [$event]")
             // Ok room is not known in store, but we can still display something
-            val body = displayableEventFormatter.format(event, isDm = false, appendAuthor = false)
+            val body = translateBodyIfEnabled(displayableEventFormatter.format(event, isDm = false, appendAuthor = false).toString())
             val roomName = stringProvider.getString(CommonStrings.notification_unknown_room_name)
             val senderDisplayName = event.senderInfo.disambiguatedDisplayName
 
@@ -142,7 +155,7 @@ class NotifiableEventResolver @Inject constructor(
                     noisy = isNoisy,
                     senderName = senderDisplayName,
                     senderId = event.root.senderId,
-                    body = body.toString(),
+                    body = body,
                     imageUriString = event.fetchImageIfPresent(session)?.toString(),
                     roomId = event.root.roomId!!,
                     threadId = event.root.getRootThreadEventId(),
@@ -156,7 +169,7 @@ class NotifiableEventResolver @Inject constructor(
                     event.root.getClearContent()?.toModel<ElementCallNotifyContent>()?.isUserMentioned(session.myUserId) == true
             when {
                 isIncomingElementCall || event.root.supportsNotification() -> {
-                    val body = displayableEventFormatter.format(event, isDm = room.roomSummary()?.isDirect.orFalse(), appendAuthor = false).toString()
+                    val body = translateBodyIfEnabled(displayableEventFormatter.format(event, isDm = room.roomSummary()?.isDirect.orFalse(), appendAuthor = false).toString())
                     val roomName = room.roomSummary()?.displayName ?: ""
                     val senderDisplayName = event.senderInfo.disambiguatedDisplayName
 

@@ -15,8 +15,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
+import android.view.ActionMode
 import android.view.KeyEvent
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -84,6 +87,10 @@ import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.poll.PollMode
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.share.SharedData
+import im.vector.app.features.ai.reformulate.ReformulationBottomSheet
+import im.vector.app.features.ai.suggestedreply.SuggestedReplyService
+import im.vector.app.features.ai.suggestedreply.SuggestedReplyView
+import im.vector.app.features.translation.TranslateConfig
 import im.vector.app.features.voice.VoiceFailure
 import im.vector.lib.strings.CommonStrings
 import kotlinx.coroutines.flow.debounce
@@ -116,6 +123,8 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
     @Inject lateinit var buildMeta: BuildMeta
     @Inject lateinit var session: Session
     @Inject lateinit var errorTracker: ErrorTracker
+    @Inject lateinit var translateConfig: TranslateConfig
+    @Inject lateinit var suggestedReplyService: SuggestedReplyService
 
     private val permalinkService: PermalinkService
         get() = session.permalinkService()
@@ -136,6 +145,8 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         get() = vectorPreferences.showEmojiKeyboard()
 
     private var lockSendButton = false
+    private var originalTextBeforeReformulation: String? = null
+    private var suggestedReplyView: SuggestedReplyView? = null
 
     private lateinit var attachmentsHelper: AttachmentsHelper
     private lateinit var attachmentTypeSelector: AttachmentTypeSelectorView
@@ -170,6 +181,9 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         setupBottomSheet()
         setupComposer()
         setupEmojiButton()
+        setupReformulationButton()
+        setupReformulationResultListener()
+        setupSuggestedReplies()
 
         views.composerLayout.isGone = vectorPreferences.isRichTextEditorEnabled()
         views.richTextComposerLayout.isVisible = vectorPreferences.isRichTextEditorEnabled()
@@ -539,6 +553,101 @@ class MessageComposerFragment : VectorBaseFragment<FragmentComposerBinding>(), A
         composer.emojiButton?.debouncedClicks {
             emojiPopup.toggle()
         }
+    }
+
+    private fun setupReformulationButton() {
+        if (!translateConfig.enabled || !translateConfig.reformulationEnabled) return
+
+        // Add "Reformuler" option to the text selection / long-press context menu of the composer EditText
+        val composerEditText = composer.editText
+
+        val reformulationCallback = object : ActionMode.Callback {
+            override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
+                if (composerEditText.text?.isNotBlank() == true) {
+                    menu.add(Menu.NONE, R.id.menu_reformulate, 10, R.string.reformulate_title)
+                }
+                return true
+            }
+
+            override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean = false
+
+            override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
+                return if (item.itemId == R.id.menu_reformulate) {
+                    val text = composerEditText.text?.toString() ?: ""
+                    if (text.isNotBlank()) {
+                        originalTextBeforeReformulation = text
+                        ReformulationBottomSheet.show(childFragmentManager, text)
+                    }
+                    mode.finish()
+                    true
+                } else {
+                    false
+                }
+            }
+
+            override fun onDestroyActionMode(mode: ActionMode) {}
+        }
+
+        composerEditText.customSelectionActionModeCallback = reformulationCallback
+        composerEditText.customInsertionActionModeCallback = reformulationCallback
+    }
+
+    private fun setupReformulationResultListener() {
+        childFragmentManager.setFragmentResultListener(
+                ReformulationBottomSheet.REQUEST_KEY,
+                viewLifecycleOwner
+        ) { _, bundle ->
+            val text = bundle.getString(ReformulationBottomSheet.RESULT_TEXT)
+            if (text != null) {
+                composer.setTextIfDifferent(text)
+            }
+        }
+    }
+
+    @Suppress("UNUSED_VARIABLE")
+    private fun setupSuggestedReplies() {
+        if (!translateConfig.enabled || !translateConfig.suggestedRepliesEnabled) return
+        // Create SuggestedReplyView and add it above the composer
+        val composerView = composer as? View ?: return
+        val composerParent = composerView.parent as? ViewGroup ?: return
+
+        suggestedReplyView = SuggestedReplyView(requireContext()).apply {
+            isVisible = false
+            layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            setOnSuggestionClickListener { suggestion ->
+                composer.setTextIfDifferent(suggestion)
+                clear()
+            }
+        }
+
+        val index = composerParent.indexOfChild(composerView)
+        composerParent.addView(suggestedReplyView, index)
+
+        // Hide suggestions when user starts typing
+        composer.editText.textChanges()
+                .skipInitialValue()
+                .onEach {
+                    if (it.isNotEmpty()) {
+                        suggestedReplyView?.clear()
+                    }
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        // Fetch suggestions when room opens
+        fetchSuggestedReplies()
+    }
+
+    private fun fetchSuggestedReplies() {
+        if (!translateConfig.enabled || !translateConfig.suggestedRepliesEnabled) return
+        if (suggestedReplyView == null) return
+
+        // Suggested replies will be triggered from the TimelineFragment which has access
+        // to the timeline controller and can pass recent messages.
+        // For now, the SuggestedReplyView is set up and ready to receive suggestions.
+        Timber.d("Suggested replies view ready, waiting for messages from timeline")
     }
 
     private fun onCannotRecord() {

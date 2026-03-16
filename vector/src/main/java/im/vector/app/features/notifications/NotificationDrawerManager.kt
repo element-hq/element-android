@@ -226,6 +226,20 @@ class NotificationDrawerManager @Inject constructor(
         return resolvedEvent.shouldIgnoreMessageEventInRoom(currentRoomId, currentThreadId)
     }
 
+    /**
+     * Returns a snapshot of the current queued message notification events.
+     * Used by the notification summary feature to generate an AI summary.
+     */
+    fun getQueuedMessageEvents(): List<NotifiableMessageEvent> {
+        val result = mutableListOf<NotifiableMessageEvent>()
+        notificationState.queuedEvents { queuedEvents ->
+            queuedEvents.rawEvents().filterIsInstance<NotifiableMessageEvent>().forEach {
+                result.add(it)
+            }
+        }
+        return result
+    }
+
     companion object {
         const val SUMMARY_NOTIFICATION_ID = 0
         const val ROOM_MESSAGES_NOTIFICATION_ID = 1
