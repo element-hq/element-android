@@ -37,6 +37,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import androidx.lifecycle.withResumed
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -131,6 +132,10 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
 import im.vector.app.features.home.room.detail.timeline.action.MessageActionsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
+import im.vector.app.features.ai.summary.ConversationSummaryBottomSheet
+import im.vector.app.features.translation.TranslateConfig
+import im.vector.app.features.translation.TranslationService
+import im.vector.app.features.translation.TimelineTranslationManager
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
 import im.vector.app.features.home.room.detail.timeline.helper.AudioMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
@@ -242,6 +247,9 @@ class TimelineFragment :
     @Inject lateinit var vectorFeatures: VectorFeatures
     @Inject lateinit var galleryOrCameraDialogHelperFactory: GalleryOrCameraDialogHelperFactory
     @Inject lateinit var permalinkFactory: PermalinkFactory
+    @Inject lateinit var translateConfig: TranslateConfig
+    @Inject lateinit var translationService: TranslationService
+    @Inject lateinit var timelineTranslationManager: TimelineTranslationManager
 
     companion object {
         const val MAX_TYPING_MESSAGE_USERS_COUNT = 4
@@ -255,6 +263,7 @@ class TimelineFragment :
     private val messageComposerViewModel: MessageComposerViewModel by fragmentViewModel()
     private val debouncer = Debouncer(createUIHandler())
     private val itemVisibilityTracker = EpoxyVisibilityTracker()
+    private var lastAutoTranslateState: Boolean = false
 
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
     private lateinit var scrollOnHighlightedEventCallback: ScrollOnHighlightedEventCallback
@@ -682,6 +691,7 @@ class TimelineFragment :
 
     override fun onDestroyView() {
         lazyLoadedViews.unBind()
+        timelineTranslationManager.setListener(null)
         timelineEventController.callback = null
         timelineEventController.removeModelBuildListener(modelBuildListener)
         currentCallsViewPresenter.unBind()
@@ -872,6 +882,10 @@ class TimelineFragment :
                 handleSearchAction()
                 true
             }
+            R.id.menu_summarize -> {
+                handleSummarizeAction()
+                true
+            }
             R.id.dev_tools -> {
                 navigator.openDevTools(requireContext(), timelineArgs.roomId)
                 true
@@ -967,6 +981,13 @@ class TimelineFragment :
         notificationDrawerManager.setCurrentThread(timelineArgs.threadTimelineArgs?.rootThreadEventId)
         roomDetailPendingActionStore.data?.let { handlePendingAction(it) }
         roomDetailPendingActionStore.data = null
+
+        // Detect auto-translate setting changes and refresh timeline
+        val currentAutoTranslate = translateConfig.autoTranslate && translateConfig.enabled
+        if (currentAutoTranslate != lastAutoTranslateState) {
+            lastAutoTranslateState = currentAutoTranslate
+            timelineEventController.invalidateAllCache()
+        }
     }
 
     private fun handlePendingAction(roomDetailPendingAction: RoomDetailPendingAction) {
@@ -1027,6 +1048,13 @@ class TimelineFragment :
     private fun setupRecyclerView() {
         timelineEventController.callback = this
         timelineEventController.timeline = timelineViewModel.timeline
+
+        // Set up translation listener to refresh timeline when translations arrive
+        timelineTranslationManager.setListener(object : TimelineTranslationManager.TranslationListener {
+            override fun onTranslationReady(eventId: String) {
+                timelineEventController.invalidateCacheForEvent(eventId)
+            }
+        })
 
         layoutManager = object : LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, true) {
             override fun onLayoutCompleted(state: RecyclerView.State) {
@@ -1891,8 +1919,39 @@ class TimelineFragment :
             is EventSharedAction.EndPoll -> {
                 askConfirmationToEndPoll(action.eventId)
             }
+            is EventSharedAction.Translate -> {
+                handleTranslateAction(action)
+            }
             is EventSharedAction.ReportContent -> Unit /* Not clickable */
             EventSharedAction.Separator -> Unit /* Not clickable */
+        }
+    }
+
+    private fun handleSummarizeAction() {
+        val messages = timelineEventController.getRecentTextMessages(50)
+        if (messages.isEmpty()) {
+            showSnackWithMessage("Aucun message texte trouv\u00e9")
+            return
+        }
+        val formatted = messages.joinToString("\n") { (sender, timestamp, body) ->
+            val time = timestamp?.let {
+                java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault()).format(java.util.Date(it))
+            } ?: ""
+            "[$sender] ($time): $body"
+        }
+        ConversationSummaryBottomSheet.show(childFragmentManager, formatted)
+    }
+
+    private fun handleTranslateAction(action: EventSharedAction.Translate) {
+        showSnackWithMessage(getString(R.string.translation_translating))
+        lifecycleScope.launch {
+            val translated = translationService.translate(action.content, translateConfig.targetLanguage)
+            if (translated != null) {
+                copyToClipboard(requireContext(), translated, false)
+                showSnackWithMessage(translated)
+            } else {
+                showSnackWithMessage(getString(R.string.translation_failed))
+            }
         }
     }
 

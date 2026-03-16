@@ -75,6 +75,7 @@ import org.matrix.android.sdk.api.session.space.CreateSpaceParams
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
+import im.vector.app.features.translation.TranslationService
 import timber.log.Timber
 
 class MessageComposerViewModel @AssistedInject constructor(
@@ -89,6 +90,7 @@ class MessageComposerViewModel @AssistedInject constructor(
         private val voiceBroadcastHelper: VoiceBroadcastHelper,
         private val clock: Clock,
         private val getVoiceBroadcastStateEventLiveUseCase: GetVoiceBroadcastStateEventLiveUseCase,
+        private val translationService: TranslationService,
 ) : VectorViewModel<MessageComposerViewState, MessageComposerAction, MessageComposerViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)
@@ -239,24 +241,35 @@ class MessageComposerViewModel @AssistedInject constructor(
                             isInThreadTimeline = state.isInThreadTimeline()
                     )) {
                         is ParsedCommand.ErrorNotACommand -> {
-                            // Send the text message to the room
-                            if (state.rootThreadEventId != null) {
-                                room.relationService().replyInThread(
-                                        rootThreadEventId = state.rootThreadEventId,
-                                        replyInThreadText = action.text,
-                                        formattedText = action.formattedText,
-                                        autoMarkdown = action.autoMarkdown
-                                )
-                            } else {
-                                if (action.formattedText != null) {
-                                    room.sendService().sendFormattedTextMessage(action.text.toString(), action.formattedText)
-                                } else {
-                                    room.sendService().sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
+                            // Send the text message to the room, with optional outgoing translation
+                            viewModelScope.launch {
+                                try {
+                                    val translatedText = translationService.translateOutgoing(action.text.toString())
+                                    val translatedFormatted = if (action.formattedText != null) {
+                                        translationService.translateOutgoing(action.formattedText)
+                                    } else null
+                                    if (state.rootThreadEventId != null) {
+                                        room.relationService().replyInThread(
+                                                rootThreadEventId = state.rootThreadEventId,
+                                                replyInThreadText = translatedText,
+                                                formattedText = translatedFormatted,
+                                                autoMarkdown = action.autoMarkdown
+                                        )
+                                    } else {
+                                        if (translatedFormatted != null) {
+                                            room.sendService().sendFormattedTextMessage(translatedText, translatedFormatted)
+                                        } else {
+                                            room.sendService().sendTextMessage(translatedText, autoMarkdown = action.autoMarkdown)
+                                        }
+                                    }
+                                    _viewEvents.post(MessageComposerViewEvents.MessageSent)
+                                    popDraft(room)
+                                } catch (e: Exception) {
+                                    Timber.e(e, "Failed to translate/send message")
+                                    _viewEvents.post(MessageComposerViewEvents.MessageSent)
+                                    popDraft(room)
                                 }
                             }
-
-                            _viewEvents.post(MessageComposerViewEvents.MessageSent)
-                            popDraft(room)
                         }
                         is ParsedCommand.ErrorSyntax -> {
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandError(parsedCommand.command))

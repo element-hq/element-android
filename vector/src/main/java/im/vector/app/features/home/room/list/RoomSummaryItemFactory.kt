@@ -14,23 +14,29 @@ import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.list.usecase.GetLatestPreviewableEventUseCase
 import im.vector.app.features.home.room.typing.TypingHelper
+import im.vector.app.features.translation.TimelineTranslationManager
+import me.gujun.android.span.span
 import im.vector.app.features.voicebroadcast.isLive
 import im.vector.app.features.voicebroadcast.model.asVoiceBroadcastEvent
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.lib.strings.CommonPlurals
 import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.extensions.orFalse
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
+import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.util.toMatrixItem
+import timber.log.Timber
 import javax.inject.Inject
 
 class RoomSummaryItemFactory @Inject constructor(
@@ -40,7 +46,9 @@ class RoomSummaryItemFactory @Inject constructor(
         private val typingHelper: TypingHelper,
         private val avatarRenderer: AvatarRenderer,
         private val errorFormatter: ErrorFormatter,
+        private val colorProvider: ColorProvider,
         private val getLatestPreviewableEventUseCase: GetLatestPreviewableEventUseCase,
+        private val timelineTranslationManager: TimelineTranslationManager,
 ) {
 
     fun create(
@@ -130,6 +138,28 @@ class RoomSummaryItemFactory @Inject constructor(
         if (latestEvent != null) {
             latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect, roomSummary.isDirect.not())
             latestEventTime = dateFormatter.format(latestEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
+
+            // Check if we can use a cached translation for the preview
+            val clearContent = latestEvent.root.getClearContent()
+            val msgContent = clearContent?.toModel<MessageContent>()
+            val body = msgContent?.body
+            Timber.w("TRANSLATION_DEBUG Room list: room=${roomSummary.displayName} clearContent=${clearContent != null} msgContent=${msgContent != null} body=${body?.take(50)} autoTranslate=${timelineTranslationManager.getCachedTranslation(body ?: "") != null}")
+            if (body != null) {
+                val translatedPreview = timelineTranslationManager.getCachedTranslation(body)
+                if (translatedPreview != null) {
+                    Timber.w("TRANSLATION_DEBUG Room list preview translated for room ${roomSummary.displayName}: $translatedPreview")
+                    latestFormattedEvent = if (roomSummary.isDirect.not()) {
+                        // For non-DM rooms, prepend the sender name with proper styling like DisplayableEventFormatter.simpleFormat()
+                        val senderName = latestEvent.senderInfo.disambiguatedDisplayName
+                        span {
+                            text = senderName
+                            textColor = colorProvider.getColorFromAttribute(im.vector.lib.ui.styles.R.attr.vctr_content_primary)
+                        }.append(": ").append(translatedPreview)
+                    } else {
+                        translatedPreview
+                    }
+                }
+            }
         }
 
         val typingMessage = typingHelper.getTypingMessage(roomSummary.typingUsers)

@@ -39,6 +39,12 @@
         app:isPreferenceVisible="@bool/settings_root_labs_visible" />
 
     <im.vector.app.core.preference.VectorPreference
+        android:icon="@drawable/ic_settings_root_translation"
+        android:title="@string/settings_translation"
+        app:fragment="im.vector.app.features.translation.VectorSettingsTranslationFragment"
+        app:isPreferenceVisible="true" />
+
+    <im.vector.app.core.preference.VectorPreference
         android:icon="@drawable/ic_settings_root_advanced"
         android:title="@string/settings_advanced_settings"
         app:fragment="im.vector.app.features.settings.VectorSettingsAdvancedSettingsFragment"

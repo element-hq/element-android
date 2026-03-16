@@ -131,8 +131,11 @@ class HomeActivity :
     @Inject lateinit var unifiedPushHelper: UnifiedPushHelper
     @Inject lateinit var nightlyProxy: NightlyProxy
     @Inject lateinit var notificationPermissionManager: NotificationPermissionManager
+    @Inject lateinit var translateConfig: im.vector.app.features.translation.TranslateConfig
+    @Inject lateinit var notificationSummaryService: im.vector.app.features.ai.notificationsummary.NotificationSummaryService
 
     private var isNewAppLayoutEnabled: Boolean = false // delete once old app layout is removed
+    private var lastPauseTimestamp: Long = 0L
 
     private val createSpaceResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
@@ -580,8 +583,16 @@ class HomeActivity :
         super.onDestroy()
     }
 
+    override fun onPause() {
+        super.onPause()
+        lastPauseTimestamp = System.currentTimeMillis()
+    }
+
     override fun onResume() {
         super.onResume()
+
+        // Check if user was away and show notification summary
+        checkNotificationSummary()
 
         if (vectorUncaughtExceptionHandler.didAppCrash()) {
             vectorUncaughtExceptionHandler.clearAppCrashStatus()
@@ -717,6 +728,35 @@ class HomeActivity :
 
     override fun spaceInviteBottomSheetOnDecline(spaceId: String) {
         // nop
+    }
+
+    private fun checkNotificationSummary() {
+        if (!translateConfig.enabled || !translateConfig.notificationSummaryEnabled) return
+        if (lastPauseTimestamp == 0L) return
+        val awayDurationMs = System.currentTimeMillis() - lastPauseTimestamp
+        if (awayDurationMs < 5 * 60 * 1000L) return // less than 5 minutes
+
+        lastPauseTimestamp = 0L // reset to avoid showing again
+
+        // Get queued message notifications
+        val messageEvents = notificationDrawerManager.getQueuedMessageEvents()
+        if (messageEvents.isEmpty()) return
+
+        Timber.d("TRANSLATION_DEBUG NotificationSummary: ${messageEvents.size} unread notifications after ${awayDurationMs / 1000}s away")
+
+        // Format as "roomName|messageBody" strings for the bottom sheet
+        val notificationStrings = messageEvents.mapNotNull { event ->
+            val roomName = event.roomName ?: return@mapNotNull null
+            val body = event.body ?: return@mapNotNull null
+            "$roomName|$body"
+        }
+        if (notificationStrings.isEmpty()) return
+
+        // Show the bottom sheet which will generate the summary asynchronously
+        im.vector.app.features.ai.notificationsummary.NotificationSummaryBottomSheet.show(
+                fragmentManager = supportFragmentManager,
+                notifications = notificationStrings
+        )
     }
 
     companion object {

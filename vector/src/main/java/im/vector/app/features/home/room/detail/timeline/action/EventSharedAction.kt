@@ -119,4 +119,7 @@ sealed class EventSharedAction(
 
     data class EndPoll(val eventId: String) :
             EventSharedAction(CommonStrings.poll_end_action, R.drawable.ic_check_on)
+
+    data class Translate(val eventId: String, val content: String) :
+            EventSharedAction(R.string.message_action_translate, R.drawable.ic_translate)
 }

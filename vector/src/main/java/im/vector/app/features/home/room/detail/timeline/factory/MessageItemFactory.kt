@@ -16,6 +16,7 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import dagger.Lazy
+import timber.log.Timber
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyModel
@@ -69,6 +70,7 @@ import im.vector.app.features.location.toLocationData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.translation.TimelineTranslationManager
 import im.vector.app.features.voice.AudioWaveformView
 import im.vector.app.features.voicebroadcast.isVoiceBroadcast
 import im.vector.app.features.voicebroadcast.model.MessageVoiceBroadcastInfoContent
@@ -138,6 +140,7 @@ class MessageItemFactory @Inject constructor(
         private val pollItemViewStateFactory: PollItemViewStateFactory,
         private val voiceBroadcastItemFactory: VoiceBroadcastItemFactory,
         private val processBodyOfReplyToEventUseCase: ProcessBodyOfReplyToEventUseCase,
+        private val timelineTranslationManager: TimelineTranslationManager,
 ) {
 
     // TODO inject this properly?
@@ -600,8 +603,69 @@ class MessageItemFactory @Inject constructor(
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
     ): VectorEpoxyModel<*>? {
+        // Try to get auto-translated text
+        val translatedBody = timelineTranslationManager.getTranslatedText(informationData.eventId, messageContent.body)
+
         val matrixFormattedBody = messageContent.matrixFormattedBody
-        return if (matrixFormattedBody != null) {
+        return if (translatedBody != null) {
+            // Use translated text but preserve reply formatting if present
+            val replyToContent = messageContent.relatesTo?.inReplyTo
+            if (replyToContent != null && matrixFormattedBody != null) {
+                // Keep the reply block from the original formatted body and translate the quoted text too
+                val endMxReply = matrixFormattedBody.indexOf("</mx-reply>")
+                val endBlockQuote = matrixFormattedBody.lastIndexOf("</blockquote>")
+                if (endBlockQuote != -1) {
+                    var replyBlock = matrixFormattedBody.substring(0, endBlockQuote + "</blockquote>".length)
+
+                    // Try to translate the quoted text:
+                    // 1. First try the parent event's cached translation
+                    // 2. Fall back to the reply quote translation cached for the current event
+                    val parentEventId = replyToContent.eventId
+                    var quoteTranslation: String? = null
+                    if (parentEventId != null) {
+                        val parentEvent = session.roomService().getRoom(roomId)?.getTimelineEvent(parentEventId)
+                        val parentBody = parentEvent?.getVectorLastMessageContent()?.body
+                        if (parentBody != null) {
+                            quoteTranslation = timelineTranslationManager.getCachedTranslation(parentBody)
+                        }
+                    }
+                    // Fall back to reply quote translation extracted from the current message's body
+                    if (quoteTranslation == null) {
+                        quoteTranslation = timelineTranslationManager.getTranslatedReplyQuote(informationData.eventId)
+                    }
+                    Timber.w("TRANSLATION_DEBUG buildItem eventId=${informationData.eventId} parentEventId=$parentEventId quoteTranslation=$quoteTranslation replyBlock=${replyBlock.take(300)}")
+                    if (quoteTranslation != null) {
+                        // Try <br/> first, then <br>, then <br /> — Matrix HTML varies
+                        val brPatterns = listOf("<br/>", "<br>", "<br />")
+                        var lastBrIndex = -1
+                        var brLen = 0
+                        for (br in brPatterns) {
+                            val idx = replyBlock.lastIndexOf(br)
+                            if (idx > lastBrIndex) {
+                                lastBrIndex = idx
+                                brLen = br.length
+                            }
+                        }
+                        if (lastBrIndex != -1) {
+                            val beforeQuoteText = replyBlock.substring(0, lastBrIndex + brLen)
+                            replyBlock = "$beforeQuoteText$quoteTranslation</blockquote>"
+                            Timber.w("TRANSLATION_DEBUG replaced quote HTML OK for ${informationData.eventId}")
+                        } else {
+                            Timber.w("TRANSLATION_DEBUG NO <br> found in replyBlock for ${informationData.eventId}")
+                        }
+                    }
+
+                    // Close the mx-reply wrapper if present, without extra <br> to avoid spacing issues
+                    val mxReplyClose = if (endMxReply != -1) "</mx-reply>" else ""
+                    val combinedHtml = "$replyBlock$mxReplyClose$translatedBody"
+                    buildFormattedTextItem(combinedHtml, informationData, highlight, callback, attributes, replyToContent, originalBody = messageContent.body)
+                } else {
+                    buildMessageTextItem(translatedBody, false, informationData, highlight, callback, attributes, originalBody = messageContent.body)
+                }
+            } else {
+                buildMessageTextItem(translatedBody, false, informationData, highlight, callback, attributes, originalBody = messageContent.body)
+            }
+        } else if (matrixFormattedBody != null) {
             val replyToContent = messageContent.relatesTo?.inReplyTo
             buildFormattedTextItem(matrixFormattedBody, informationData, highlight, callback, attributes, replyToContent)
         } else {
@@ -616,6 +680,7 @@ class MessageItemFactory @Inject constructor(
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
             replyToContent: ReplyToContent?,
+            originalBody: CharSequence? = null,
     ): MessageTextItem? {
         val processedBody = replyToContent
                 ?.let { processBodyOfReplyToEventUseCase.execute(roomId, matrixFormattedBody, it) }
@@ -629,6 +694,7 @@ class MessageItemFactory @Inject constructor(
                 highlight,
                 callback,
                 attributes,
+                originalBody = originalBody,
         )
     }
 
@@ -639,6 +705,7 @@ class MessageItemFactory @Inject constructor(
             highlight: Boolean,
             callback: TimelineEventController.Callback?,
             attributes: AbsMessageItem.Attributes,
+            originalBody: CharSequence? = null,
     ): MessageTextItem? {
         val renderedBody = textRenderer.render(body)
         val bindingOptions = spanUtils.getBindingOptions(renderedBody)
@@ -652,6 +719,7 @@ class MessageItemFactory @Inject constructor(
                             linkifiedBody
                         }.toEpoxyCharSequence()
                 )
+                .originalMessage(originalBody?.toEpoxyCharSequence())
                 .useBigFont(linkifiedBody.length <= MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT * 2 && containsOnlyEmojis(linkifiedBody.toString()))
                 .bindingOptions(bindingOptions)
                 .markwonPlugins(htmlRenderer.get().plugins)

@@ -63,6 +63,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/menu_summarize"
+        android:icon="@drawable/ic_summary"
+        android:title="@string/menu_summarize"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/dev_tools"
         android:icon="@drawable/ic_settings_root_general"
         android:title="@string/dev_tools_menu_name"

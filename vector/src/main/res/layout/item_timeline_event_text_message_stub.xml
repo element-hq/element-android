@@ -19,6 +19,28 @@
         android:layout_height="wrap_content"
         android:layout="@layout/item_timeline_event_text_message_rich_stub" />
 
+    <TextView
+        android:id="@+id/messageTranslationToggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="?colorAccent"
+        android:paddingTop="4dp"
+        android:paddingBottom="2dp"
+        android:visibility="gone"
+        android:text="@string/translation_toggle_show_original" />
+
+    <TextView
+        android:id="@+id/messageOriginalText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textStyle="italic"
+        android:textColor="?android:attr/textColorSecondary"
+        android:paddingTop="4dp"
+        android:paddingBottom="2dp"
+        android:visibility="gone" />
+
     <im.vector.app.features.home.room.detail.timeline.url.PreviewUrlView
         android:id="@+id/messageUrlPreview"
         android:layout_width="match_parent"

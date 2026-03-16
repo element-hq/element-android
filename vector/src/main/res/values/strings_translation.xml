@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Translation settings -->
+    <string name="settings_translation">Traduction &amp; IA</string>
+
+    <string name="translation_category_general">Traduction</string>
+    <string name="translation_enable">Activer la traduction</string>
+    <string name="translation_auto_translate">Traduction automatique</string>
+    <string name="translation_auto_translate_summary">Traduire automatiquement tous les messages entrants</string>
+
+    <string name="translation_category_api">Configuration API</string>
+    <string name="translation_api_url">URL de l\'API</string>
+    <string name="translation_api_key">Cl\u00e9 API</string>
+    <string name="translation_api_key_summary">Bearer token (optionnel pour les mod\u00e8les locaux)</string>
+    <string name="translation_model">Mod\u00e8le</string>
+    <string name="translation_test_connection">Tester la connexion</string>
+    <string name="translation_test_connection_summary">Appuyer pour tester la connexion API</string>
+    <string name="translation_testing">Test en cours\u2026</string>
+    <string name="translation_test_success">Connect\u00e9 ! Mod\u00e8les : %1$s</string>
+    <string name="translation_test_failed">\u00c9chec : %1$s</string>
+
+    <string name="translation_category_languages">Langues</string>
+    <string name="translation_target_language">Langue cible</string>
+    <string name="translation_target_language_summary">Langue vers laquelle traduire les messages entrants</string>
+    <string name="translation_room_language">Langue du salon (sortant)</string>
+    <string name="translation_room_language_summary">Traduire les messages sortants vers cette langue (vide = d\u00e9sactiv\u00e9)</string>
+
+    <string name="translation_category_cache">Cache</string>
+    <string name="translation_cache_info">Info cache</string>
+    <string name="translation_cache_count">%1$d traductions en cache</string>
+    <string name="translation_clear_cache">Vider le cache de traduction</string>
+    <string name="translation_cache_cleared">Cache de traduction vid\u00e9</string>
+
+    <!-- Message actions -->
+    <string name="message_action_translate">Traduire</string>
+    <string name="translation_translating">Traduction en cours\u2026</string>
+    <string name="translation_original">Original</string>
+    <string name="translation_show_original">Afficher l\'original</string>
+    <string name="translation_show_translated">Afficher la traduction</string>
+    <string name="translation_toggle_show_original">Voir l\'original ▾</string>
+    <string name="translation_toggle_hide_original">Masquer l\'original ▴</string>
+    <string name="translation_failed">\u00c9chec de la traduction</string>
+
+    <!-- AI Features settings -->
+    <string name="translation_category_ai_features">Fonctionnalit\u00e9s IA</string>
+    <string name="translation_reformulation_enabled">Reformulation</string>
+    <string name="translation_reformulation_summary">Reformuler les messages avant envoi</string>
+    <string name="translation_summary_enabled">R\u00e9sum\u00e9 de conversation</string>
+    <string name="translation_summary_summary">R\u00e9sumer les conversations</string>
+    <string name="translation_suggested_replies_enabled">R\u00e9ponses sugg\u00e9r\u00e9es</string>
+    <string name="translation_suggested_replies_summary">Sugg\u00e9rer des r\u00e9ponses rapides</string>
+    <string name="translation_notification_summary_enabled">R\u00e9sum\u00e9 des notifications</string>
+    <string name="translation_notification_summary_summary">R\u00e9sumer les notifications manqu\u00e9es</string>
+
+    <!-- Reformulation -->
+    <string name="reformulate_title">Reformuler</string>
+    <string name="reformulate_formal">Formel</string>
+    <string name="reformulate_casual">D\u00e9contract\u00e9</string>
+    <string name="reformulate_concise">Concis</string>
+    <string name="reformulate_fix_grammar">Corriger la grammaire</string>
+    <string name="reformulate_loading">Reformulation en cours\u2026</string>
+    <string name="reformulate_failed">\u00c9chec de la reformulation</string>
+    <string name="reformulate_undo">Annuler</string>
+
+    <!-- Conversation Summary -->
+    <string name="summary_title">R\u00e9sum\u00e9 de la conversation</string>
+    <string name="summary_loading">G\u00e9n\u00e9ration du r\u00e9sum\u00e9\u2026</string>
+    <string name="summary_failed">\u00c9chec de la g\u00e9n\u00e9ration du r\u00e9sum\u00e9</string>
+    <string name="summary_copy">Copier</string>
+    <string name="summary_close">Fermer</string>
+    <string name="menu_summarize">R\u00e9sumer</string>
+
+    <!-- Suggested Replies -->
+    <string name="suggested_replies_loading">Chargement des suggestions\u2026</string>
+
+    <!-- Notification Summary -->
+    <string name="notification_summary_title">R\u00e9sum\u00e9 des notifications</string>
+    <string name="notification_summary_loading">G\u00e9n\u00e9ration du r\u00e9sum\u00e9\u2026</string>
+    <string name="notification_summary_failed">\u00c9chec du r\u00e9sum\u00e9</string>
+    <string name="notification_summary_dismiss">Fermer</string>
+    <string name="notification_summary_mark_read">Tout marquer comme lu</string>
+</resources>
