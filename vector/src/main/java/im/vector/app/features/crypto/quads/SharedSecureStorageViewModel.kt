@@ -93,7 +93,7 @@ class SharedSecureStorageViewModel @AssistedInject constructor(
         setState {
             copy(userId = session.myUserId)
         }
-        if (initialState.requestType is RequestType.ReadSecrets) {
+        if (initialState.requestType is RequestType.ReadSecrets && initialState.step != SharedSecureStorageViewState.Step.ResetAll) {
             val integrityResult =
                     session.sharedSecretStorageService().checkShouldBeAbleToAccessSecrets(initialState.requestType.secretsName, initialState.keyId)
             if (integrityResult !is IntegrityResult.Success) {
