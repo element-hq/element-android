@@ -146,7 +146,29 @@ class SharedSecureStorageViewModelTest {
                 .finish()
     }
 
-    private fun createViewModel(): SharedSecureStorageViewModel {
+    @Test
+    fun `given step is ResetAll then does not check secret storage integrity`() = runTest {
+        val resetAllArgs = SharedSecureStorageActivity.Args(
+                keyId = null,
+                requestedSecrets = emptyList(),
+                resultKeyStoreAlias = "alias",
+                currentStep = SharedSecureStorageViewState.Step.ResetAll
+        )
+
+        val viewModel = createViewModel(resetAllArgs)
+
+        viewModel
+                .test()
+                .assertState(aViewState(
+                        hasPassphrase = true,
+                        step = SharedSecureStorageViewState.Step.ResetAll,
+                        args = resetAllArgs
+                ))
+                .assertNoEvents()
+                .finish()
+    }
+
+    private fun createViewModel(args: SharedSecureStorageActivity.Args = this.args): SharedSecureStorageViewModel {
         return SharedSecureStorageViewModel(
                 SharedSecureStorageViewState(args),
                 stringProvider.instance,
@@ -155,7 +177,11 @@ class SharedSecureStorageViewModelTest {
         )
     }
 
-    private fun aViewState(hasPassphrase: Boolean, step: SharedSecureStorageViewState.Step) = SharedSecureStorageViewState(args).copy(
+    private fun aViewState(
+            hasPassphrase: Boolean,
+            step: SharedSecureStorageViewState.Step,
+            args: SharedSecureStorageActivity.Args = this.args,
+    ) = SharedSecureStorageViewState(args).copy(
             ready = true,
             hasPassphrase = hasPassphrase,
             checkingSSSSAction = Uninitialized,
