@@ -18,12 +18,15 @@ import android.os.RemoteException
 import androidx.core.os.bundleOf
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
+import com.squareup.moshi.Moshi
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.services.VectorAndroidService
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysVersionResult
+import org.matrix.android.sdk.api.session.crypto.keysbackup.toKeysVersionResult
 import org.matrix.android.sdk.api.session.getUser
 import timber.log.Timber
 import javax.inject.Inject
@@ -42,6 +45,7 @@ class ImporterService : VectorAndroidService() {
         const val KEY_HOMESERVER_URL_STR = "homeserverUrl"
         const val KEY_USER_DISPLAY_NAME_STR = "displayName"
         const val KEY_SECRETS_STR = "secrets"
+        const val KEY_ROOM_KEYS_VERSION_STR = "roomKeysVersion"
         const val KEY_USER_AVATAR_PARCELABLE = "avatar"
     }
 
@@ -81,6 +85,7 @@ class ImporterService : VectorAndroidService() {
         val bundle = Bundle()
         if (session == null) {
             // Keep an empty Bundle to indicate that there is no session
+            sendResponse(MSG_GET_SESSION, bundle)
         } else {
             bundle.putString(KEY_USER_ID_STR, session.myUserId)
             bundle.putString(KEY_HOMESERVER_URL_STR, session.sessionParams.homeServerUrlBase)
@@ -92,14 +97,34 @@ class ImporterService : VectorAndroidService() {
                     onSuccess = { secrets ->
                         Timber.d("ImporterService: the session has the secret, send the userId, displayName and the secrets")
                         bundle.putString(KEY_SECRETS_STR, secrets)
+                        session.coroutineScope.launch(Dispatchers.IO) {
+                            val roomKeysVersion = runCatching {
+                                session.cryptoService().keysBackupService().getCurrentVersion()
+                                        ?.toKeysVersionResult()
+                                        ?.let {
+                                            Moshi.Builder()
+                                                    .build()
+                                                    .adapter(KeysVersionResult::class.java)
+                                                    .toJson(it)
+                                        }
+                            }
+                                    .getOrElse {
+                                        Timber.e(it, "ImporterService: Failed to retrieve keys backup version")
+                                        null
+                                    }
+                            // If roomKeysVersion is null, send an empty string so that Element X can ensure that the export is performed with the updated
+                            // version of Element Classic.
+                            bundle.putString(KEY_ROOM_KEYS_VERSION_STR, roomKeysVersion.orEmpty())
+                            sendResponse(MSG_GET_SESSION, bundle)
+                        }
                     },
                     onFailure = {
                         Timber.w(it, "ImporterService: Failed to retrieve secrets from session")
                         Timber.d("ImporterService: the session does not have the secret, send the userId and displayName only")
+                        sendResponse(MSG_GET_SESSION, bundle)
                     }
             )
         }
-        sendResponse(MSG_GET_SESSION, bundle)
     }
 
     private fun Messenger.sendAvatar(userId: String?) {
