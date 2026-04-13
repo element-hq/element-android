@@ -1,0 +1,1 @@
+Fix "Cannot find secrets in storage" error when using "Reset everything" to reset verification keys. ([#8917](https://github.com/element-hq/element-android/issues/8917))
