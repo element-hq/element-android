@@ -88,6 +88,25 @@ android {
                             ")",
             )
         }
+        nightly {
+            matchingFallbacks = ['release']
+            buildConfigField(
+                    "java.util.List<im.vector.app.features.importer.ApplicationFingerprint>",
+                    "ALLOWED_APP_SIGNATURES",
+                    "java.util.Arrays.asList(\n" +
+                            // Element
+                            "new im.vector.app.features.importer.ApplicationFingerprint(\n" +
+                            "\"io.element.android.x.nightly\",\n" +
+                            "java.util.Arrays.asList(\"CA:D3:85:16:84:3A:05:CC:EB:00:AB:7B:D3:80:0F:01:BA:8F:E0:4B:38:86:F3:97:D8:F7:9A:1B:C4:54:E4:0F\")\n" +
+                            "),\n" +
+                            // Element Pro
+                            "new im.vector.app.features.importer.ApplicationFingerprint(\n" +
+                            "\"io.element.enterprise.nightly\",\n" +
+                            "java.util.Arrays.asList(\"CA:D3:85:16:84:3A:05:CC:EB:00:AB:7B:D3:80:0F:01:BA:8F:E0:4B:38:86:F3:97:D8:F7:9A:1B:C4:54:E4:0F\")\n" +
+                            ")\n" +
+                            ")",
+            )
+        }
         release {
             buildConfigField(
                     "java.util.List<im.vector.app.features.importer.ApplicationFingerprint>",
