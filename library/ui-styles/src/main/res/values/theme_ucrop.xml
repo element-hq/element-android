@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+        Theme applied to com.yalantis.ucrop.UCropActivity.
+
+        UCrop 2.2.8 (the version pinned in :vector) does not consume window insets,
+        so its toolbar and bottom controls are drawn under the system bars when the
+        platform enforces edge-to-edge layout (Android 15 / API 35+).
+
+        On older API levels there is nothing to do here: the system bars are opaque
+        and the activity already lays out within them. The v35 override of this
+        theme opts the activity out of edge-to-edge enforcement so the toolbar's
+        save button and the bottom rotate / scale controls remain reachable.
+
+        AppCompat.Light.NoActionBar matches the parent declared by uCrop's own
+        manifest entry, so the activity continues to render its custom toolbar.
+    -->
+    <style name="Theme.Vector.UCrop" parent="Theme.AppCompat.Light.NoActionBar" />
+
+</resources>

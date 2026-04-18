@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+        Android 15 (API 35) forces every window to be edge-to-edge when the app
+        targets SDK 35+. UCrop 2.2.8 does not handle WindowInsets, which causes
+        its title bar (close / save) to be hidden behind the status bar and the
+        rotate / scale controls to be hidden behind 3-button navigation.
+
+        windowOptOutEdgeToEdgeEnforcement is the official escape hatch documented
+        for legacy screens that have not yet been migrated to insets-aware layout.
+        It is honoured on API 35 only; on API 36+ we will need to either upgrade
+        UCrop or override its layouts to consume insets directly.
+
+        Tracks https://github.com/element-hq/element-android/issues/9084
+    -->
+    <style name="Theme.Vector.UCrop" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
+    </style>
+
+</resources>

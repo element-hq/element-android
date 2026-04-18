@@ -1,0 +1,1 @@
+Fix the avatar / image cropping screen on Android 15+: the toolbar save button and the bottom rotate / scale controls are no longer hidden behind the system status bar and 3-button navigation bar. ([#9084](https://github.com/element-hq/element-android/issues/9084))
