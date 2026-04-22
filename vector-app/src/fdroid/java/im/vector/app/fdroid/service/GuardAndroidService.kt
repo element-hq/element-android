@@ -11,6 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.services.VectorAndroidService
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.lib.strings.CommonStrings
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -27,7 +28,14 @@ class GuardAndroidService : VectorAndroidService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val notificationSubtitleRes = CommonStrings.notification_listening_for_notifications
         val notification = notificationUtils.buildForegroundServiceNotification(notificationSubtitleRes, false)
-        startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
+        try {
+            startForeground(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
+        } catch (e: Exception) {
+            Timber.e("## Sync: Failed to start GuardAndroidService as foreground service: ${e.message}")
+            // Stop the service if we can't start it as foreground
+            stopSelf()
+            return START_NOT_STICKY
+        }
         return START_STICKY
     }
 }
