@@ -1290,6 +1290,8 @@
         <item quantity="other">%d aktive Sitzungen</item>
     </plurals>
     <string name="crosssigning_verify_this_session">Verifiziere dieses Gerät</string>
+    <string name="verify_this_session_content">Ab Oktober 2026 können unverifizierte Geräte keine Nachrichten mehr senden und empfangen.</string>
+    <string name="verify_now">Jetzt verifizieren</string>
     <string name="verification_open_other_to_verify">Nutze eine vorhandene Sitzung um diese Sitzung zu verifizieren und ihr Zugriff auf verschlüsselte Nachrichten zu gewähren.</string>
     <string name="verification_profile_verify">Verifizieren</string>
     <string name="verification_profile_verified">Verifiziert</string>
