@@ -1,9 +1,13 @@
-Changes in Element v1.6.54 (2026-04-01)
+Changes in Element v1.6.56 (2026-04-29)
 =======================================
 
 Features ✨
 ----------
  - Expose service to let Element X access some internal data ([#9109](https://github.com/element-hq/element-android/issues/9109))
+
+Bugfixes 🐛
+----------
+ - Fix "Cannot find secrets in storage" error when using "Reset everything" to reset verification keys. ([#8917](https://github.com/element-hq/element-android/issues/8917)) ([#8917](https://github.com/element-hq/element-android/issues/8917))
 
 Other changes
 -------------
