@@ -1,0 +1,2 @@
+Main changes in this version: update Rust Crypto SDK.
+Full changelog: https://github.com/element-hq/element-android/releases
