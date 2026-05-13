@@ -43,12 +43,12 @@ internal object ScanEncryptorUtils {
                 ),
                 v = "v2"
         )
-        return if (publicServerKey != null) {
+        return publicServerKey?.let { serverKey ->
             // Note: fromBase64 can throw Exception
-            val pkEncryption = PkEncryption.fromBase64(key = publicServerKey)
+            val pkEncryption = PkEncryption.fromBase64(key = serverKey)
             val pkMessage = pkEncryption.use {
                 pkEncryption.encrypt(DownloadBody(encryptedInfo).toCanonicalJson())
-            }
+            } ?: error("Encryption failed, the keys used for encryption are not valid")
             DownloadBody(
                     encryptedBody = EncryptedBody(
                             cipherText = pkMessage.ciphertext,
@@ -56,8 +56,6 @@ internal object ScanEncryptorUtils {
                             mac = pkMessage.mac
                     )
             )
-        } else {
-            DownloadBody(encryptedInfo)
-        }
+        } ?: DownloadBody(encryptedInfo)
     }
 }
