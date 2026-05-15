@@ -43,6 +43,7 @@ import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.auth.toLocalizedLoginTerms
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import timber.log.Timber
 
 /**
  * The LoginActivity manages the fragment navigation and also display the loading View.
@@ -308,9 +309,15 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
 
-        intent.data
-                ?.let { tryOrNull { it.getQueryParameter("loginToken") } }
-                ?.let { loginViewModel.handle(LoginAction.LoginWithToken(it)) }
+        intent.data?.let { uri ->
+            val returnedState = tryOrNull { uri.getQueryParameter("state") }
+            if (!loginViewModel.verifySsoState(returnedState)) {
+                Timber.e("SSO state mismatch, possible CSRF attack. Got=$returnedState")
+                return
+            }
+            tryOrNull { uri.getQueryParameter("loginToken") }
+                    ?.let { loginViewModel.handle(LoginAction.LoginWithToken(it)) }
+        }
     }
 
     @Suppress("OVERRIDE_DEPRECATION")
