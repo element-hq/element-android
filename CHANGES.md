@@ -1,6 +1,13 @@
 Changes in Element v1.6.58 (2026-05-13)
 =======================================
 
+Security fixes 🔐
+-----------------
+
+This release contains an important security fix:
+
+- Check the user ID in the `sender_device_keys` property of Olm-encrypted to-device events to prevent sender spoofing by homeserver owners. ([#6553](https://github.com/matrix-org/matrix-rust-sdk/pull/6553), High, [CVE-2026-45056](https://www.cve.org/CVERecord?id=CVE-2026-45056), [GHSA-wfq4-36m3-9g42](https://github.com/matrix-org/matrix-rust-sdk/security/advisories/GHSA-wfq4-36m3-9g42))
+
 Other changes
 -------------
 - Bump org.matrix.rustcomponents:crypto-android from 26.1.28 to 26.05.12 ([#9143](https://github.com/element-hq/element-android/issues/9143))
