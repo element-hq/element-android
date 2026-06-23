@@ -844,4 +844,8 @@
     <string name="notice_room_created_by_you">Ti si kreirao sobu</string>
     <string name="notice_room_created">%1$s je kreirao sobu</string>
     <string name="notice_room_invite_no_invitee_by_you">Tvoja pozivnica</string>
+    <string name="crosssigning_verify_this_session">Verificirajte ovaj uređaj</string>
+    <string name="verify_this_session_content">Od listopada 2026. neverificirani uređaji više neće moći slati i primati poruke.</string>
+    <string name="action_learn_more">Saznajte više</string>
+    <string name="verify_now">Verificiraj sada</string>
 </resources>

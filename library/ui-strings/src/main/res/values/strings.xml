@@ -2717,7 +2717,7 @@
     <string name="review_unverified_sessions_description">Review to ensure your account is safe</string>
     <!-- Argument will be replaced by the other session name (e.g, Desktop, mobile) -->
     <string name="verify_this_session">Verify the new login accessing your account: %1$s</string>
-    <string name="verify_this_session_content">As of April 2026 unverified devices will not be able to send and receive messages.</string>
+    <string name="verify_this_session_content">As of October 2026 unverified devices will not be able to send and receive messages.</string>
     <string name="verify_now">Verify now</string>
 
     <string name="cross_signing_verify_by_text">Manually Verify by Text</string>
