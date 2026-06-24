@@ -51,6 +51,7 @@ import im.vector.lib.strings.CommonStrings
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.auth.toLocalizedLoginTerms
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import timber.log.Timber
 
 private const val FRAGMENT_REGISTRATION_STAGE_TAG = "FRAGMENT_REGISTRATION_STAGE_TAG"
 private const val FRAGMENT_LOGIN_TAG = "FRAGMENT_LOGIN_TAG"
@@ -373,9 +374,15 @@ class FtueAuthVariant(
      * Handle the SSO redirection here.
      */
     override fun onNewIntent(intent: Intent?) {
-        intent?.data
-                ?.let { tryOrNull { it.getQueryParameter("loginToken") } }
-                ?.let { onboardingViewModel.handle(OnboardingAction.LoginWithToken(it)) }
+        intent?.data?.let { uri ->
+            val returnedState = tryOrNull { uri.getQueryParameter("state") }
+            if (!onboardingViewModel.verifySsoState(returnedState)) {
+                Timber.e("SSO state mismatch, possible CSRF attack. Got=$returnedState")
+                return
+            }
+            tryOrNull { uri.getQueryParameter("loginToken") }
+                    ?.let { onboardingViewModel.handle(OnboardingAction.LoginWithToken(it)) }
+        }
     }
 
     private fun doStage(stage: Stage) {

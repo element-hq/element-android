@@ -20,6 +20,7 @@ import org.matrix.android.sdk.api.util.toBase64NoPadding
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.di.UserMd5
 import org.matrix.android.sdk.internal.session.SessionScope
+import java.security.MessageDigest
 import javax.inject.Inject
 
 @SessionScope
@@ -28,8 +29,23 @@ internal class RustEncryptionConfiguration @Inject constructor(
         private val realmKeyUtil: RealmKeysUtils,
 ) {
 
+    // New SHA-256 based alias derived from the legacy MD5 hash
+    private val userSha256: String by lazy {
+        val digest = MessageDigest.getInstance("SHA-256")
+        digest.update(userMd5.toByteArray())
+        digest.digest().joinToString("") { "%02x".format(it) }
+    }
+
+    private val legacyAlias = "crypto_module_rust_$userMd5"
+    private val newAlias: String get() = "crypto_module_rust_sha256_$userSha256"
+
     fun getDatabasePassphrase(): String {
-        // let's reuse the code for realm that creates a random 64 bytes array.
-        return realmKeyUtil.getRealmEncryptionKey("crypto_module_rust_$userMd5").toBase64NoPadding()
+        // Migration strategy: if a key exists under the legacy MD5 alias, keep using it
+        // for backward compatibility. New installations will use the SHA-256 alias.
+        return if (realmKeyUtil.hasRealmEncryptionKey(legacyAlias)) {
+            realmKeyUtil.getRealmEncryptionKey(legacyAlias).toBase64NoPadding()
+        } else {
+            realmKeyUtil.getRealmEncryptionKey(newAlias).toBase64NoPadding()
+        }
     }
 }
