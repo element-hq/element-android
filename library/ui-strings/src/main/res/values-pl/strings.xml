@@ -1126,6 +1126,8 @@
         <item quantity="other">%d aktywnych sesji</item>
     </plurals>
     <string name="crosssigning_verify_this_session">Weryfikuj to urządzenie</string>
+    <string name="verify_this_session_content">Od października 2026 r. niezweryfikowane urządzenia nie będą mogły wysyłać ani odbierać wiadomości.</string>
+    <string name="verify_now">Zweryfikuj teraz</string>
     <string name="verification_open_other_to_verify">Otwórz obecną sesję i użyj jej do zweryfikowania obecnej, przyznając jej dostęp do zaszyfrowanych wiadomości.</string>
     <string name="verification_profile_verify">Zweryfkuj</string>
     <string name="verification_profile_verified">Zweryfikowano</string>

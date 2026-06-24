@@ -34,13 +34,10 @@ data class HomeDetailViewState(
         val pushCounter: Int = 0,
         val pstnSupportFlag: Boolean = false,
         val forceDialPadTab: Boolean = false,
-        // Set to true by default to avoid glitch
-        val isSessionVerified: Boolean = true,
+        // Set to false by default to avoid glitch
+        val showVerifyDeviceBanner: Boolean = false,
 ) : MavericksState {
     val showDialPadTab = forceDialPadTab || pstnSupportFlag
-
-    // Temporarily disabled until we have a way to reset from the verification screen.
-    val showVerifyDeviceBanner = false // !isSessionVerified
 }
 
 sealed class HomeTab(@StringRes val titleRes: Int) {

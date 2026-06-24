@@ -1265,6 +1265,8 @@
         <item quantity="other">%d sessions actives</item>
     </plurals>
     <string name="crosssigning_verify_this_session">Vérifier cet appareil</string>
+    <string name="verify_this_session_content">À partir d’octobre 2026, les appareils non vérifiés ne pourront plus envoyer ni recevoir de messages</string>
+    <string name="verify_now">Vérifier maintenant</string>
     <string name="verification_open_other_to_verify">Utilisez une session existante pour vérifier celle-ci, ce qui lui permettra d’avoir accès aux messages chiffrés.</string>
     <string name="verification_profile_verify">Vérifier</string>
     <string name="verification_profile_verified">Vérifié</string>
