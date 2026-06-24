@@ -11,8 +11,8 @@ import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Binder
 import android.os.IBinder
+import androidx.core.app.ServiceCompat
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.core.extensions.startForegroundCompat
 import im.vector.app.core.services.VectorAndroidService
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.lib.core.utils.timer.Clock
@@ -34,13 +34,11 @@ class ScreenCaptureAndroidService : VectorAndroidService() {
     private fun showStickyNotification() {
         val notificationId = clock.epochMillis().toInt()
         val notification = notificationUtils.buildScreenSharingNotification()
-        startForegroundCompat(
+        ServiceCompat.startForeground(
+                this,
                 notificationId,
                 notification,
-                {
-                    ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION
-                }
-
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION,
         )
     }
 
