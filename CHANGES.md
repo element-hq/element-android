@@ -1,3 +1,11 @@
+Changes in Element v1.6.60 (2026-06-24)
+=======================================
+
+Other changes
+-------------
+ - Show "Verify this device" banner on un-verified devices. ([#9141](https://github.com/element-hq/element-android/issues/9141))
+
+
 Changes in Element v1.6.58 (2026-05-13)
 =======================================
 
