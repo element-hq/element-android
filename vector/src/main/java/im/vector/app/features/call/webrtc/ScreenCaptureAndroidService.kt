@@ -8,6 +8,7 @@
 package im.vector.app.features.call.webrtc
 
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.os.Binder
 import android.os.IBinder
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +34,14 @@ class ScreenCaptureAndroidService : VectorAndroidService() {
     private fun showStickyNotification() {
         val notificationId = clock.epochMillis().toInt()
         val notification = notificationUtils.buildScreenSharingNotification()
-        startForegroundCompat(notificationId, notification)
+        startForegroundCompat(
+                notificationId,
+                notification,
+                {
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION
+                }
+
+        )
     }
 
     override fun onBind(intent: Intent?): IBinder {
