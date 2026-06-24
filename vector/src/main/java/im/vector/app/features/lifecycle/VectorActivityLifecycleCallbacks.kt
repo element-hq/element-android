@@ -7,6 +7,7 @@
 
 package im.vector.app.features.lifecycle
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
 import android.app.Application
@@ -50,6 +51,7 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
 
     override fun onActivityStopped(activity: Activity) {}
 
+    @SuppressLint("WrongConstant")
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
         if (activitiesInfo == null) {
             val context = activity.applicationContext
