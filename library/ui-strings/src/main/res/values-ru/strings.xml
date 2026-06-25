@@ -2214,11 +2214,11 @@
         <item quantity="other">%1$d активных вызовов ·</item>
     </plurals>
     <string name="call_tile_no_answer">Нет ответа</string>
-    <string name="call_tile_video_missed">Пропущенный выдеовызов</string>
+    <string name="call_tile_video_missed">Пропущенный видеовызов</string>
     <string name="call_tile_voice_missed">Пропущенный голосовой вызов</string>
     <string name="call_tile_video_declined">Видеовызов отклонен</string>
     <string name="call_tile_voice_declined">Голосовой вызов отклонен</string>
-    <string name="call_tile_video_call_has_ended">Выдеовызов завершен • %1$s</string>
+    <string name="call_tile_video_call_has_ended">Видеовызов завершен • %1$s</string>
     <string name="call_tile_voice_call_has_ended">Голосовой вызов завершен • %1$s</string>
     <string name="call_tile_video_active">Активный видеовызов</string>
     <string name="call_tile_voice_active">Активный голосовой вызов</string>
