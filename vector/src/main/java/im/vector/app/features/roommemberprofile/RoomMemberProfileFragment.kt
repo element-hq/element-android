@@ -302,7 +302,17 @@ class RoomMemberProfileFragment :
     }
 
     override fun onReportClicked() {
-        viewModel.handle(RoomMemberProfileAction.ReportUser)
+        ConfirmationDialogBuilder
+                .show(
+                        activity = requireActivity(),
+                        askForReason = false,
+                        confirmationRes = CommonStrings.room_participants_action_report_prompt_msg,
+                        positiveRes = CommonStrings.room_participants_action_report,
+                        reasonHintRes = 0,
+                        titleRes = CommonStrings.room_participants_action_report_title
+                ) {
+                    viewModel.handle(RoomMemberProfileAction.ReportUser)
+                }
     }
 
     override fun onTapVerify() {
