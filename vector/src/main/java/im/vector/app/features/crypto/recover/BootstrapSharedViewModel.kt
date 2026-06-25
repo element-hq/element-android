@@ -87,30 +87,29 @@ class BootstrapSharedViewModel @AssistedInject constructor(
                         secureBackupMethod = wellKnown?.secureBackupMethod() ?: SecureBackupMethod.KEY_OR_PASSPHRASE,
                 )
             }
-        }
-
-        when (initialState.setupMode) {
-            SetupMode.PASSPHRASE_RESET,
-            SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET,
-            SetupMode.HARD_RESET -> {
-                setState {
-                    copy(
-                            step = BootstrapStep.FirstForm(
-                                    keyBackUpExist = false,
-                                    reset = session.sharedSecretStorageService().isRecoverySetup(),
-                                    methods = this.secureBackupMethod
-                            )
-                    )
+            when (initialState.setupMode) {
+                SetupMode.PASSPHRASE_RESET,
+                SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET,
+                SetupMode.HARD_RESET -> {
+                    setState {
+                        copy(
+                                step = BootstrapStep.FirstForm(
+                                        keyBackUpExist = false,
+                                        reset = session.sharedSecretStorageService().isRecoverySetup(),
+                                        methods = this.secureBackupMethod
+                                )
+                        )
+                    }
                 }
-            }
-            SetupMode.CROSS_SIGNING_ONLY -> {
-                // Go straight to account password
-                setState {
-                    copy(step = BootstrapStep.AccountReAuth())
+                SetupMode.CROSS_SIGNING_ONLY -> {
+                    // Go straight to account password
+                    setState {
+                        copy(step = BootstrapStep.AccountReAuth())
+                    }
                 }
-            }
-            SetupMode.NORMAL -> {
-                checkMigration()
+                SetupMode.NORMAL -> {
+                    checkMigration()
+                }
             }
         }
     }
