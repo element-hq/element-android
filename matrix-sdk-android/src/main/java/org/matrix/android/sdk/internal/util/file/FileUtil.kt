@@ -27,8 +27,8 @@ fun safeFileName(fileName: String?, mimeType: String?): String {
     return buildString {
         // filename has to be safe for the Android System
         val result = fileName
-                ?.replace("[\\\\?%*:|\"<>\\s]".toRegex(), "_")
-                ?.takeIf { it.isNotEmpty() }
+                ?.replace("[\\\\/?%*:|\"<>\\s]".toRegex(), "_")
+                ?.takeIf { it.isNotEmpty() && it != "." && it != ".." }
                 ?: DEFAULT_FILENAME
         append(result)
         // Check that the extension is correct regarding the mimeType

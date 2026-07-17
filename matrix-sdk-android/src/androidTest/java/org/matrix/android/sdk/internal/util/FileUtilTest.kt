@@ -30,7 +30,6 @@ import org.matrix.android.sdk.internal.util.file.safeFileName
  */
 @RunWith(AndroidJUnit4::class)
 class FileUtilTest : InstrumentedTest {
-
     @Test
     fun shouldReturnOriginalFilenameWhenValidCharactersAreUsed() {
         val fileName = "validFileName.txt"
@@ -41,10 +40,10 @@ class FileUtilTest : InstrumentedTest {
 
     @Test
     fun shouldReplaceInvalidCharactersWithUnderscores() {
-        val fileName = "invalid/filename:with*chars?.txt"
+        val fileName = "invalid/file\\name:with*chars?.txt"
         val mimeType = "text/plain"
         val result = safeFileName(fileName, mimeType)
-        assertEquals("invalid/filename_with_chars_.txt", result)
+        assertEquals("invalid_file_name_with_chars_.txt", result)
     }
 
     @Test
@@ -84,7 +83,7 @@ class FileUtilTest : InstrumentedTest {
         val fileName = "my*docu/ment"
         val mimeType = "application/pdf"
         val result = safeFileName(fileName, mimeType)
-        assertEquals("my_docu/ment.pdf", result)
+        assertEquals("my_docu_ment.pdf", result)
     }
 
     @Test
@@ -117,5 +116,28 @@ class FileUtilTest : InstrumentedTest {
         val mimeType = "application/octet-stream"
         val result = safeFileName(fileName, mimeType)
         assertEquals("my-file-name.bin", result)
+    }
+
+    @Test
+    fun shouldHandlePathTraversalAttempts() {
+        val fileName = "my-file-name/../../../file.bin"
+        val mimeType = "application/octet-stream"
+        val result = safeFileName(fileName, mimeType)
+        assertEquals("my-file-name_.._.._.._file.bin", result)
+    }
+
+    @Test
+    fun shouldHandleDotAttempts() {
+        val fileName = "."
+        val mimeType = null
+        val result = safeFileName(fileName, mimeType)
+        assertEquals(DEFAULT_FILENAME, result)
+    }
+    @Test
+    fun shouldHandleTwoDotAttempts() {
+        val fileName = ".."
+        val mimeType = null
+        val result = safeFileName(fileName, mimeType)
+        assertEquals(DEFAULT_FILENAME, result)
     }
 }
