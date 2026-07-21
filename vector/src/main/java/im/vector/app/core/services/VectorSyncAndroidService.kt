@@ -11,7 +11,9 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.os.Build
+import androidx.core.app.ServiceCompat
 import androidx.core.content.getSystemService
 import androidx.work.Constraints
 import androidx.work.Data
@@ -22,7 +24,6 @@ import androidx.work.WorkRequest
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.core.extensions.startForegroundCompat
 import im.vector.app.core.platform.PendingIntentCompat
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.BackgroundSyncMode
@@ -90,7 +91,12 @@ class VectorSyncAndroidService : SyncAndroidService() {
             CommonStrings.notification_listening_for_notifications
         }
         val notification = notificationUtils.buildForegroundServiceNotification(notificationSubtitleRes, false)
-        startForegroundCompat(NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE, notification)
+        ServiceCompat.startForeground(
+                this,
+                NotificationUtils.NOTIFICATION_ID_FOREGROUND_SERVICE,
+                notification,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC,
+        )
     }
 
     override fun onRescheduleAsked(

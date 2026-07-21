@@ -1,3 +1,14 @@
+Changes in Element v1.6.62 (2026-07-21)
+=======================================
+
+Security fixes 🔐
+-----------------
+
+This release contains a security fix:
+
+ - Improve sanitization of file storage location ([#9157](https://github.com/element-hq/element-android/issues/9157))
+  This is part of a security fix ([GHSA-fr74-76wm-x6pp](https://github.com/matrix-org/matrix-android-sdk2/security/advisories/GHSA-fr74-76wm-x6pp)).
+
 Changes in Element v1.6.60 (2026-06-24)
 =======================================
 

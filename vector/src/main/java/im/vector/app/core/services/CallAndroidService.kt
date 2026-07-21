@@ -12,17 +12,18 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.ServiceInfo
 import android.os.Binder
 import android.support.v4.media.session.MediaSessionCompat
 import android.view.KeyEvent
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
 import androidx.media.session.MediaButtonReceiver
 import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.singletonEntryPoint
-import im.vector.app.core.extensions.startForegroundCompat
 import im.vector.app.features.call.CallArgs
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.audio.MicrophoneAccessService
@@ -178,7 +179,12 @@ class CallAndroidService : VectorAndroidService() {
                 fromBg = fromBg
         )
         if (knownCalls.isEmpty()) {
-            startForegroundCompat(callId.hashCode(), notification)
+            ServiceCompat.startForeground(
+                    this,
+                    callId.hashCode(),
+                    notification,
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL,
+            )
         } else {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 Timber.w("Not allowed to notify.")
@@ -201,8 +207,12 @@ class CallAndroidService : VectorAndroidService() {
             return
         }
         val notification = notificationUtils.buildCallEndedNotification(false)
-        val notificationId = callId.hashCode()
-        startForegroundCompat(notificationId, notification)
+        ServiceCompat.startForeground(
+                this,
+                callId.hashCode(),
+                notification,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL,
+        )
         if (knownCalls.isEmpty()) {
             Timber.tag(loggerTag.value).v("No more call, stop the service")
             stopForegroundCompat()
@@ -240,7 +250,12 @@ class CallAndroidService : VectorAndroidService() {
                 title = callInformation.opponentMatrixItem?.getBestName() ?: callInformation.opponentUserId
         )
         if (knownCalls.isEmpty()) {
-            startForegroundCompat(callId.hashCode(), notification)
+            ServiceCompat.startForeground(
+                    this,
+                    callId.hashCode(),
+                    notification,
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL,
+            )
         } else {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 Timber.w("Not allowed to notify.")
@@ -268,7 +283,12 @@ class CallAndroidService : VectorAndroidService() {
                 title = callInformation.opponentMatrixItem?.getBestName() ?: callInformation.opponentUserId
         )
         if (knownCalls.isEmpty()) {
-            startForegroundCompat(callId.hashCode(), notification)
+            ServiceCompat.startForeground(
+                    this,
+                    callId.hashCode(),
+                    notification,
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL,
+            )
         } else {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 Timber.w("Not allowed to notify.")
@@ -285,9 +305,19 @@ class CallAndroidService : VectorAndroidService() {
         callRingPlayerOutgoing?.stop()
         val notification = notificationUtils.buildCallEndedNotification(false)
         if (callId != null) {
-            startForegroundCompat(callId.hashCode(), notification)
+            ServiceCompat.startForeground(
+                    this,
+                    callId.hashCode(),
+                    notification,
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL,
+            )
         } else {
-            startForegroundCompat(DEFAULT_NOTIFICATION_ID, notification)
+            ServiceCompat.startForeground(
+                    this,
+                    DEFAULT_NOTIFICATION_ID,
+                    notification,
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL,
+            )
         }
         if (knownCalls.isEmpty()) {
             mediaSession?.isActive = false

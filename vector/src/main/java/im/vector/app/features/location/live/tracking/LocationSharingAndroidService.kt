@@ -10,13 +10,14 @@ package im.vector.app.features.location.live.tracking
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.ServiceInfo
 import android.os.IBinder
 import android.os.Parcelable
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.ServiceCompat
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.extensions.startForegroundCompat
 import im.vector.app.core.services.VectorAndroidService
 import im.vector.app.core.utils.PermissionChecker
 import im.vector.app.features.location.LocationData
@@ -114,7 +115,12 @@ class LocationSharingAndroidService : VectorAndroidService(), LocationTracker.Ca
                     NotificationManagerCompat.from(this).notify(FOREGROUND_SERVICE_NOTIFICATION_ID, notification)
                 }
             } else {
-                startForegroundCompat(FOREGROUND_SERVICE_NOTIFICATION_ID, notification)
+                ServiceCompat.startForeground(
+                        this,
+                        FOREGROUND_SERVICE_NOTIFICATION_ID,
+                        notification,
+                        ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION,
+                )
                 foregroundModeStarted = true
             }
 
