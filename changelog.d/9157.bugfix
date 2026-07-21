@@ -1,1 +1,2 @@
-Improve file storage location
+Improve sanitization of file storage location
+This is part of a security fix: https://github.com/matrix-org/matrix-android-sdk2/security/advisories/GHSA-fr74-76wm-x6pp
