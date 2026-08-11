@@ -51,6 +51,7 @@ class ProcessInfo @Inject constructor() {
 
 private fun Thread.getInfo() = buildString {
     append("Thread '$name':")
+    @Suppress("DEPRECATION")
     append(" id: $id")
     append(" priority: $priority")
     append(" group name: ${threadGroup?.name ?: "null"}")
