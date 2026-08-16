@@ -13,9 +13,9 @@ import javax.inject.Inject
 
 class ShowVerifyDeviceBannerChecker @Inject constructor() {
     companion object {
-        /* Hashed domains: 
-           logineonrw-messenger.de
-        */
+        /* Hashed domains:
+         * logineonrw-messenger.de
+         */
         private val EXCLUDED_HASHED_DOMAINS = setOf(
                 "9e6d1ca3e739dd3f879b8046af783402a34d247f879dfa1b531edbd56a56c1a6",
         )
