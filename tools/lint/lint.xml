@@ -83,6 +83,11 @@
     <issue id="CheckResult" severity="error" />
     <issue id="StaticFieldLeak" severity="error" />
 
+    <!-- targetSdk 36 promotes this to an error: onBackPressed() is no longer called for back
+         gestures on Android 16. We temporarily opt out of predictive back via
+         android:enableOnBackInvokedCallback="false" in the app manifest. -->
+    <issue id="GestureBackNavigation" severity="ignore" />
+
     <issue id="InvalidPackage">
         <!-- Ignore error from HtmlCompressor lib -->
         <ignore path="**/htmlcompressor-1.4.jar" />
