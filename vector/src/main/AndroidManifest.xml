@@ -417,8 +417,7 @@
 
         <service
             android:name=".features.importer.ImporterService"
-            android:exported="true"
-            tools:ignore="ExportedService" />
+            android:exported="false" />
 
         <!-- Receivers -->
 

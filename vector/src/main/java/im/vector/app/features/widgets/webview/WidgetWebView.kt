@@ -43,9 +43,9 @@ fun WebView.setupForWidget(activity: Activity,
     settings.domStorageEnabled = true
 
     @Suppress("DEPRECATION")
-    settings.allowFileAccessFromFileURLs = true
+    settings.allowFileAccessFromFileURLs = false
     @Suppress("DEPRECATION")
-    settings.allowUniversalAccessFromFileURLs = true
+    settings.allowUniversalAccessFromFileURLs = false
 
     settings.displayZoomControls = false
 

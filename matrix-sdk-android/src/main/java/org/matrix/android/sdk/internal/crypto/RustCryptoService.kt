@@ -665,6 +665,9 @@ internal class RustCryptoService @Inject constructor(
                     val roomId = content.roomId
                     val sessionId = content.sessionId ?: return@forEach
 
+                    // Security: Log forwarded key reception for audit trail
+                    Timber.d("Received forwarded room key for room=${roomId?.take(8)}*** session=${sessionId.take(8)}*** from sender=${event.senderId?.take(8)}***")
+
                     notifyRoomKeyReceived(roomId, sessionId)
                     matrixConfiguration.cryptoAnalyticsPlugin?.onRoomKeyImported(sessionId, EventType.FORWARDED_ROOM_KEY)
                 }

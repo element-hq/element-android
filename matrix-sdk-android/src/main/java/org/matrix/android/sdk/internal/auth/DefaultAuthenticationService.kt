@@ -74,6 +74,11 @@ internal class DefaultAuthenticationService @Inject constructor(
     private var currentLoginWizard: LoginWizard? = null
     private var currentRegistrationWizard: RegistrationWizard? = null
 
+    /**
+     * The current SSO state parameter, used to prevent CSRF attacks.
+     */
+    private var currentSsoState: String? = null
+
     override fun hasAuthenticatedSessions(): Boolean {
         return sessionParamsStore.getLast() != null
     }
@@ -111,7 +116,18 @@ internal class DefaultAuthenticationService @Inject constructor(
 
             // stable param:
             appendParamToUrl("action", action.value)
+
+            // CSRF protection: append a random state parameter
+            val state = java.util.UUID.randomUUID().toString()
+            currentSsoState = state
+            appendParamToUrl("state", state)
         }
+    }
+
+    override fun verifySsoState(state: String?): Boolean {
+        val expected = currentSsoState
+        currentSsoState = null // One-time use
+        return expected != null && expected == state
     }
 
     override fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String? {

@@ -47,6 +47,13 @@ interface AuthenticationService {
     fun getSsoUrl(redirectUrl: String, deviceId: String?, providerId: String?, action: SSOAction): String?
 
     /**
+     * Verify the SSO state parameter returned in the callback to prevent CSRF attacks.
+     * @param state the state parameter from the SSO callback URI.
+     * @return true if the state matches the one generated during [getSsoUrl], false otherwise.
+     */
+    fun verifySsoState(state: String?): Boolean
+
+    /**
      * Get the sign in or sign up fallback URL.
      */
     fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String?

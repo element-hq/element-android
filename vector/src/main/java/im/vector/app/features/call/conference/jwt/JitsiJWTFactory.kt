@@ -9,9 +9,7 @@ package im.vector.app.features.call.conference.jwt
 
 import im.vector.app.core.utils.ensureProtocol
 import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.io.Encoders
-import io.jsonwebtoken.security.Keys
 import org.matrix.android.sdk.api.session.openid.OpenIdToken
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
@@ -35,8 +33,7 @@ class JitsiJWTFactory @Inject constructor() {
         // we cannot use random secret keys anymore. But the JWT library `jjwt` doesn't accept the hardcoded key `notused`
         // from the module `prosody-mod-auth-matrix-user-verification` since it's too short and thus insecure. So, we
         // create a new token using a random key and then re-sign the token manually with the 'weak' key.
-        val signatureAlgorithm = SignatureAlgorithm.HS256
-        val key = Keys.secretKeyFor(signatureAlgorithm)
+        val key = Jwts.SIG.HS256.key().build()
         val context = mapOf(
                 "matrix" to mapOf(
                         "token" to openIdToken.accessToken,
@@ -52,10 +49,10 @@ class JitsiJWTFactory @Inject constructor() {
         // JWT generating side and Prosody config. Since we have no configuration for
         // the widgets, we can't set one anywhere. Using the Jitsi domain here probably makes sense.
         val token = Jwts.builder()
-                .setHeaderParam("typ", "JWT")
-                .setIssuer(jitsiServerDomain)
-                .setSubject(jitsiServerDomain)
-                .setAudience(jitsiServerDomain.ensureProtocol())
+                .header().type("JWT").and()
+                .issuer(jitsiServerDomain)
+                .subject(jitsiServerDomain)
+                .audience().add(jitsiServerDomain.ensureProtocol()).and()
                 // room is not used at the moment, a * works here.
                 .claim("room", "*")
                 .claim("context", context)
@@ -63,7 +60,7 @@ class JitsiJWTFactory @Inject constructor() {
                 .compact()
         // Re-sign token with the hardcoded key
         val toSign = token.substring(0, token.lastIndexOf('.'))
-        val mac = Mac.getInstance(signatureAlgorithm.jcaName)
+        val mac = Mac.getInstance("HmacSHA256")
         mac.init(SecretKeySpec("notused".toByteArray(), mac.algorithm))
         val prosodySignature = Encoders.BASE64URL.encode(mac.doFinal(toSign.toByteArray()))
         return "$toSign.$prosodySignature"

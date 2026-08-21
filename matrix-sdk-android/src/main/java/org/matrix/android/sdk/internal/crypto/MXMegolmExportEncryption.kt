@@ -20,10 +20,12 @@ import android.util.Base64
 import org.matrix.android.sdk.internal.extensions.toUnsignedInt
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
+import java.nio.ByteBuffer
 import java.nio.charset.Charset
 import java.security.SecureRandom
 import javax.crypto.Cipher
 import javax.crypto.Mac
+import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.and
@@ -37,6 +39,10 @@ import kotlin.system.measureTimeMillis
 internal object MXMegolmExportEncryption {
     private const val HEADER_LINE = "-----BEGIN MEGOLM SESSION DATA-----"
     private const val TRAILER_LINE = "-----END MEGOLM SESSION DATA-----"
+
+    private const val EXPORT_VERSION_1 = 1  // AES-CTR + HMAC-SHA256 (legacy)
+    private const val EXPORT_VERSION_2 = 2  // AES-GCM (current)
+    private const val AES_KEY_LENGTH_BITS = 256
 
     // we split into lines before base64ing, because encodeBase64 doesn't deal
     // terribly well with large arrays.
@@ -83,19 +89,31 @@ internal object MXMegolmExportEncryption {
             throw Exception("Invalid file: too short")
         }
 
-        val version = body[0]
-        if (version.toInt() != 1) {
-            Timber.e("## decryptMegolmKeyFile() : Invalid file: too short")
-            throw Exception("Unsupported version")
+        if (password.isEmpty()) {
+            throw Exception("Empty password is not supported")
         }
 
+        val version = body[0].toInt()
+
+        return when (version) {
+            EXPORT_VERSION_2 -> decryptWithAesGcm(body, password)
+            EXPORT_VERSION_1 -> decryptLegacy(body, password)
+            else -> {
+                // Unknown version byte - assume legacy format (version 1)
+                Timber.w("## decryptMegolmKeyFile() : Unknown version $version, trying legacy decryption")
+                decryptLegacy(body, password)
+            }
+        }
+    }
+
+    /**
+     * Decrypt using legacy AES-CTR + HMAC-SHA256 format (version 1).
+     */
+    @Throws(Exception::class)
+    private fun decryptLegacy(body: ByteArray, password: String): String {
         val ciphertextLength = body.size - (1 + 16 + 16 + 4 + 32)
         if (ciphertextLength < 0) {
             throw Exception("Invalid file: too short")
-        }
-
-        if (password.isEmpty()) {
-            throw Exception("Empty password is not supported")
         }
 
         val salt = body.copyOfRange(1, 1 + 16)
@@ -115,13 +133,14 @@ internal object MXMegolmExportEncryption {
         val digest = mac.doFinal(toVerify)
 
         if (!hmac.contentEquals(digest)) {
-            Timber.e("## decryptMegolmKeyFile() : Authentication check failed: incorrect password?")
+            Timber.e("## decryptLegacy() : Authentication check failed: incorrect password?")
             throw Exception("Authentication check failed: incorrect password?")
         }
 
         val decryptCipher = Cipher.getInstance("AES/CTR/NoPadding")
 
-        val secretKeySpec = SecretKeySpec(getAesKey(deriveKey), "AES")
+        val aesKey = getAesKey(deriveKey)
+        val secretKeySpec = SecretKeySpec(aesKey, "AES")
         val ivParameterSpec = IvParameterSpec(iv)
         decryptCipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec)
 
@@ -132,11 +151,47 @@ internal object MXMegolmExportEncryption {
         val decodedString = String(outStream.toByteArray(), Charset.defaultCharset())
         outStream.close()
 
+        // Securely wipe derived key material from memory
+        deriveKey.fill(0)
+        aesKey.fill(0)
+
         return decodedString
     }
 
     /**
+     * Decrypt using AES-GCM format (version 2).
+     * Format: version(1B) + salt(16B) + iv(12B) + iterations(4B) + ciphertext_with_tag
+     */
+    @Throws(Exception::class)
+    private fun decryptWithAesGcm(packed: ByteArray, password: String): String {
+        // Minimum size: 1(version) + 16(salt) + 12(iv) + 4(iterations) + 16(tag) = 49
+        if (packed.size < 49) {
+            throw Exception("Invalid file: too short for AES-GCM format")
+        }
+
+        var offset = 1 // skip version byte
+        val salt = packed.copyOfRange(offset, offset + 16); offset += 16
+        val iv = packed.copyOfRange(offset, offset + 12); offset += 12
+        val iterations = ByteBuffer.wrap(packed.copyOfRange(offset, offset + 4)).int; offset += 4
+        val ciphertext = packed.copyOfRange(offset, packed.size)
+
+        val prf = Mac.getInstance("HmacSHA512")
+        val deriveKey = pbkdf2(password, salt, iterations, AES_KEY_LENGTH_BITS, prf)
+
+        try {
+            val secretKey = SecretKeySpec(deriveKey, "AES")
+            val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+            val gcmSpec = GCMParameterSpec(128, iv)
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, gcmSpec)
+            return String(cipher.doFinal(ciphertext), Charsets.UTF_8)
+        } finally {
+            deriveKey.fill(0)
+        }
+    }
+
+    /**
      * Encrypt a string into the megolm export format.
+     * Uses AES-GCM (version 2) for authenticated encryption.
      *
      * @param data the data to encrypt.
      * @param password the password
@@ -151,61 +206,41 @@ internal object MXMegolmExportEncryption {
             throw Exception("Empty password is not supported")
         }
 
+        val resultBuffer = encryptWithAesGcm(data.toByteArray(Charsets.UTF_8), password, kdfRounds)
+        return packMegolmKeyFile(resultBuffer)
+    }
+
+    /**
+     * Encrypt data using AES-GCM (version 2).
+     * Output format: version(1B) + salt(16B) + iv(12B) + iterations(4B big-endian) + ciphertext_with_tag
+     */
+    @Throws(Exception::class)
+    private fun encryptWithAesGcm(data: ByteArray, password: String, iterations: Int = DEFAULT_ITERATION_COUNT): ByteArray {
         val secureRandom = SecureRandom()
 
         val salt = ByteArray(16)
         secureRandom.nextBytes(salt)
 
-        val iv = ByteArray(16)
+        val iv = ByteArray(12) // GCM uses 12-byte IV
         secureRandom.nextBytes(iv)
 
-        // clear bit 63 of the salt to stop us hitting the 64-bit counter boundary
-        // (which would mean we wouldn't be able to decrypt on Android). The loss
-        // of a single bit of salt is a price we have to pay.
-        iv[9] = iv[9] and 0x7f
+        // Derive 256-bit key using PBKDF2
+        val prf = Mac.getInstance("HmacSHA512")
+        val deriveKey = pbkdf2(password, salt, iterations, AES_KEY_LENGTH_BITS, prf)
 
-        val deriveKey = deriveKeys(salt, kdfRounds, password)
+        try {
+            val secretKey = SecretKeySpec(deriveKey, "AES")
+            val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+            val gcmSpec = GCMParameterSpec(128, iv) // 128-bit auth tag
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey, gcmSpec)
+            val ciphertext = cipher.doFinal(data)
 
-        val decryptCipher = Cipher.getInstance("AES/CTR/NoPadding")
-
-        val secretKeySpec = SecretKeySpec(getAesKey(deriveKey), "AES")
-        val ivParameterSpec = IvParameterSpec(iv)
-        decryptCipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec)
-
-        val outStream = ByteArrayOutputStream()
-        outStream.write(decryptCipher.update(data.toByteArray(charset("UTF-8"))))
-        outStream.write(decryptCipher.doFinal())
-
-        val cipherArray = outStream.toByteArray()
-        val bodyLength = 1 + salt.size + iv.size + 4 + cipherArray.size + 32
-
-        val resultBuffer = ByteArray(bodyLength)
-        var idx = 0
-        resultBuffer[idx++] = 1 // version
-
-        System.arraycopy(salt, 0, resultBuffer, idx, salt.size)
-        idx += salt.size
-
-        System.arraycopy(iv, 0, resultBuffer, idx, iv.size)
-        idx += iv.size
-
-        resultBuffer[idx++] = (kdfRounds shr 24 and 0xff).toByte()
-        resultBuffer[idx++] = (kdfRounds shr 16 and 0xff).toByte()
-        resultBuffer[idx++] = (kdfRounds shr 8 and 0xff).toByte()
-        resultBuffer[idx++] = (kdfRounds and 0xff).toByte()
-
-        System.arraycopy(cipherArray, 0, resultBuffer, idx, cipherArray.size)
-        idx += cipherArray.size
-
-        val toSign = resultBuffer.copyOfRange(0, idx)
-
-        val macKey = SecretKeySpec(getHmacKey(deriveKey), "HmacSHA256")
-        val mac = Mac.getInstance("HmacSHA256")
-        mac.init(macKey)
-        val digest = mac.doFinal(toSign)
-        System.arraycopy(digest, 0, resultBuffer, idx, digest.size)
-
-        return packMegolmKeyFile(resultBuffer)
+            // Pack: version + salt + iv + iterations(big-endian 4 bytes) + ciphertext(includes tag)
+            val iterBytes = ByteBuffer.allocate(4).putInt(iterations).array()
+            return byteArrayOf(EXPORT_VERSION_2.toByte()) + salt + iv + iterBytes + ciphertext
+        } finally {
+            deriveKey.fill(0)
+        }
     }
 
     /**
@@ -302,12 +337,12 @@ internal object MXMegolmExportEncryption {
     }
 
     /**
-     * Derive the AES and HMAC-SHA-256 keys for the file.
+     * Derive the AES and HMAC-SHA-256 keys for the file (legacy, 512-bit output).
      *
      * @param salt salt for pbkdf
      * @param iterations number of pbkdf iterations
      * @param password password
-     * @return the derived keys
+     * @return the derived keys (64 bytes: 32 AES + 32 HMAC)
      */
     @Throws(Exception::class)
     private fun deriveKeys(salt: ByteArray, iterations: Int, password: String): ByteArray {
@@ -347,5 +382,56 @@ internal object MXMegolmExportEncryption {
         }
 
         return key
+    }
+
+    /**
+     * PBKDF2 key derivation with configurable output length.
+     * Uses HMAC-SHA512 as PRF. Output is truncated to the requested bit length.
+     *
+     * @param password the password
+     * @param salt the salt
+     * @param iterations number of iterations
+     * @param keyLengthBits desired key length in bits (must be <= 512)
+     * @param prf the HMAC instance (must be initialized externally or will be initialized here)
+     * @return the derived key bytes
+     */
+    @Throws(Exception::class)
+    private fun pbkdf2(password: String, salt: ByteArray, iterations: Int, keyLengthBits: Int, prf: Mac): ByteArray {
+        require(keyLengthBits in 1..512) { "Key length must be between 1 and 512 bits" }
+
+        val keyLengthBytes = keyLengthBits / 8
+        val fullKey = ByteArray(64)
+
+        measureTimeMillis {
+            prf.init(SecretKeySpec(password.toByteArray(Charsets.UTF_8), "HmacSHA512"))
+
+            val uc = ByteArray(64)
+
+            // U1 = PRF(Password, Salt || INT_32_BE(1))
+            prf.update(salt)
+            val int32BE = ByteArray(4) { 0.toByte() }
+            int32BE[3] = 1.toByte()
+            prf.update(int32BE)
+            prf.doFinal(uc, 0)
+
+            // copy to the key
+            System.arraycopy(uc, 0, fullKey, 0, uc.size)
+
+            for (index in 2..iterations) {
+                // Uc = PRF(Password, Uc-1)
+                prf.update(uc)
+                prf.doFinal(uc, 0)
+
+                // F(Password, Salt, c, i) = U1 ^ U2 ^ ... ^ Uc
+                for (byteIndex in uc.indices) {
+                    fullKey[byteIndex] = fullKey[byteIndex] xor uc[byteIndex]
+                }
+            }
+        }.also {
+            Timber.v("## pbkdf2() : $iterations iterations in $it ms")
+        }
+
+        // Truncate to requested key length
+        return fullKey.copyOfRange(0, keyLengthBytes)
     }
 }

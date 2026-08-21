@@ -75,6 +75,9 @@ internal class RealmKeysUtils @Inject constructor(
         sharedPreferences.edit {
             putString("${ENCRYPTED_KEY_PREFIX}_$alias", Base64.encodeToString(toStore, Base64.NO_PADDING))
         }
+        // Securely wipe intermediate key material from memory
+        // Note: encodedKey is a String and cannot be securely erased in JVM
+        toStore.fill(0)
         return key
     }
 
@@ -86,13 +89,24 @@ internal class RealmKeysUtils @Inject constructor(
         val encryptedB64 = sharedPreferences.getString("${ENCRYPTED_KEY_PREFIX}_$alias", null)
         val encryptedKey = Base64.decode(encryptedB64, Base64.NO_PADDING)
         val b64 = secretStoringUtils.loadSecureSecretBytes(encryptedKey, alias)
-        return Base64.decode(b64, Base64.NO_PADDING)
+        val key = Base64.decode(b64, Base64.NO_PADDING)
+        // Securely wipe intermediate key material from memory
+        encryptedKey.fill(0)
+        b64.fill(0)
+        return key
     }
 
     fun configureEncryption(realmConfigurationBuilder: RealmConfiguration.Builder, alias: String) {
         val key = getRealmEncryptionKey(alias)
 
         realmConfigurationBuilder.encryptionKey(key)
+    }
+
+    /**
+     * Check if a key for the given alias already exists.
+     */
+    fun hasRealmEncryptionKey(alias: String): Boolean {
+        return hasKeyForDatabase(alias)
     }
 
     // Expose to handle Realm migration to riotX

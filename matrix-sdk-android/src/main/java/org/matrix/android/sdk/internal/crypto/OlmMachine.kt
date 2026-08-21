@@ -293,7 +293,7 @@ internal class OlmMachine @Inject constructor(
                     keyCounts = counts,
                     unusedFallbackKeys = deviceUnusedFallbackKeyTypes,
                     nextBatchToken = nextBatch ?: "",
-                    decryptionSettings = DecryptionSettings(TrustRequirement.UNTRUSTED),
+                    decryptionSettings = DecryptionSettings(TrustRequirement.CROSS_SIGNED_OR_LEGACY),
             )
 
             val outAdapter = moshi.adapter(Event::class.java)
@@ -462,8 +462,8 @@ internal class OlmMachine @Inject constructor(
                     val decrypted = inner.decryptRoomEvent(
                             serializedEvent, event.roomId,
                             handleVerificationEvents = false,
-                            strictShields = false,
-                            decryptionSettings = DecryptionSettings(TrustRequirement.UNTRUSTED)
+                            strictShields = true,
+                            decryptionSettings = DecryptionSettings(TrustRequirement.CROSS_SIGNED_OR_LEGACY)
                     )
 
                     val deserializationAdapter =
