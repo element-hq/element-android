@@ -1,0 +1,1 @@
+Drop allowFileAccessFromFileURLs and allowUniversalAccessFromFileURLs in VectorWebViewActivity and WidgetWebView. Both call sites only load http/https URLs, so the flags are not load-bearing and are CWE-200 sandbox-escape vectors when left on.

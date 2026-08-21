@@ -42,10 +42,11 @@ fun WebView.setupForWidget(activity: Activity,
     // Allow use of Local Storage
     settings.domStorageEnabled = true
 
-    @Suppress("DEPRECATION")
-    settings.allowFileAccessFromFileURLs = true
-    @Suppress("DEPRECATION")
-    settings.allowUniversalAccessFromFileURLs = true
+    // allowFileAccessFromFileURLs and allowUniversalAccessFromFileURLs
+    // only take effect when the main frame is a file:// URL. Widgets are
+    // always served from an https widget URL, so neither flag is
+    // load-bearing here, and allowUniversalAccessFromFileURLs in
+    // particular is a CWE-200 sandbox-escape vector.
 
     settings.displayZoomControls = false
 
