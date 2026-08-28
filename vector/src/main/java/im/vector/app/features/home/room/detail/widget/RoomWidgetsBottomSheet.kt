@@ -7,10 +7,12 @@
 
 package im.vector.app.features.home.room.detail.widget
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +33,7 @@ import javax.inject.Inject
  * Bottom sheet displaying active widgets in a room.
  */
 @AndroidEntryPoint
-class RoomWidgetsBottomSheet :
+class RoomWidgetsBottomSheet(private val widgetActivityResultLauncher: ActivityResultLauncher<Intent>) :
         VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>(),
         RoomWidgetsController.Listener {
 
@@ -64,7 +66,7 @@ class RoomWidgetsBottomSheet :
     }
 
     override fun didSelectWidget(widget: Widget) = withState(timelineViewModel) {
-        navigator.openRoomWidget(requireContext(), it.roomId, widget)
+        navigator.openRoomWidget(requireContext(), widgetActivityResultLauncher, it.roomId, widget)
         dismiss()
     }
 
@@ -74,8 +76,8 @@ class RoomWidgetsBottomSheet :
     }
 
     companion object {
-        fun newInstance(): RoomWidgetsBottomSheet {
-            return RoomWidgetsBottomSheet()
+        fun newInstance(widgetActivityResultLauncher: ActivityResultLauncher<Intent>): RoomWidgetsBottomSheet {
+            return RoomWidgetsBottomSheet(widgetActivityResultLauncher)
         }
     }
 }
