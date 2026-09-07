@@ -12,6 +12,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -33,6 +34,18 @@ class VectorDataStore @Inject constructor(
         context.dataStore.edit { settings ->
             val currentCounterValue = settings[pushCounter] ?: 0
             settings[pushCounter] = currentCounterValue + 1
+        }
+    }
+
+    private val elementXMigrationBannerTimestamp = longPreferencesKey("element_x_migration_banner_timestamp")
+
+    val elementXMigrationBannerTimestampFlow: Flow<Long> = context.dataStore.data.map { preferences ->
+        preferences[elementXMigrationBannerTimestamp] ?: 0L
+    }
+
+    suspend fun setElementXMigrationBannerTimestamp(timestamp: Long) {
+        context.dataStore.edit { settings ->
+            settings[elementXMigrationBannerTimestamp] = timestamp
         }
     }
 }
