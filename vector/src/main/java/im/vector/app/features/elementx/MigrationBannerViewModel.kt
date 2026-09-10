@@ -96,9 +96,7 @@ class MigrationBannerViewModel @AssistedInject constructor(
     }
 
     private fun handleOnResume() {
-        viewModelScope.launch {
-            resumeFlow.value++
-        }
+        resumeFlow.value++
     }
 
     private fun handleOnBannerClosed() {

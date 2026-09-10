@@ -73,6 +73,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="@null"
+        android:contentDescription="@string/action_close"
         android:src="@drawable/ic_close_24dp"
         android:tint="?vctr_content_secondary"
         app:layout_constraintEnd_toEndOf="parent"

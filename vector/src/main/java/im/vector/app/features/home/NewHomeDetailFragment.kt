@@ -380,7 +380,7 @@ class NewHomeDetailFragment :
                             body.text = bannerState.body
                             button.isVisible = bannerState.showButton
                             button.text = bannerState.buttonText
-                            button.debouncedClicks {
+                            button.setOnClickListener {
                                 openApplicationStore(
                                         activity = requireActivity(),
                                         buildMeta = buildMeta,

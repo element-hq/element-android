@@ -41,7 +41,7 @@ fun ElementWellKnown?.toMigrationBannerState(
     val migrationBannerConfig = this?.migrationBanner
             ?: MigrationBanner().takeIf { useDefaultOnMissingData }
             ?: return MigrationBannerState.Hide
-    if (!migrationBannerConfig.enabled) return MigrationBannerState.Hide
+    if (migrationBannerConfig.enabled == false) return MigrationBannerState.Hide
 
     val title = migrationBannerConfig.title?.takeIf { it.isNotBlank() } ?: stringProvider.getString(R.string.view_element_x_banner_title)
     val body = migrationBannerConfig.body?.takeIf { it.isNotBlank() } ?: stringProvider.getString(R.string.view_element_x_banner_body)

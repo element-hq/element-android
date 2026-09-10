@@ -50,7 +50,7 @@ data class ElementWellKnown(
 data class MigrationBanner(
         // If true or not provided, the migration banner will be displayed. If false, it will not be displayed.
         @Json(name = "enabled")
-        val enabled: Boolean = true,
+        val enabled: Boolean? = true,
 
         // If null or empty, will default to "Download Element X"
         @Json(name = "title")
