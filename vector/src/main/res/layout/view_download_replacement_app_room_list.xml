@@ -16,8 +16,10 @@
         android:layout_marginTop="12dp"
         android:contentDescription="@null"
         android:src="@drawable/replacement_app_icon"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/view_download_replacement_app_room_list_title"
