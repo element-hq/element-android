@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:background="@drawable/card_background"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/view_download_replacement_app_room_list_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:contentDescription="@null"
+        android:src="@drawable/replacement_app_icon"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/view_download_replacement_app_room_list_title"
+        style="@style/Widget.Vector.TextView.HeadlineMedium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:textColor="?android:textColorPrimary"
+        app:layout_constraintEnd_toStartOf="@id/view_download_replacement_app_room_list_button_close"
+        app:layout_constraintStart_toEndOf="@id/view_download_replacement_app_room_list_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginStart="12dp"
+        tools:text="@string/view_element_x_banner_title" />
+
+    <TextView
+        android:id="@+id/view_download_replacement_app_room_list_body"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="12dp"
+        android:autoLink="web"
+        android:ellipsize="end"
+        android:maxLines="8"
+        android:textColor="?android:textColorSecondary"
+        app:layout_constraintBottom_toTopOf="@id/view_download_replacement_app_room_list_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/view_download_replacement_app_room_list_title"
+        app:layout_constraintTop_toBottomOf="@id/view_download_replacement_app_room_list_title"
+        app:layout_goneMarginBottom="16dp"
+        tools:text="@string/view_element_x_banner_body" />
+
+    <Button
+        android:id="@+id/view_download_replacement_app_room_list_button"
+        style="@style/Widget.Vector.Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_download_replacement_app_room_list_body"
+        tools:text="@string/view_element_x_banner_button"
+        tools:visibility="visible" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/view_download_replacement_app_room_list_button_close"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@null"
+        android:contentDescription="@string/action_close"
+        android:src="@drawable/ic_close_24dp"
+        android:tint="?vctr_content_secondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

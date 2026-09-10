@@ -5,6 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <FrameLayout
+        android:id="@+id/view_download_replacement_app_room_list_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
+
+        <include layout="@layout/view_download_replacement_app_room_list" />
+
+    </FrameLayout>
+
     <im.vector.app.core.ui.views.KeysBackupBanner
         android:id="@+id/homeKeysBackupBanner"
         android:layout_width="0dp"
@@ -14,7 +28,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_download_replacement_app_room_list_container"
         tools:visibility="gone" />
 
     <im.vector.app.core.ui.views.CurrentCallsView
