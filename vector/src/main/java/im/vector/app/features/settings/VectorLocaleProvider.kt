@@ -24,6 +24,7 @@ class VectorLocaleProvider @Inject constructor(
      * SharedPref values has been initialized in [VectorLocale.init]
      */
     val applicationLocale: Locale
+        @Suppress("DEPRECATION")
         get() = Locale(
                 preferences.getString(VectorLocale.APPLICATION_LOCALE_LANGUAGE_KEY, "")!!,
                 preferences.getString(VectorLocale.APPLICATION_LOCALE_COUNTRY_KEY, "")!!,

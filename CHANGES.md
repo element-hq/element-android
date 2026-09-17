@@ -1,3 +1,19 @@
+Changes in Element v1.6.64 (2026-09-17)
+=======================================
+
+Features ✨
+----------
+ - Add a banner in the room list inviting users to migrate to Element X, configurable via the homeserver .well-known file. ([#9167](https://github.com/element-hq/element-android/issues/9167))
+
+SDK API changes ⚠️
+------------------
+ - RawService: cache definitive "not found" (404/410) answers for the same duration as successful ones, so that a url which is known to be missing is not requested again on every call. ([#9167](https://github.com/element-hq/element-android/issues/9167))
+
+Other changes
+-------------
+ - Target SDK 36. ([#9162](https://github.com/element-hq/element-android/pull/9162))
+
+
 Changes in Element v1.6.62 (2026-07-21)
 =======================================
 

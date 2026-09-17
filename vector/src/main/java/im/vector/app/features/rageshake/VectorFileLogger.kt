@@ -135,6 +135,7 @@ class VectorFileLogger @Inject constructor(
 
     private fun logToFile(level: String, tag: String, content: String) {
         val b = StringBuilder()
+        @Suppress("DEPRECATION")
         b.append(Thread.currentThread().id)
         b.append(" ")
         b.append(level)
