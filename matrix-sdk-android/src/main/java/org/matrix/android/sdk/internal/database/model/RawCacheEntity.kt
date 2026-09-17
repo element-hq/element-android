@@ -23,7 +23,14 @@ internal open class RawCacheEntity(
         @PrimaryKey
         var url: String = "",
         var data: String = "",
-        var lastUpdatedTimestamp: Long = 0L
+        var lastUpdatedTimestamp: Long = 0L,
+        /**
+         * True when the server answered with a definitive "not found" (404 or 410) for this url.
+         * Used to avoid re-issuing a request which is known to fail, until [lastUpdatedTimestamp]
+         * is older than the cache validity duration. [data] is left untouched when this is set, so
+         * that a previously retrieved value can still be returned as a stale fallback.
+         */
+        var isNotFound: Boolean = false,
 ) : RealmObject() {
 
     companion object

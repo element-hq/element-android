@@ -28,6 +28,7 @@ import im.vector.app.features.crypto.verification.user.UserVerificationViewModel
 import im.vector.app.features.devtools.RoomDevToolViewModel
 import im.vector.app.features.discovery.DiscoverySettingsViewModel
 import im.vector.app.features.discovery.change.SetIdentityServerViewModel
+import im.vector.app.features.elementx.MigrationBannerViewModel
 import im.vector.app.features.home.HomeActivityViewModel
 import im.vector.app.features.home.HomeDetailViewModel
 import im.vector.app.features.home.NewHomeDetailViewModel
@@ -706,4 +707,9 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(NewHomeDetailViewModel::class)
     fun newHomeDetailViewModelFactory(factory: NewHomeDetailViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(MigrationBannerViewModel::class)
+    fun migrationBannerViewModelFactory(factory: MigrationBannerViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }
