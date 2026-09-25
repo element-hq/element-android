@@ -1,3 +1,10 @@
+Changes in Element v1.6.66 (2026-09-25)
+=======================================
+
+Other changes
+-------------
+- Update the banner for excluding insecure devices. ([#9172](https://github.com/element-hq/element-android/issues/9172))
+
 Changes in Element v1.6.64 (2026-09-17)
 =======================================
 
