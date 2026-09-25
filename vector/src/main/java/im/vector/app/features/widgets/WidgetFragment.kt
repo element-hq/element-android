@@ -81,8 +81,10 @@ class WidgetFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         views.widgetWebView.setupForWidget(requireActivity(), checkWebViewPermissionsUseCase, this)
-        if (fragmentArgs.kind.isAdmin()) {
-            viewModel.getPostAPIMediator().setWebView(views.widgetWebView)
+        withState(viewModel) { state ->
+            if (state.status == WidgetStatus.WIDGET_ALLOWED) {
+                viewModel.getPostAPIMediator().setWebView(views.widgetWebView)
+            }
         }
         viewModel.observeViewEvents {
             Timber.v("Observed view events: $it")
@@ -113,8 +115,10 @@ class WidgetFragment :
     }
 
     override fun onDestroyView() {
-        if (fragmentArgs.kind.isAdmin()) {
-            viewModel.getPostAPIMediator().clearWebView()
+        withState(viewModel) { state ->
+            if (state.status == WidgetStatus.WIDGET_ALLOWED) {
+                viewModel.getPostAPIMediator().clearWebView()
+            }
         }
         views.widgetWebView.clearAfterWidget()
         super.onDestroyView()
