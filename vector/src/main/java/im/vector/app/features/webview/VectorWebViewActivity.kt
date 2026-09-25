@@ -56,9 +56,9 @@ class VectorWebViewActivity : VectorBaseActivity<ActivityVectorWebViewBinding>()
             domStorageEnabled = true
 
             @Suppress("DEPRECATION")
-            allowFileAccessFromFileURLs = true
+            allowFileAccessFromFileURLs = false
             @Suppress("DEPRECATION")
-            allowUniversalAccessFromFileURLs = true
+            allowUniversalAccessFromFileURLs = false
 
             displayZoomControls = false
         }
