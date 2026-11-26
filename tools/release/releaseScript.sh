@@ -282,8 +282,9 @@ printf "Unzipping the artifact...\n"
 unzip ${targetPath}/vector-gplay-release-unsigned.zip -d ${targetPath}
 
 # Flatten folder hierarchy
-mv ${targetPath}/gplay/release/* ${targetPath}
-rm -rf ${targetPath}/gplay
+mv ${targetPath}/apk/gplay/release/* ${targetPath}
+mv ${targetPath}/mapping/gplayRelease/mapping.txt ${targetPath}/mapping.txt
+rm -rf ${targetPath}/apk ${targetPath}/mapping
 
 printf "\n================================================================================\n"
 printf "Signing the APKs...\n"
@@ -352,12 +353,19 @@ set -e
 read -p "Please run the APK on your phone to check that the upgrade went well (no init sync, etc.). Press enter when it's done."
 
 printf "\n================================================================================\n"
+printf "The code is obfuscated. When uploading the APKs to the Google Play Console, please also upload the R8 mapping file:\n"
+printf "  ${targetPath}/mapping.txt\n"
+printf "(App bundle explorer > select the version > Downloads > Assets > ReTrace mapping file)\n"
+read -p "Press enter to continue. "
+
+printf "\n================================================================================\n"
 githubCreateReleaseLink="https://github.com/element-hq/element-android/releases/new?tag=v${version}&title=Element%20Android%20v${version}&body=${changelogUrlEncoded}"
 printf "Creating the release on gitHub.\n"
 printf -- "Open this link: %s\n" ${githubCreateReleaseLink}
 printf "Then\n"
 printf " - click on the 'Generate releases notes' button\n"
 printf " - Add the 4 signed APKs to the GitHub release. They are located at ${targetPath}\n"
+printf " - Add the R8 mapping file ${targetPath}/mapping.txt to the GitHub release (it is required to retrace obfuscated stack traces)\n"
 read -p ". Press enter when it's done. "
 
 printf "\n================================================================================\n"

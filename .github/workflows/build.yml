@@ -78,6 +78,7 @@ jobs:
           name: vector-gplay-release-unsigned
           path: |
             vector-app/build/outputs/apk/*/release/*.apk
+            vector-app/build/outputs/mapping/gplayRelease/mapping.txt
 
   exodus:
     runs-on: ubuntu-latest
