@@ -260,8 +260,8 @@ android {
                 // FIXME Set to true.
                 removeUnusedCode false
                 removeUnusedResources true
-                // We do not activate obfuscation as it makes it hard then to read crash reports, and it's a bit useless on an open source project :)
-                obfuscate false
+                // Obfuscation is required by Google Play. Use the generated mapping.txt file to retrace stack traces.
+                obfuscate true
                 optimizeCode true
                 proguardFiles 'proguard-rules.pro'
             }
@@ -278,8 +278,8 @@ android {
                 // FIXME Set to true.
                 removeUnusedCode false
                 removeUnusedResources true
-                // We do not activate obfuscation as it makes it hard then to read crash reports, and it's a bit useless on an open source project :)
-                obfuscate false
+                // Obfuscation is required by Google Play. Use the generated mapping.txt file to retrace stack traces.
+                obfuscate true
                 optimizeCode true
                 proguardFiles 'proguard-rules.pro'
             }

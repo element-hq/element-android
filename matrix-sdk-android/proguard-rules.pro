@@ -74,3 +74,8 @@
     java.lang.Object writeReplace();
     java.lang.Object readResolve();
 }
+
+### WorkManager
+# Worker class names are persisted in the WorkManager database and are used by MatrixWorkerFactory
+# to instantiate the workers, so they must not change between app versions.
+-keepnames class * extends androidx.work.ListenableWorker

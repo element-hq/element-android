@@ -1,0 +1,1 @@
+Enable code obfuscation, as requested by Google Play. The R8 mapping file is now part of the release artifacts.
